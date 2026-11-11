@@ -1,162 +1,22 @@
-.pixel-scene {
-  --scene-duration: 12s;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  isolation: isolate;
-  background: #eee8df;
-}
+.pixel-scene{container-type:inline-size;background:#eee8df;isolation:isolate;color:#57624c}
+.scene-masthead{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;background:#f2eee5;border-bottom:1px solid #e2daca;font-size:9px;letter-spacing:1.2px;color:#7b806e}
+.scene-masthead>span:first-child{display:flex;align-items:center;gap:7px;font-weight:600}.scene-masthead i{width:5px;height:5px;background:#8a9c7b}.scene-masthead>span:last-child{font-size:8px;letter-spacing:.8px}
+.scene-layout{display:grid;grid-template-columns:minmax(0,1fr) 210px;align-items:stretch}.scene-room{position:relative;align-self:center;min-width:0;background:#eee8df}.scene-art{display:block;width:100%;height:auto;aspect-ratio:720/430}
+.scene-thought{position:absolute;left:42%;top:14%;width:22%;min-height:35px;padding:9px 11px;border:1px solid #d5c9b9;background:#fffaf0;box-shadow:0 3px 0 #c8bca633;font-size:11px;line-height:1.5;text-align:center;border-radius:8px;color:#777262;pointer-events:none}.scene-thought:after{content:'';position:absolute;left:47%;bottom:-6px;width:10px;height:10px;background:#fffaf0;border-right:1px solid #d5c9b9;border-bottom:1px solid #d5c9b9;transform:rotate(45deg)}
+.scene-exposure-note{position:absolute;left:16px;bottom:12px;font-size:9px;color:#776e5f;letter-spacing:.2px}
+.scene-monitor{background:#f6f4ea;border-left:1px solid #dfdbcd;padding:16px 16px 14px;display:flex;flex-direction:column;justify-content:flex-start;min-width:0}.monitor-heading{display:flex;flex-direction:column;gap:6px;margin-bottom:9px;font-size:9px;letter-spacing:1px;color:#78856c}.monitor-heading>span:first-child{font-weight:700}.monitor-heading>span:last-child{font-size:8px;letter-spacing:.6px;color:#9a9e8d}.monitor-body{text-align:center}.scene-body-map{width:111px;height:166px;display:block;margin:0 auto}.monitor-legend{font-size:9px;line-height:1.6;color:#829170;text-transform:capitalize;margin:5px 0 13px;display:flex;gap:5px;justify-content:center;align-items:center;flex-wrap:wrap}.monitor-key{width:5px;height:5px;background:#9fae8b;border-radius:50%;display:inline-block;flex:none}.monitor-copy h3{font:600 12px/1.5 var(--body);letter-spacing:-.1px;margin:0 0 9px;color:#637154}.monitor-copy ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}.monitor-copy li{font-size:11px;line-height:1.55;color:#7d846f;padding-left:10px;position:relative}.monitor-copy li:before{content:'';position:absolute;left:0;top:.65em;width:3px;height:3px;border-radius:50%;background:#a7b298}.monitor-signal{margin-top:11px;color:#9eaf8a}.monitor-signal svg{display:block;width:100%;height:30px}.monitor-signal>span{display:block;text-align:center;font-size:8px;color:#939b84;line-height:1.5}.scene-monitor.is-adverse .monitor-heading>span:last-child,.scene-monitor.is-adverse .monitor-copy h3{color:#a36c55}.scene-monitor.is-adverse .monitor-key,.scene-monitor.is-adverse .monitor-copy li:before{background:#c59179}.scene-monitor.is-adverse .monitor-signal{color:#bd886f}.scene-monitor.is-adverse .monitor-legend{color:#a47c65}
+.scene-story{display:flex;gap:12px;align-items:center;padding:15px 18px;background:#f8f5ec;border-top:1px solid #dfd7c7;min-height:74px}.story-number{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid #dce0ce;background:#e9eddf;border-radius:50%;color:#798b66;font-size:10px;font-weight:600;flex:none}.story-number.is-adverse{background:#f0e2d8;border-color:#e6d1bf;color:#ae7e61}.scene-story>div{flex:1}.scene-story strong{font-size:12px;font-weight:500;line-height:1.55;display:block;color:#636f52}.scene-story p{font-size:11px;line-height:1.5;color:#92927f;margin:3px 0 0}.scene-story-duration{font-size:9px;color:#969983;white-space:nowrap}.scene-progress{height:3px;background:#e3e1d4;overflow:hidden}.scene-progress>span{display:block;width:100%;height:100%;background:#a7b495;transform-origin:left center;will-change:transform}
+@container(max-width:810px){.scene-layout{grid-template-columns:minmax(0,1fr)}.scene-monitor{border-left:0;border-top:1px solid #e0dacb;display:grid;grid-template-columns:130px 1fr;grid-template-rows:auto 1fr;column-gap:20px;padding:15px 20px;min-height:200px}.monitor-heading{grid-column:1/-1;flex-direction:row;justify-content:space-between;margin-bottom:12px}.monitor-body{grid-column:1;grid-row:2}.scene-body-map{width:88px;height:134px}.monitor-legend{margin:5px 0 0;font-size:9px}.monitor-copy{grid-column:2;grid-row:2;align-self:center}.monitor-copy h3{font-size:13px}.monitor-copy li{font-size:12px}.monitor-signal{max-width:240px;margin-top:9px}.monitor-signal svg{height:24px}.scene-thought{font-size:12px}.scene-story{min-height:75px}}
+@container(max-width:520px){.scene-masthead{padding:11px 12px;font-size:8px;letter-spacing:.9px}.scene-masthead>span:last-child{font-size:7px;letter-spacing:.3px}.scene-thought{display:none}.scene-exposure-note{font-size:8px;bottom:8px;left:12px}.scene-monitor{grid-template-columns:96px minmax(0,1fr);column-gap:13px;padding:14px 13px}.monitor-heading{font-size:9px}.monitor-heading>span:last-child{font-size:8px}.scene-body-map{width:83px;height:126px}.monitor-copy h3{font-size:12px}.monitor-copy li{font-size:11px;line-height:1.6}.monitor-signal>span{font-size:8px}.monitor-legend{font-size:8px;line-height:1.5}.scene-story{gap:9px;padding:13px 12px}.scene-story strong{font-size:12px}.scene-story p{font-size:11px}.scene-story-duration{display:none}.story-number{width:26px;height:26px;font-size:9px}}
+@media(prefers-reduced-motion:reduce){.scene-progress>span{will-change:auto}}
 
-.pixel-scene__art { display: block; width: 100%; height: auto; aspect-ratio: 760 / 340; }
-.pixel-scene text { font-family: var(--font-mono, "Courier New", monospace); shape-rendering: auto; }
-.pixel-scene__room-label text { font-size: 7px; font-weight: 600; letter-spacing: 1px; fill: #686f5e; }
-.pixel-scene__scale-label { font-size: 6.5px; letter-spacing: .8px; fill: #898273; }
-.pixel-scene__tiny-note { font-size: 6.5px; letter-spacing: .2px; fill: #a18471; }
-.pixel-scene__thought text { font-size: 9px; letter-spacing: -.2px; fill: #716d61; }
-.pixel-scene__clock-hand { transform-origin: 605px 91px; animation: pixel-clock 60s steps(12, end) infinite; }
-.pixel-scene__cat { transform-origin: 220px 231px; animation: pixel-cat-breathe 4s steps(2, end) infinite; }
-.pixel-scene__cat-sleep { animation: pixel-cat-sleep 4s steps(3, end) infinite; }
-.pixel-scene__hand { animation: pixel-hand var(--scene-duration) steps(4, end) infinite; }
-.pixel-scene__arm-down { animation: pixel-arm-down var(--scene-duration) steps(1, end) infinite; }
-.pixel-scene__arm-mid { opacity: 0; animation: pixel-arm-mid var(--scene-duration) steps(1, end) infinite; }
-.pixel-scene__arm-up { opacity: 0; animation: pixel-arm-up var(--scene-duration) steps(1, end) infinite; }
-.pixel-scene__mouth { transform-origin: 407px 169px; animation: pixel-mouth var(--scene-duration) steps(1, end) infinite; }
-.pixel-scene__person { animation: pixel-after-effect var(--scene-duration) steps(1, end) infinite; }
-.pixel-scene__head { transform-origin: 406px 180px; }
-.pixel-scene__sleepy-eyes { opacity: 0; }
-.pixel-scene__body-highlight { opacity: 0; animation: pixel-highlight var(--scene-duration) steps(3, end) infinite; }
-.pixel-scene__good-effects, .pixel-scene__thought--good { opacity: 0; animation: pixel-good var(--scene-duration) steps(2, end) infinite; }
-.pixel-scene__bad-effects, .pixel-scene__thought--bad { opacity: 0; animation: pixel-bad var(--scene-duration) steps(2, end) infinite; }
-.pixel-scene__float-one { animation: pixel-float 3s steps(3, end) infinite; }
-.pixel-scene__float-two { animation: pixel-float 3s steps(3, end) -1.5s infinite; }
-.pixel-scene__orbit { display: none; }
-.pixel-scene--psychedelic .pixel-scene__orbit,
-.pixel-scene--cannabis .pixel-scene__orbit { display: inline; }
-.pixel-scene__sleep-symbols { display: none; }
-.pixel-scene--sedative .pixel-scene__person,
-.pixel-scene--cannabis .pixel-scene__person,
-.pixel-scene--supplement .pixel-scene__person,
-.pixel-scene--muscle .pixel-scene__person { animation: none; }
-.pixel-scene--sedative .pixel-scene__head,
-.pixel-scene--cannabis .pixel-scene__head { animation: pixel-droop var(--scene-duration) steps(3, end) infinite; }
-.pixel-scene--sedative .pixel-scene__eyes,
-.pixel-scene--cannabis .pixel-scene__eyes { animation: pixel-awake var(--scene-duration) steps(1, end) infinite; }
-.pixel-scene--sedative .pixel-scene__sleepy-eyes,
-.pixel-scene--cannabis .pixel-scene__sleepy-eyes { animation: pixel-bad var(--scene-duration) steps(1, end) infinite; }
-.pixel-scene--sedative .pixel-scene__bad-effects > path,
-.pixel-scene--cannabis .pixel-scene__bad-effects > path,
-.pixel-scene--supplement .pixel-scene__bad-effects > path,
-.pixel-scene--muscle .pixel-scene__worry { display: none; }
-.pixel-scene--sedative .pixel-scene__sleep-symbols,
-.pixel-scene--cannabis .pixel-scene__sleep-symbols { display: inline; }
-
-/* A raised hand, a changing sleeve silhouette, and a moving mouth tell the first beat. */
-@keyframes pixel-hand {
-  0%, 6% { transform: translate(0, 0); }
-  13%, 23% { transform: translate(-26px, -34px); }
-  31%, 100% { transform: translate(0, 0); }
-}
-@keyframes pixel-arm-down { 0%, 6%, 30%, 100% { opacity: 1; } 7%, 29% { opacity: 0; } }
-@keyframes pixel-arm-mid { 0%, 6%, 13%, 23%, 30%, 100% { opacity: 0; } 7%, 12%, 24%, 29% { opacity: 1; } }
-@keyframes pixel-arm-up { 0%, 12%, 24%, 100% { opacity: 0; } 13%, 23% { opacity: 1; } }
-@keyframes pixel-mouth { 0%, 12%, 24%, 100% { transform: scaleY(1); } 13%, 23% { transform: scaleY(2); } }
-@keyframes pixel-highlight { 0%, 31%, 68%, 100% { opacity: 0; } 38%, 61% { opacity: 1; } }
-@keyframes pixel-good { 0%, 34%, 67%, 100% { opacity: 0; } 39%, 60% { opacity: 1; } }
-@keyframes pixel-bad { 0%, 69%, 98%, 100% { opacity: 0; } 74%, 92% { opacity: 1; } }
-@keyframes pixel-after-effect {
-  0%, 73%, 78%, 83%, 88%, 93%, 100% { transform: translateX(0); }
-  75%, 85% { transform: translateX(1px); }
-  80%, 90% { transform: translateX(-1px); }
-}
-@keyframes pixel-droop { 0%, 70%, 98%, 100% { transform: translateY(0) rotate(0); } 78%, 91% { transform: translateY(3px) rotate(4deg); } }
-@keyframes pixel-awake { 0%, 70%, 98%, 100% { opacity: 1; } 74%, 94% { opacity: 0; } }
-@keyframes pixel-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-@keyframes pixel-cat-breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.04); } }
-@keyframes pixel-cat-sleep { 0%, 100% { opacity: .35; transform: translateY(0); } 50% { opacity: .75; transform: translateY(-3px); } }
-@keyframes pixel-clock { to { transform: rotate(360deg); } }
-
-/* A controlled stage is a useful still frame, including when choosing a step. */
-.pixel-scene:not([data-stage="loop"]) *,
-.pixel-scene[data-paused="true"] * { animation-play-state: paused !important; }
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__person,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__head,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__hand,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__mouth,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__eyes,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__sleepy-eyes,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__arm-down,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__arm-mid,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__arm-up,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__body-highlight,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__good-effects,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__bad-effects,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__thought { animation: none; }
-.pixel-scene[data-stage="0"] .pixel-scene__hand { transform: translate(-26px, -34px); }
-.pixel-scene[data-stage="0"] .pixel-scene__arm-down { opacity: 0; }
-.pixel-scene[data-stage="0"] .pixel-scene__arm-up,
-.pixel-scene[data-stage="1"] .pixel-scene__body-highlight,
-.pixel-scene[data-stage="1"] .pixel-scene__good-effects,
-.pixel-scene[data-stage="1"] .pixel-scene__thought--good,
-.pixel-scene[data-stage="2"] .pixel-scene__bad-effects,
-.pixel-scene[data-stage="2"] .pixel-scene__thought--bad { opacity: 1; }
-.pixel-scene--sedative[data-stage="2"] .pixel-scene__head,
-.pixel-scene--cannabis[data-stage="2"] .pixel-scene__head { transform: translateY(3px) rotate(4deg); }
-.pixel-scene--sedative[data-stage="2"] .pixel-scene__eyes,
-.pixel-scene--cannabis[data-stage="2"] .pixel-scene__eyes { opacity: 0; }
-.pixel-scene--sedative[data-stage="2"] .pixel-scene__sleepy-eyes,
-.pixel-scene--cannabis[data-stage="2"] .pixel-scene__sleepy-eyes { opacity: 1; }
-
-/* Named profiles distinguish the biological response from the possible downside. */
-.pixel-scene__risk-highlight,
-.pixel-scene__risk-label { opacity: 0; animation: pixel-bad var(--scene-duration) steps(2, end) infinite; }
-.pixel-scene__risk-highlight .pixel-scene__symbol { fill: #bd8277; }
-.pixel-scene__risk-label text { font-size: 6px; fill: #986f64; letter-spacing: .25px; }
-.pixel-scene__dissociation { opacity: 0; transform: translate(9px, -3px); animation: pixel-good var(--scene-duration) steps(2, end) infinite; }
-.pixel-scene__arrival { opacity: 0; animation: pixel-arrival var(--scene-duration) steps(3, end) infinite; }
-.pixel-scene[data-action="takes"] .pixel-scene__hand { animation: pixel-hand-neutral var(--scene-duration) steps(2, end) infinite; }
-.pixel-scene[data-action="takes"] .pixel-scene__arm-down { animation: none; opacity: 1; }
-.pixel-scene[data-action="takes"] .pixel-scene__arm-mid,
-.pixel-scene[data-action="takes"] .pixel-scene__arm-up { display: none; }
-.pixel-scene[data-action="takes"] .pixel-scene__mouth { animation: none; }
-.pixel-scene--supplement .pixel-scene__good-effects,
-.pixel-scene--muscle .pixel-scene__good-effects,
-.pixel-scene--sedative .pixel-scene__good-effects { display: none; }
-.pixel-scene[data-substance="fentanyl"] .pixel-scene__head,
-.pixel-scene[data-substance="ketamine"] .pixel-scene__head { animation: none; transform: none; }
-.pixel-scene[data-substance="fentanyl"] .pixel-scene__eyes,
-.pixel-scene[data-substance="ketamine"] .pixel-scene__eyes { animation: none; opacity: 1; }
-.pixel-scene[data-substance="fentanyl"] .pixel-scene__sleepy-eyes,
-.pixel-scene[data-substance="ketamine"] .pixel-scene__sleepy-eyes,
-.pixel-scene[data-substance="fentanyl"] .pixel-scene__sleep-symbols,
-.pixel-scene[data-substance="ketamine"] .pixel-scene__sleep-symbols,
-.pixel-scene[data-substance="alcohol"] .pixel-scene__sleep-symbols { display: none; }
-.pixel-scene[data-substance="alcohol"] .pixel-scene__person { transform-origin: 406px 277px; animation: pixel-balance var(--scene-duration) steps(2, end) infinite; }
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__risk-highlight,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__risk-label,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__arrival,
-.pixel-scene:not([data-stage="loop"]) .pixel-scene__dissociation,
-.pixel-scene:not([data-stage="loop"])[data-action="takes"] .pixel-scene__hand,
-.pixel-scene:not([data-stage="loop"])[data-substance="alcohol"] .pixel-scene__person { animation: none; }
-.pixel-scene[data-stage="0"][data-action="takes"] .pixel-scene__hand { transform: translate(-2px, -3px); }
-.pixel-scene[data-stage="0"] .pixel-scene__arrival,
-.pixel-scene[data-stage="1"] .pixel-scene__dissociation,
-.pixel-scene[data-stage="2"] .pixel-scene__risk-highlight,
-.pixel-scene[data-stage="2"] .pixel-scene__risk-label { opacity: 1; }
-.pixel-scene[data-stage="2"][data-substance="alcohol"] .pixel-scene__person { transform: rotate(2deg); }
-@keyframes pixel-hand-neutral { 0%, 31%, 100% { transform: translate(0, 0); } 13%, 23% { transform: translate(-2px, -3px); } }
-@keyframes pixel-arrival { 0%, 30%, 100% { opacity: 0; transform: translate(4px, 0); } 8%, 23% { opacity: 1; transform: translate(-3px, 0); } }
-@keyframes pixel-balance { 0%, 70%, 96%, 100% { transform: rotate(0); } 76%, 86% { transform: rotate(2deg); } 81%, 91% { transform: rotate(-2deg); } }
-
-@media (prefers-reduced-motion: reduce) {
-  .pixel-scene * { animation: none !important; }
-  .pixel-scene[data-stage="loop"] .pixel-scene__body-highlight,
-  .pixel-scene[data-stage="loop"] .pixel-scene__good-effects,
-  .pixel-scene[data-stage="loop"] .pixel-scene__thought--good { opacity: 1; }
-}
-
-@media (max-width: 520px) {
-  .pixel-scene__scale-label { display: none; }
-  .pixel-scene__art { width: 126%; max-width: none; margin-left: -13%; }
-  .pixel-scene__room-label { transform: translateX(70px); }
-  .pixel-scene__tiny-note { display: none; }
-}
+/* The body explanation needs the same contrast as the surrounding guide. */
+.monitor-copy li,.monitor-copy h3,.monitor-legend{color:#59674c}
+.scene-story p,.scene-story-duration,.monitor-signal>span,.scene-exposure-note{color:#6b705e}
+.scene-monitor.is-adverse .monitor-heading>span:last-child,.scene-monitor.is-adverse .monitor-copy h3,.scene-monitor.is-adverse .monitor-legend{color:#89543e}
+.monitor-copy{min-height:181px}.monitor-legend{min-height:30px;font-size:10px}.monitor-heading>span:last-child{color:#6b705e}
+.scene-thought{color:#676251}
+@container(max-width:810px){.scene-monitor{min-height:260px}.monitor-copy{min-height:181px}.monitor-body{align-self:center}}
+@container(max-width:650px){.scene-thought{display:none}}
+@container(max-width:520px){.scene-monitor{min-height:275px}.monitor-copy{min-height:200px}.monitor-legend{font-size:10px}.monitor-signal>span{font-size:9px}}
+.scene-thought{top:8%;padding:7px 9px;min-height:0}
