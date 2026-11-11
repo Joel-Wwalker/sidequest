@@ -2,6 +2,9 @@ import type { Organ } from './profiles';
 import type { sampleScene } from './timeline';
 
 const shapes: Record<Organ, string> = {
+  skin: 'M33 80L26 113L31 117L40 88ZM107 80L114 113L109 117L100 88Z',
+  hair: 'M54 18Q57 3 71 5Q86 3 89 18L84 14L78 15L72 11L65 15L59 14Z',
+  eyes: 'M59 22Q63 18 67 22Q63 26 59 22ZM75 22Q79 18 83 22Q79 26 75 22Z',
   brain: 'M57 21Q53 12 62 12Q65 6 71 11Q78 7 83 14Q90 15 86 24Q88 29 81 32L73 30L67 32L59 29Z',
   lungs: 'M67 58L65 66Q57 60 51 72L49 88Q52 96 63 91L68 82ZM74 58L76 66Q84 60 90 72L92 88Q89 96 78 91L73 82Z',
   heart: 'M70 75Q64 69 63 78Q62 86 72 92Q82 82 79 77Q76 71 70 75Z',
@@ -79,7 +82,7 @@ export default function BodyMap({ organs, risks, pose, motion, substanceKey = ''
     </g>}
     {substanceKey==='ostarine' && <g opacity={pose.response+pose.adverse} fill="none" stroke="#a18bae" strokeWidth="2"><path d="M70 44V57M70 57L42 77M70 57L100 77" strokeDasharray="3 5" strokeDashoffset={-pose.t*3}/><circle cx="70" cy="44" r="5"/><path d="M65 42h10M70 39v10"/><path d="M62 104h16" stroke="#b27760" strokeWidth={1+pose.adverse*2}/></g>}
     {substanceKey==='vitamin-d' && <g fill="#d7b467" opacity={pose.response}>{[0,1,2].map(i=><circle key={i} cx={63+Math.sin(pose.t*1.5-i)*6} cy={82+i*20} r={2.5+Math.sin(pose.t*1.5-i)*.7}/>)}</g>}
-    <circle cx="126" cy="12" r="3" fill="#8c9f79" opacity={.8 * (1 - pose.adverse)}/>
-    <circle cx="126" cy="12" r="3" fill={motion === 'hormone' ? '#9b83ac' : '#bd7d66'} opacity={.8 * pose.adverse}/>
+    {motion!=='context'&&<><circle cx="126" cy="12" r="3" fill="#8c9f79" opacity={.8 * (1 - pose.adverse)}/>
+    <circle cx="126" cy="12" r="3" fill={motion === 'hormone' ? '#9b83ac' : '#bd7d66'} opacity={.8 * pose.adverse}/></>}
   </svg>;
 }

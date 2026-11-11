@@ -6,9 +6,11 @@ Use the [review record template](scene-review-record-template.md) to record evid
 
 ## 1. Establish the scope
 
-List the changed files and affected substance IDs before capturing evidence. A change to shared `Character` code requires regression review of all 19 entries in `app/data/substances.ts`. Changes to shared timing, layout, drawing helpers or controls require review of every scene they can affect. If the affected set cannot be established, review all entries.
+List the changed files and affected substance IDs before capturing evidence. A change to shared `Character` code requires regression review of all entries exported by `app/data/substances.ts`, including the expanded catalog. Changes to shared timing, layout, drawing helpers or controls require review of every scene they can affect. If the affected set cannot be established, review all entries.
 
 Record the source revision, any uncommitted changes, browser, viewport and capture date. Capture after the final relevant edit. Later edits invalidate the affected approval and require fresh evidence. Compare entries within the same effect family side by side to check that their settings, response and downside remain distinct.
+
+Run `node scripts/scene-review-snapshot.mjs` before capturing a stable revision. It records the application source hashes and current catalog IDs in a dedicated ignored output folder. Copy the returned fingerprint into each recording manifest and reviewer record. Pause source assembly while recording: a development reload can reset playback or selected stages. Record displayed scene times, not just elapsed wall time.
 
 ## 2. Capture complete scenes
 
@@ -16,7 +18,7 @@ For each affected scene, record a complete loop at desktop width. At 390 CSS pix
 
 The current loop is 24 seconds. Start before the first action and continue past the reset into the next cycle; approximately 26 seconds covers that boundary. Check the displayed scene time as well as elapsed recording time. If `LOOP_SECONDS` changes, capture the new complete duration and its reset.
 
-Save exposure, response and downside stills using the current `STAGE_TIMES`, plus frames immediately before and after the loop boundary. Add frames at maximum reach, mouth contact, strongest body lean and any attachment or occlusion that needs closer inspection. The current stage times are 3.7, 9 and 18.1 seconds; use the source values if these change.
+Save opening, exposure, response and downside stills, plus frames immediately before and after the loop boundary. Add frames at maximum reach, mouth contact, strongest body lean and any attachment or occlusion that needs closer inspection. Legacy stage times are 3.7, 9 and 18.1 seconds. Context scenes use 2, 10 and 18.1 seconds, with exposure contact near 6 seconds. Use the current source values if these change.
 
 Check capture validity before reviewing it. A cropped SVG, hidden feet, covered character, devtools overlay or missing loop boundary makes that capture insufficient for approval. Magnified crops help diagnose a defect, but require a complete-scene capture alongside them. Recapture invalid evidence. Record the actual sampling rate and any dropped frames; a sparse recording does not establish a higher rendering frame rate.
 
@@ -54,7 +56,7 @@ npm run build
 git diff --check
 ```
 
-The current regression suite has 13 tests across `scene-timeline.test.mjs`, `substance-choreography.test.mjs` and `scene-sound.test.mjs`. Run the full suite, including later additions, and record the observed count and results. A validated Sites production build may supply the production-build result; record the command used. Compilation and tests support the review but do not replace rendered inspection.
+Run every `tests/*.test.mjs` file and record the observed count and results. The suite includes catalog identity, context choreography, original scene timing and sound checks. A validated Sites production build may supply the production-build result; record the command used. Compilation and tests support the review but do not replace rendered inspection.
 
 ## 5. Resolve findings and obtain both reviews
 
@@ -63,3 +65,5 @@ Log each defect with its scene, stage or time, viewport, evidence and expected b
 The motion reviewer must inspect full-loop playback, attachment continuity, stage transitions and the boundary. The composition/accessibility reviewer must inspect object placement, intentional overlaps, protected spaces, readable content and desktop/mobile layout. Both reviewers receive the source changes, complete captures and defect log.
 
 Keep each review pending until its required evidence is valid and its concrete findings have been resolved and rechecked. Record each reviewer's disposition, reviewed revision, covered scenes and limitations. Report unresolved or untested areas explicitly. Approval means that no blocking defect remains in the reviewed scope; it is not a guarantee against every possible defect.
+
+Use Sol for both independent review roles. Source research may use a lower-cost model. A development review grid can establish broad coverage, but it does not replace full-size contact checks or the real guide's captions, controls and mobile layout. Record the IDs actually present in each grid, capture timestamps, sample rate and gaps. Never treat a sparse capture as proof of smooth rendering.

@@ -1,3 +1,5 @@
+import { getCatalogSeed } from '../../data/catalog/index.ts';
+import { sampleContextPose } from './context-motion.ts';
 export const LOOP_SECONDS = 24;
 export const STAGE_TIMES = [3.7, 9, 18.1] as const;
 export type Motion = 'jitter' | 'sway' | 'panic' | 'heat' | 'breathing' | 'gut' | 'craving' | 'hormone' | 'kidney' | 'interaction' | 'dissociate';
@@ -16,9 +18,10 @@ const rampIntegral = (t: number, a: number, b: number) => {
 /** One clock drives every visible channel, including idle movement and labels. */
 export function sampleScene(seconds: number, motion: Motion | string, substanceKey = '') {
   const t = ((seconds % LOOP_SECONDS) + LOOP_SECONDS) % LOOP_SECONDS;
-  const intake = envelope(t, 1.4, 3.1, 4.4, 6.1);
-  const response = envelope(t, 5.9, 7.2, 11.9, 13.4);
-  const adverse = envelope(t, 13.4, 14.9, 20.8, 22.8);
+  const context=getCatalogSeed(substanceKey),contextual=motion==='context'||!!context;
+  const intake = contextual?envelope(t,4.1,5.7,6.7,8.2):envelope(t, 1.4, 3.1, 4.4, 6.1);
+  const response = contextual?envelope(t,8.2,10,12.2,14):envelope(t, 5.9, 7.2, 11.9, 13.4);
+  const adverse = contextual?envelope(t,14,15.5,21,23):envelope(t, 13.4, 14.9, 20.8, 22.8);
   const wave = Math.sin(t * Math.PI * 2 / 4);
   const tremor = adverse * (motion === 'jitter' || motion === 'craving' ? Math.sin(t * 15) * 1.25 : 0);
   const sway = adverse * (motion === 'sway' ? Math.sin(t * 1.3) * 4 : motion === 'dissociate' ? Math.sin(t * .9) * 2 : 0);
@@ -31,7 +34,8 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
   const blinkAt = t % 6;
   const blink = 1 - .9 * envelope(blinkAt, 4.4, 4.52, 4.64, 4.8);
   const base = {
-    t, intake, response, adverse, oralProp: 1 - envelope(t, 3.3, 3.9, 22.8, 24), stage: t < 5.9 ? 0 : t < 13.4 ? 1 : 2,
+    t, intake, response, adverse, oralProp: 1 - (contextual?envelope(t,6.1,6.7,23.2,24):envelope(t, 3.3, 3.9, 22.8, 24)), stage: t < (contextual?8.2:5.9) ? 0 : t < (contextual?14:13.4) ? 1 : 2,
+    contextTaskAmount:0,contextPropOpacity:0,contextExposureOpacity:1,
     // Reach around the shoulder on an arc; a straight line crosses its joint.
     hand: [(1 - intake) ** 2 * 465 + 2 * (1 - intake) * intake * 500 + intake ** 2 * 409 + tremor,
       (1 - intake) ** 2 * 267 + 2 * (1 - intake) * intake * 170 + intake ** 2 * 211] as Point,
@@ -47,6 +51,7 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
     ghost: adverse * (motion === 'dissociate' ? .3 : 0),
     worry: adverse * (motion === 'panic' || motion === 'craving' || motion === 'jitter' ? 1 : 0),
   };
+  if(context)return {...base,...sampleContextPose(base,context)};
   const r = response, a = adverse;
   const oscillate = (speed: number, phase = 0) => Math.sin(t * speed + phase);
   let lr: Point = [366,279], la: Point = [366,279], rr: Point = [465,267], ra: Point = [465,267];

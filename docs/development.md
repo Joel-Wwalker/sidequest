@@ -33,6 +33,8 @@ Use the keyboard to reach the library, entry tabs and dialog controls. Check tha
 
 For scene changes, watch a complete loop, pause it, resume it, replay it and select each story stage. Switch substances during playback. Repeat the check with reduced motion enabled and confirm that the scene stays still. Check that captions and organ highlights agree with the selected entry and stage.
 
+The development-only `/review` route renders the same scene components in batches. Its search accepts comma-separated names or IDs for side-by-side checks. Use full cards for captions and body views, and check the real guide's controls separately. Record a source snapshot with `node scripts/scene-review-snapshot.mjs`; `node scripts/check-scene-evidence.mjs <snapshot-directory>` checks capture coverage. Neither command grants visual approval.
+
 ## Publishing
 
 `.openai/hosting.json` identifies the existing Sites project. Keep its project ID when updating this app. A GitHub push records source changes; it does not publish a new Site deployment.

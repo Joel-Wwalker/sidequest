@@ -1,6 +1,6 @@
 # SIDEQUEST
 
-SIDEQUEST is a browser-based substance encyclopedia with source-linked entries and animated pixel scenes. Browse 19 curated entries, compare effects and risks, and follow the sources behind each summary.
+SIDEQUEST is a browser-based substance encyclopedia with source-linked entries and animated retro scenes. Browse 506 entries, compare selected effects and risks, and follow the sources behind each summary. The catalog includes medications, psychoactive substances, peptides, SARMs, steroids, nutrients and herbs.
 
 Bookmarks and personal notes save in your browser. The current edition has no account system or forum.
 
@@ -37,9 +37,9 @@ Browser storage belongs to the current browser and site address. Notes and bookm
 
 ## Editorial scope
 
-This is a curated first edition. Descriptions are original summaries with linked government and research sources. Risk labels are qualitative editorial summaries, not validated clinical scales or personal safety predictions. Medical-product risk descriptions focus on nonmedical use. The guide has not undergone clinical review.
+Descriptions are summaries with linked government and research sources. Medication entries select a treatment context; experimental entries state evidence limits. Risk labels are qualitative editorial summaries, not validated clinical scales or personal safety predictions. The guide has not undergone clinical review. See the [catalog method](docs/catalog.md) for scope and counting rules.
 
-Animations are symbolic and do not depict dosage, real timing or a procedural method of use. Their stages summarize exposure, possible body responses and possible adverse effects. They are not predictions of an individual's experience.
+Animations illustrate a use context, a selected body response and a possible downside. Oral and beverage examples use simplified gestures; other routes can be symbolic. The scenes do not give doses or administration instructions, model biological timing, or predict an individual's experience. Changes from repeated treatment are labeled accordingly.
 
 ## Development
 

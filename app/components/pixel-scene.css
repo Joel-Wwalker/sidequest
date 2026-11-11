@@ -29,3 +29,4 @@
 .scene-room{align-self:stretch;display:flex;align-items:center;background:var(--scene-wall,#eee8df)}.monitor-copy h3{display:flex;align-items:flex-end}
 .scene-room-art{position:relative;width:100%;aspect-ratio:720/430}.monitor-legend{min-height:32px;display:block}.monitor-key{margin-right:5px;vertical-align:middle}
 .scene-masthead,.monitor-heading{color:#59674c}
+.scene-caption,.scene-exposure-note{color:#45523d}.story-number{color:#4e6241}.story-number.is-adverse{color:#8b4e35}

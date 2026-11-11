@@ -1,3 +1,5 @@
+import { getCatalogSeed } from '../../data/catalog/index.ts';
+import { contextStyle } from './context-style.ts';
 export type SceneFamily =
   | 'stimulation'
   | 'heat'
@@ -99,5 +101,7 @@ export const sceneSets: Record<string, SceneSet> = {
 };
 
 export function getSceneSet(key: string): SceneSet {
+  const seed=getCatalogSeed(key);
+  if(seed)return contextStyle(seed) as SceneSet;
   return sceneSets[key] ?? sceneSets.caffeine;
 }

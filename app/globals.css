@@ -23,3 +23,14 @@
 @media(max-width:640px){.scene-stages{grid-template-columns:1fr;gap:3px;padding:12px 0}.scene-stages button{align-items:center;font-size:12px;padding:6px 8px;border-radius:5px}.scene-stages button>span:first-child{width:25px;flex:none}.scene-stages button.active{background:#e9eddf}.stats-grid{grid-template-columns:1fr;gap:15px;padding:18px 0}.stat{padding:0 0 15px;border-right:0;border-bottom:1px solid var(--line)}.stat:last-child{padding-bottom:0;border-bottom:0}.stat-label{font-size:10px;min-height:0}.stat strong{min-height:0;font-size:22px;margin-bottom:5px}.stat small{font-size:11px}.scene-caption{font-size:10px;line-height:1.5}}
 @media(max-width:640px){.stats-grid{padding:0;gap:0}.stat,.stat:last-child{padding:16px}}
 @media(max-width:640px){.guide-topline .library-count-detail{display:none}.guide-topline>span:last-child{max-width:none;overflow:visible}}
+/* The setting explains why this scene accompanies the selected ingredient. */
+.scene-context{margin:0 0 18px;padding:14px 17px;border:1px solid #d6ddcd;border-radius:10px;background:#edf0e5;color:#56644c}
+.scene-context[hidden]{display:none}.scene-context>span{font:600 10px/1.5 var(--body);letter-spacing:.7px;text-transform:uppercase}.scene-context i{font-style:normal;margin:0 7px;opacity:.5}.scene-context p{margin:6px 0 0;font:400 13px/1.7 var(--body);max-width:76ch}
+
+/* Keep long ingredient names within the entry column. */
+.entry-title-row>div{min-width:0}.entry h2{overflow-wrap:anywhere}
+.substance-link>span:nth-child(2){min-width:0;overflow-wrap:anywhere}
+
+.title-ending{white-space:nowrap}
+
+@media(max-width:640px){.entry h2.long-name{font-size:30px;letter-spacing:-1px}}

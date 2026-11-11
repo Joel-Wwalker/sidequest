@@ -1,8 +1,11 @@
 'use client';
 
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { memo, useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import Room from './scene/Room';
+import ContextRoom from './scene/ContextRoom';
+import ContextEffects from './scene/ContextEffects';
+import { getCatalogSeed } from '../data/catalog/index';
 import Atmosphere from './scene/Atmosphere';
 import Character from './scene/Character';
 import BodyMap from './scene/BodyMap';
@@ -12,11 +15,15 @@ import { playSceneSound, prepareSceneSound, stopSceneSound } from './scene/sound
 import { getSceneSet } from './scene/sets';
 import './pixel-scene.css';
 
+const StaticRoom=memo(Room);
+const StaticContextRoom=memo(ContextRoom);
+
 export type PixelSceneProps = {
   type: string;
   action: 'sips' | 'takes';
   labels?: string[];
   name: string;
+  substanceId?: string;
   paused: boolean;
   phase?: number;
   risks?: string[];
@@ -27,18 +34,24 @@ export type PixelSceneProps = {
 };
 
 /** Shared by live playback and deterministic visual review frames. */
-export function SceneFrame({ type, action, labels, name, time, risks = [], effects = [], soundOn = false, onSoundChange, soundUnavailable = false }: Omit<PixelSceneProps, 'paused' | 'phase'> & { time: number }) {
+export function SceneFrame({ type, action, labels, name, substanceId, time, risks = [], effects = [], soundOn = false, onSoundChange, soundUnavailable = false }: Omit<PixelSceneProps, 'paused' | 'phase'> & { time: number }) {
   const id = useId().replace(/:/g, '');
-  const profile = useMemo(() => getSceneProfile(name, type), [name, type]);
+  const profile = useMemo(() => getSceneProfile(name, type,substanceId), [name, type,substanceId]);
+  const context=getCatalogSeed(profile.key);
   const sceneSet = getSceneSet(profile.key);
   const pose = sampleScene(time, profile.motion, profile.key);
   const stage = pose.stage;
-  const title = ['The first moment', ...profile.beats][stage];
+  const title = [context ? 'The use context' : 'The first moment', ...profile.beats][stage];
   const selectedLabel = labels?.[stage] ?? title;
-  const thought = stage === 2 ? profile.thoughts[1] : stage === 1 ? profile.thoughts[0] : action === 'sips' ? 'one curious little human.' : profile.oral ? 'a small action, a complex body.' : 'let’s see what changes.';
+  const thought = stage === 2 ? profile.thoughts[1] : stage === 1 ? profile.thoughts[0] : context?.scene.intent ?? (action === 'sips' ? 'one curious little human.' : profile.oral ? 'a small action, a complex body.' : 'let’s see what changes.');
   const activeOrgans = stage === 2 ? profile.risks : profile.organs;
-  const details = stage === 2 ? risks.slice(0, 2) : stage === 1 ? effects.slice(0, 2) : ['Responses vary between people.', profile.longTerm ? 'Changes develop over time.' : 'This is an illustrative sequence.'];
-  const intake = action === 'sips' ? 'drink' : profile.oral ? 'oral' : 'symbolic';
+  const timing = context ? ({'immediate':'Timing varies with the substance and person.','over-time':'Changes develop over repeated use, not in one loop.',variable:'Timing depends on the condition and formulation.',unknown:'Human effects and timing are not well established.'}[context.scene.timeCourse ?? 'unknown']) : profile.longTerm ? 'Changes develop over time.' : 'This is an illustrative sequence.';
+  const details = stage === 2 ? context?.scene.riskNotes ?? risks.slice(0, 2) : stage === 1 ? context?.scene.responseNotes ?? effects.slice(0, 2) : [context?.scene.intent ?? 'Responses vary between people.', timing];
+  const intake = context?.scene.exposure ?? (action === 'sips' ? 'drink' : profile.oral ? 'oral' : 'symbolic');
+  const exposureText={drink:profile.key==='alcohol'?'smoothly raises and lowers an alcohol bottle':'smoothly raises and lowers a mug',oral:'raises their hand to their mouth in an oral example',symbolic:'appears beside a symbolic exposure marker',inhaler:'raises an inhaler in a schematic example',topical:'brings a topical product toward the forearm'}[intake];
+  const sceneDescription=context
+    ? `${sceneSet.name}. ${stage===0?(pose.t<4.1?`${context.scene.intent} The activity uses a ${context.scene.prop.replaceAll('-',' ')}.`:`A person ${exposureText}.`):`${details.join('. ')}. ${stage===1?'The wall diagram illustrates a selected mechanism.':'The wall diagram illustrates the selected possible downside.'}`} ${timing} This is a schematic illustration, not a method of use.`
+    : `${selectedLabel}. ${stage===0?`A person ${exposureText}.`:'Their expression and movement show selected possible effects.'} The separate body view shows ${profile.motion==='interaction'?'medicine interactions':stage===2?profile.riskLabel.toLowerCase():activeOrgans.join(', ')}. This illustration is not a real timeline or a method of use.`;
   const signalFrequency = profile.motion === 'breathing' ? 1 : profile.motion === 'jitter' || profile.motion === 'heat' ? 3 : 1.8;
   const signal = Array.from({ length: 65 }, (_, i) => {
     const envelope = Math.sin(i / 64 * Math.PI);
@@ -53,22 +66,22 @@ export function SceneFrame({ type, action, labels, name, time, risks = [], effec
         <div className="scene-room-art">
         <svg className="scene-art" viewBox="0 0 720 430" role="img" aria-labelledby={`${id}-title ${id}-description`}>
           <title id={`${id}-title`}>{`${name}: ${title.toLowerCase()}`}</title>
-          <desc id={`${id}-description`}>{`${selectedLabel}. A person ${intake === 'drink' ? (profile.key === 'alcohol' ? 'smoothly raises and lowers an alcohol bottle' : 'smoothly raises and lowers a mug') : intake === 'oral' ? 'raises their hand to their mouth in an oral example' : 'appears beside a symbolic exposure marker'}. Their expression and movement show selected possible effects. The separate body view shows ${profile.motion === 'interaction' ? 'medicine interactions' : stage === 2 ? profile.riskLabel.toLowerCase() : activeOrgans.join(', ')}. This illustration is not a real timeline or a method of use.`}</desc>
-          <Room id={id} substanceKey={profile.key}/>
-          <Atmosphere id={id} substanceKey={profile.key} pose={pose}/>
+          <desc id={`${id}-description`}>{sceneDescription}</desc>
+          {context?<StaticContextRoom id={id} seed={context}/>:<StaticRoom id={id} substanceKey={profile.key}/>}
+          {context?<ContextEffects id={id} seed={context} pose={pose}/>:<Atmosphere id={id} substanceKey={profile.key} pose={pose}/>}
           <Character pose={pose} motion={profile.motion} intake={intake} mushroom={profile.key === 'psilocybin'} substanceKey={profile.key} accent={sceneSet.accent}/>
         </svg>
-        <div className="scene-thought" key={`${name}-${stage}`}><span>{thought}</span></div>
-        <span className="scene-exposure-note">{intake === 'drink' ? 'Beverage example' : intake === 'oral' ? 'Oral example' : 'Symbolic exposure'}</span>
+        {(!context||stage>0)&&<div className="scene-thought" key={`${name}-${stage}`}><span>{thought}</span></div>}
+        <span className="scene-exposure-note">{{drink:'Beverage example',oral:'Oral example',symbolic:'Symbolic exposure',inhaler:'Inhaled example',topical:'Topical example'}[intake]}</span>
         </div>
       </div>
       <aside className={`scene-monitor ${stage === 2 ? 'is-adverse' : ''}`} aria-label={`${name} body view`}>
         <div className="monitor-heading"><span>BODY VIEW</span><span>{stage === 2 ? 'POSSIBLE DOWNSIDE' : stage === 1 ? 'BODY RESPONSE' : 'AT A GLANCE'}</span></div>
-        <div className="monitor-body"><BodyMap organs={profile.organs} risks={profile.risks} pose={pose} motion={profile.motion} substanceKey={profile.key}/><div className="monitor-legend"><span className="monitor-key"/>{stage === 2 || profile.motion === 'interaction' ? profile.riskLabel.toLowerCase() : activeOrgans.join(' · ')}</div></div>
+        <div className="monitor-body"><BodyMap organs={profile.organs} risks={profile.risks} pose={pose} motion={profile.motion} substanceKey={profile.key}/><div className="monitor-legend"><span className="monitor-key"/>{!context&&(stage === 2 || profile.motion === 'interaction') ? profile.riskLabel.toLowerCase() : activeOrgans.join(' · ') || 'Systemic / cellular effects'}</div></div>
         <div className="monitor-copy"><h3>{title}</h3><ul>{details.map(detail => <li key={detail}>{detail}</li>)}</ul><div className="monitor-signal"><svg viewBox="0 0 160 40" aria-hidden="true"><path d="M0 20H160" stroke="#e0e3d7" strokeDasharray="2 4"/><path d={signal} stroke="currentColor" strokeWidth="1.5" fill="none"/></svg><span>{profile.motion === 'breathing' ? 'Breathing illustration' : profile.motion === 'heat' ? 'Heat / body strain' : profile.longTerm ? 'Changes over time' : 'Body response illustration'}</span></div></div>
       </aside>
     </div>
-    <div className="scene-story"><span className={`story-number ${stage === 2 ? 'is-adverse' : ''}`}>0{stage + 1}</span><div><strong>{selectedLabel}</strong><p>{thought}</p></div><span className="scene-story-duration">{profile.longTerm ? 'Over time' : 'Every body differs'}</span></div>
+    <div className="scene-story"><span className={`story-number ${stage === 2 ? 'is-adverse' : ''}`}>0{stage + 1}</span><div><strong>{selectedLabel}</strong><p>{thought}</p></div><span className="scene-story-duration" title={timing}>{profile.longTerm ? 'Over repeated use' : context?.scene.timeCourse==='unknown' ? 'Timing uncertain' : 'Every body differs'}</span></div>
     <div className="scene-progress" role="progressbar" aria-label="Illustration playback" aria-valuenow={Math.round(pose.t)} aria-valuemax={LOOP_SECONDS} aria-valuemin={0}><span style={{ transform: `scaleX(${pose.t / LOOP_SECONDS})` }}/></div>
   </div>;
 }
@@ -79,7 +92,7 @@ export default function PixelScene(props: PixelSceneProps) {
   const elapsed = useRef(0);
   const [soundUnavailable,setSoundUnavailable]=useState(false);
   const soundKey=useRef('');
-  const profile=useMemo(()=>getSceneProfile(props.name,props.type),[props.name,props.type]);
+  const profile=useMemo(()=>getSceneProfile(props.name,props.type,props.substanceId),[props.name,props.type,props.substanceId]);
   const family=getSceneSet(profile.key).family;
   const currentStage=sampleScene(time,profile.motion,profile.key).stage;
   useEffect(()=>{
@@ -105,10 +118,11 @@ export default function PixelScene(props: PixelSceneProps) {
   }, []);
   useEffect(() => {
     if (props.phase !== undefined) {
-      elapsed.current = STAGE_TIMES[Math.max(0, Math.min(2, Math.floor(props.phase)))];
+      const times=getCatalogSeed(profile.key)?[2,10,18.1]:STAGE_TIMES;
+      elapsed.current = times[Math.max(0, Math.min(2, Math.floor(props.phase)))];
       setTime(elapsed.current); return;
     }
-    if (reduced) { elapsed.current = STAGE_TIMES[1]; setTime(elapsed.current); return; }
+    if (reduced) { elapsed.current = getCatalogSeed(profile.key)?10:STAGE_TIMES[1]; setTime(elapsed.current); return; }
     if (props.paused) return;
     let frameId: number;
     let prior = performance.now();
@@ -120,6 +134,6 @@ export default function PixelScene(props: PixelSceneProps) {
     };
     frameId = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(frameId);
-  }, [props.paused, props.phase, reduced]);
+  }, [props.paused, props.phase, reduced,profile.key]);
   return <SceneFrame {...props} time={time} onSoundChange={props.onSoundChange?toggleSound:undefined} soundUnavailable={soundUnavailable}/>;
 }

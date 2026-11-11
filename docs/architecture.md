@@ -9,6 +9,7 @@ SIDEQUEST renders a single field guide page. React manages browsing state and pe
 | `app/page.tsx` | Mounts the field guide. |
 | `app/layout.tsx` | Page metadata and global styles. |
 | `app/data/substances.ts` | Substance entries, aliases, evidence links, effect descriptions and risk context. |
+| `app/data/catalog/` | Typed medication and specialty records with explicit context, sources and authored scene assignments. |
 | `app/components/FieldGuide.tsx` | Search, categories, saved entries, notes, tabs and scene controls. |
 | `app/components/PixelScene.tsx` | Playback clock, scene composition and accessible descriptions. |
 | `app/components/scene/timeline.ts` | Pose sampling and connected arm geometry. |
@@ -16,6 +17,9 @@ SIDEQUEST renders a single field guide page. React manages browsing state and pe
 | `app/components/scene/sets.ts` and `Atmosphere.tsx` | Nineteen room settings, nine shared effect families, and each entry's animated visual motifs. |
 | `app/components/scene/sound.ts` | Quiet synthesized stage cues, enabled by a user gesture. |
 | `app/components/scene/Character.tsx`, `Room.tsx` and `BodyMap.tsx` | Character, room and separate body-view SVGs. |
+| `app/components/scene/ContextRoom.tsx`, `ContextTaskProps.tsx` and `context-motion.ts` | Context settings, held objects and connected activity gestures for the expanded catalog. |
+| `app/components/scene/ContextEffects.tsx` and `RiskDiagram.tsx` | Separate mechanism and downside diagrams. |
+| `app/review/` | Development-only scene gallery using the production renderer. |
 | `app/components/pixel-scene.css` | Scene layout and responsive body panel. |
 | `app/globals.css` | Responsive application layout and typography. |
 | `components/ui/` | Shared UI primitives supplied by the starter. |
@@ -32,7 +36,9 @@ Bookmarks use the `sidequest-saved` local-storage key. Notes use `sidequest-note
 
 ## Scenes
 
-The field guide passes the selected substance, effect and risk text, and playback controls to `PixelScene`. All nineteen entries have a setting and a named choreography. Nine effect families share drawing and motion primitives; each entry supplies its own gestures, visual motifs and captions. The separate body panel reuses effect and risk text from the matching entry. The animation illustrates possible effects and does not model biological timing.
+The field guide passes the selected substance, effect and risk text, and playback controls to `PixelScene`. The original nineteen entries retain their named choreography. The 487 expanded entries explicitly select a context setting, activity, held object, exposure representation, response, downside and time course. Shared components provide sixteen settings, twenty-two tasks and separate mechanism and downside diagrams. The catalog test compares the actual shared drawing branches so a different label or color cannot establish scene uniqueness.
+
+The context animation returns to the selected task during neutral or therapeutic responses. Experimental entries show uncertainty rather than an established therapeutic benefit. Context-specific notes appear in the body panel; full source summaries remain in the entry details without the scene caption length limit. The animation illustrates selected processes and does not model biological timing.
 
 One `requestAnimationFrame` clock supplies elapsed time to `sampleScene`. The sampler calculates each pose, including ambient movement and effect opacity. `solveArm` calculates the elbow and hand positions from fixed segment lengths so the sleeve, wrist and held prop stay connected.
 

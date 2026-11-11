@@ -6,13 +6,21 @@ Use clean, readable typography. The user rejected pixel lettering; retro styling
 
 ## UI review
 
+Use Sol for independent reviews. Use a lower-cost model for source research; this cost preference does not lower the implementation or review bar. Keep reviewers independent from authors.
+
 For every UI or animation revision, obtain independent UI reviews before delivery. Reviewers must not author the change they review. Use at least one motion reviewer and one composition/accessibility reviewer. Have them inspect rendered output as well as source. Address concrete findings and have the revised output checked again. Do not claim a revision is reviewed from compilation or source inspection alone.
 
 Animations need smooth, connected movement; distinct, evidence-backed side effects; stable object placement; readable annotations; and working pause, replay, selected stages and reduced-motion behavior. Check a full loop and narrow layouts, not only one still.
 
 Each drug needs a recognizable setting and its own response and downside choreography. Shared effect families may reuse animation mechanics, but changing only colors, text or speed is insufficient. Compare same-family entries side by side. Use restrained drug-specific humor in character asides and props; keep serious harm legible. Scene sound is optional, quiet, and off until the user enables it.
 
-Follow the [scene review procedure](docs/scene-review-procedure.md) for every scene-affecting revision. Record full-loop and stage evidence, attachment and overlap checks, desktop and 390px checks, both independent reviewers' findings, and each fix and recheck. A shared `Character` change requires regression review of all 19 scenes. Cropped or obstructed captures cannot support approval. Keep approval scoped to the evidence reviewed; do not promise that a revision has no possible defects.
+Follow the [scene review procedure](docs/scene-review-procedure.md) for every scene-affecting revision. Record full-loop and stage evidence, attachment and overlap checks, desktop and 390px checks, both independent reviewers' findings, and each fix and recheck. A shared `Character` change requires regression review of every catalog scene. Cropped or obstructed captures cannot support approval. Keep approval scoped to the evidence reviewed; do not promise that a revision has no possible defects.
+
+## New entries
+
+Before implementing a substance, establish its credible use context. Author the setting, ordinary activity, held object, exposure representation, selected response and downside, and time course explicitly. Show prescribed treatment as treatment; label experimental uncertainty. Changes over repeated use must not appear to be an immediate transformation. Match the scene explanation to its selected indication.
+
+Use verified sources. Count canonical substances once and treat brands, salts and formulations as aliases unless a separate ingredient has a justified identity. Each entry needs a distinct rendered scene; ID hashes, colors, timing labels and unused metadata do not establish uniqueness. Check task/prop combinations and map body regions deliberately rather than guessing from risk keywords.
 
 ## Pull requests
 

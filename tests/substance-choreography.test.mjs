@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { sampleScene, solveArm, LOOP_SECONDS } from '../app/components/scene/timeline.ts';
 import { getSceneProfile } from '../app/components/scene/profiles.ts';
-import { substances } from '../app/data/substances.ts';
+import { originalSubstances as substances } from '../app/data/substances.ts';
 import { sceneSets } from '../app/components/scene/sets.ts';
 
 test('all nineteen entries have an explicit setting within the shared effect families',()=>{

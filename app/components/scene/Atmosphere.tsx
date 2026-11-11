@@ -22,7 +22,7 @@ function Stimulation({ substanceKey, pose, accent }: EffectProps) {
     const points = Array.from({length:37},(_,i) => {
       const a = i/36*TAU*2 - pose.t*1.7;
       const peak = Math.sin(a) * Math.pow(Math.abs(Math.sin(a)),5);
-      return `${i?'L':'M'}${571+i*3.25} ${128+peak*(12+pose.adverse*26)}`;
+      return `${i?'L':'M'}${571+i*3.25} ${(128+peak*(12+pose.adverse*26)).toFixed(3)}`;
     }).join(' ');
     return <g stroke={accent} strokeLinecap="round" strokeLinejoin="round">
       <path d={points} strokeWidth="5"/><path d={points} strokeWidth="13" opacity=".13"/>
@@ -133,7 +133,7 @@ function Calendar({ x, y, width, height, columns, pose, accent }: { x:number; y:
   return <g transform={`translate(${x} ${y})`} stroke={accent}>
     <rect width={width} height={height} rx="5" fill="#eee6cd" strokeWidth="2.5"/><path d={`M0 17H${width}M15-4V6M${width-15}-4V6`} strokeWidth="3"/>
     {Array.from({length:rows*columns},(_,i) => <g key={i} transform={`translate(${10+i%columns*cellWidth} ${22+Math.floor(i/columns)*cellHeight})`}>
-      <rect width={cellWidth-5} height={cellHeight-5} rx="2" fill={accent} stroke="none" opacity={.1+(.5+.5*Math.sin(pose.t*.24-i*.5))*.35*(1-pose.adverse*.5)}/>
+      <rect width={cellWidth-5} height={cellHeight-5} rx="2" fill={accent} stroke="none" opacity={Number((.1+(.5+.5*Math.sin(pose.t*.24-i*.5))*.35*(1-pose.adverse*.5)).toFixed(4))}/>
       <path d={`M3 ${cellHeight*.45}h${Math.max(3,cellWidth-12)}`} strokeWidth="2" opacity={pose.adverse*.6}/>
     </g>)}
   </g>;

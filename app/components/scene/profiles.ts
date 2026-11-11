@@ -1,3 +1,4 @@
+import { getCatalogSeed } from '../../data/catalog/index.ts';
 const thoughts: Record<string, [string, string]> = {
   caffeine: ["oh, hello brain.", "i can hear the fridge."],
   psychedelic: ["the wallpaper gets it.", "a little too much input."],
@@ -8,7 +9,7 @@ const thoughts: Record<string, [string, string]> = {
   supplement: ["not an instant feeling.", "results may vary."],
 };
 
-export type Organ = "brain" | "lungs" | "heart" | "gut" | "muscle" | "liver" | "kidneys" | "bladder" | "hormones" | "bones";
+export type Organ = "brain" | "lungs" | "heart" | "gut" | "muscle" | "liver" | "kidneys" | "bladder" | "hormones" | "bones" | "skin" | "hair" | "eyes";
 export type SceneProfile = { thoughts: [string, string]; organs: Organ[]; risks: Organ[]; riskLabel: string };
 // These labels summarize the matching encyclopedia entry, not a dose or onset model.
 export const profiles: Record<string, SceneProfile> = {
@@ -85,7 +86,9 @@ const asides: Record<string, [string, string]> = {
   ashwagandha: ['a plant, with fine print.', 'the eyelids have other plans.'],
   'st-johns-wort': ['small flowers. busy chemistry.', 'the medicines missed the memo.'],
 };
-export function getSceneProfile(name: string, type: string) {
+export function getSceneProfile(name: string, type: string, substanceId?:string) {
+  const seed=getCatalogSeed(substanceId??name);
+  if(seed)return {key:seed.id,thoughts:seed.scene.asides,organs:seed.scene.organs,risks:seed.scene.cautions,riskLabel:seed.risks[0],beats:seed.scene.beats,motion:'context',oral:seed.scene.exposure==='oral',longTerm:seed.scene.timeCourse==='over-time',exposure:seed.scene.exposure};
   const key = name.toLowerCase().replace(/[.’']/g, '').replace(/\s+/g, '-');
   return {
     key,
