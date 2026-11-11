@@ -1,0 +1,162 @@
+.pixel-scene {
+  --scene-duration: 12s;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background: #eee8df;
+}
+
+.pixel-scene__art { display: block; width: 100%; height: auto; aspect-ratio: 760 / 340; }
+.pixel-scene text { font-family: var(--font-mono, "Courier New", monospace); shape-rendering: auto; }
+.pixel-scene__room-label text { font-size: 7px; font-weight: 600; letter-spacing: 1px; fill: #686f5e; }
+.pixel-scene__scale-label { font-size: 6.5px; letter-spacing: .8px; fill: #898273; }
+.pixel-scene__tiny-note { font-size: 6.5px; letter-spacing: .2px; fill: #a18471; }
+.pixel-scene__thought text { font-size: 9px; letter-spacing: -.2px; fill: #716d61; }
+.pixel-scene__clock-hand { transform-origin: 605px 91px; animation: pixel-clock 60s steps(12, end) infinite; }
+.pixel-scene__cat { transform-origin: 220px 231px; animation: pixel-cat-breathe 4s steps(2, end) infinite; }
+.pixel-scene__cat-sleep { animation: pixel-cat-sleep 4s steps(3, end) infinite; }
+.pixel-scene__hand { animation: pixel-hand var(--scene-duration) steps(4, end) infinite; }
+.pixel-scene__arm-down { animation: pixel-arm-down var(--scene-duration) steps(1, end) infinite; }
+.pixel-scene__arm-mid { opacity: 0; animation: pixel-arm-mid var(--scene-duration) steps(1, end) infinite; }
+.pixel-scene__arm-up { opacity: 0; animation: pixel-arm-up var(--scene-duration) steps(1, end) infinite; }
+.pixel-scene__mouth { transform-origin: 407px 169px; animation: pixel-mouth var(--scene-duration) steps(1, end) infinite; }
+.pixel-scene__person { animation: pixel-after-effect var(--scene-duration) steps(1, end) infinite; }
+.pixel-scene__head { transform-origin: 406px 180px; }
+.pixel-scene__sleepy-eyes { opacity: 0; }
+.pixel-scene__body-highlight { opacity: 0; animation: pixel-highlight var(--scene-duration) steps(3, end) infinite; }
+.pixel-scene__good-effects, .pixel-scene__thought--good { opacity: 0; animation: pixel-good var(--scene-duration) steps(2, end) infinite; }
+.pixel-scene__bad-effects, .pixel-scene__thought--bad { opacity: 0; animation: pixel-bad var(--scene-duration) steps(2, end) infinite; }
+.pixel-scene__float-one { animation: pixel-float 3s steps(3, end) infinite; }
+.pixel-scene__float-two { animation: pixel-float 3s steps(3, end) -1.5s infinite; }
+.pixel-scene__orbit { display: none; }
+.pixel-scene--psychedelic .pixel-scene__orbit,
+.pixel-scene--cannabis .pixel-scene__orbit { display: inline; }
+.pixel-scene__sleep-symbols { display: none; }
+.pixel-scene--sedative .pixel-scene__person,
+.pixel-scene--cannabis .pixel-scene__person,
+.pixel-scene--supplement .pixel-scene__person,
+.pixel-scene--muscle .pixel-scene__person { animation: none; }
+.pixel-scene--sedative .pixel-scene__head,
+.pixel-scene--cannabis .pixel-scene__head { animation: pixel-droop var(--scene-duration) steps(3, end) infinite; }
+.pixel-scene--sedative .pixel-scene__eyes,
+.pixel-scene--cannabis .pixel-scene__eyes { animation: pixel-awake var(--scene-duration) steps(1, end) infinite; }
+.pixel-scene--sedative .pixel-scene__sleepy-eyes,
+.pixel-scene--cannabis .pixel-scene__sleepy-eyes { animation: pixel-bad var(--scene-duration) steps(1, end) infinite; }
+.pixel-scene--sedative .pixel-scene__bad-effects > path,
+.pixel-scene--cannabis .pixel-scene__bad-effects > path,
+.pixel-scene--supplement .pixel-scene__bad-effects > path,
+.pixel-scene--muscle .pixel-scene__worry { display: none; }
+.pixel-scene--sedative .pixel-scene__sleep-symbols,
+.pixel-scene--cannabis .pixel-scene__sleep-symbols { display: inline; }
+
+/* A raised hand, a changing sleeve silhouette, and a moving mouth tell the first beat. */
+@keyframes pixel-hand {
+  0%, 6% { transform: translate(0, 0); }
+  13%, 23% { transform: translate(-26px, -34px); }
+  31%, 100% { transform: translate(0, 0); }
+}
+@keyframes pixel-arm-down { 0%, 6%, 30%, 100% { opacity: 1; } 7%, 29% { opacity: 0; } }
+@keyframes pixel-arm-mid { 0%, 6%, 13%, 23%, 30%, 100% { opacity: 0; } 7%, 12%, 24%, 29% { opacity: 1; } }
+@keyframes pixel-arm-up { 0%, 12%, 24%, 100% { opacity: 0; } 13%, 23% { opacity: 1; } }
+@keyframes pixel-mouth { 0%, 12%, 24%, 100% { transform: scaleY(1); } 13%, 23% { transform: scaleY(2); } }
+@keyframes pixel-highlight { 0%, 31%, 68%, 100% { opacity: 0; } 38%, 61% { opacity: 1; } }
+@keyframes pixel-good { 0%, 34%, 67%, 100% { opacity: 0; } 39%, 60% { opacity: 1; } }
+@keyframes pixel-bad { 0%, 69%, 98%, 100% { opacity: 0; } 74%, 92% { opacity: 1; } }
+@keyframes pixel-after-effect {
+  0%, 73%, 78%, 83%, 88%, 93%, 100% { transform: translateX(0); }
+  75%, 85% { transform: translateX(1px); }
+  80%, 90% { transform: translateX(-1px); }
+}
+@keyframes pixel-droop { 0%, 70%, 98%, 100% { transform: translateY(0) rotate(0); } 78%, 91% { transform: translateY(3px) rotate(4deg); } }
+@keyframes pixel-awake { 0%, 70%, 98%, 100% { opacity: 1; } 74%, 94% { opacity: 0; } }
+@keyframes pixel-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes pixel-cat-breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.04); } }
+@keyframes pixel-cat-sleep { 0%, 100% { opacity: .35; transform: translateY(0); } 50% { opacity: .75; transform: translateY(-3px); } }
+@keyframes pixel-clock { to { transform: rotate(360deg); } }
+
+/* A controlled stage is a useful still frame, including when choosing a step. */
+.pixel-scene:not([data-stage="loop"]) *,
+.pixel-scene[data-paused="true"] * { animation-play-state: paused !important; }
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__person,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__head,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__hand,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__mouth,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__eyes,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__sleepy-eyes,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__arm-down,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__arm-mid,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__arm-up,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__body-highlight,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__good-effects,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__bad-effects,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__thought { animation: none; }
+.pixel-scene[data-stage="0"] .pixel-scene__hand { transform: translate(-26px, -34px); }
+.pixel-scene[data-stage="0"] .pixel-scene__arm-down { opacity: 0; }
+.pixel-scene[data-stage="0"] .pixel-scene__arm-up,
+.pixel-scene[data-stage="1"] .pixel-scene__body-highlight,
+.pixel-scene[data-stage="1"] .pixel-scene__good-effects,
+.pixel-scene[data-stage="1"] .pixel-scene__thought--good,
+.pixel-scene[data-stage="2"] .pixel-scene__bad-effects,
+.pixel-scene[data-stage="2"] .pixel-scene__thought--bad { opacity: 1; }
+.pixel-scene--sedative[data-stage="2"] .pixel-scene__head,
+.pixel-scene--cannabis[data-stage="2"] .pixel-scene__head { transform: translateY(3px) rotate(4deg); }
+.pixel-scene--sedative[data-stage="2"] .pixel-scene__eyes,
+.pixel-scene--cannabis[data-stage="2"] .pixel-scene__eyes { opacity: 0; }
+.pixel-scene--sedative[data-stage="2"] .pixel-scene__sleepy-eyes,
+.pixel-scene--cannabis[data-stage="2"] .pixel-scene__sleepy-eyes { opacity: 1; }
+
+/* Named profiles distinguish the biological response from the possible downside. */
+.pixel-scene__risk-highlight,
+.pixel-scene__risk-label { opacity: 0; animation: pixel-bad var(--scene-duration) steps(2, end) infinite; }
+.pixel-scene__risk-highlight .pixel-scene__symbol { fill: #bd8277; }
+.pixel-scene__risk-label text { font-size: 6px; fill: #986f64; letter-spacing: .25px; }
+.pixel-scene__dissociation { opacity: 0; transform: translate(9px, -3px); animation: pixel-good var(--scene-duration) steps(2, end) infinite; }
+.pixel-scene__arrival { opacity: 0; animation: pixel-arrival var(--scene-duration) steps(3, end) infinite; }
+.pixel-scene[data-action="takes"] .pixel-scene__hand { animation: pixel-hand-neutral var(--scene-duration) steps(2, end) infinite; }
+.pixel-scene[data-action="takes"] .pixel-scene__arm-down { animation: none; opacity: 1; }
+.pixel-scene[data-action="takes"] .pixel-scene__arm-mid,
+.pixel-scene[data-action="takes"] .pixel-scene__arm-up { display: none; }
+.pixel-scene[data-action="takes"] .pixel-scene__mouth { animation: none; }
+.pixel-scene--supplement .pixel-scene__good-effects,
+.pixel-scene--muscle .pixel-scene__good-effects,
+.pixel-scene--sedative .pixel-scene__good-effects { display: none; }
+.pixel-scene[data-substance="fentanyl"] .pixel-scene__head,
+.pixel-scene[data-substance="ketamine"] .pixel-scene__head { animation: none; transform: none; }
+.pixel-scene[data-substance="fentanyl"] .pixel-scene__eyes,
+.pixel-scene[data-substance="ketamine"] .pixel-scene__eyes { animation: none; opacity: 1; }
+.pixel-scene[data-substance="fentanyl"] .pixel-scene__sleepy-eyes,
+.pixel-scene[data-substance="ketamine"] .pixel-scene__sleepy-eyes,
+.pixel-scene[data-substance="fentanyl"] .pixel-scene__sleep-symbols,
+.pixel-scene[data-substance="ketamine"] .pixel-scene__sleep-symbols,
+.pixel-scene[data-substance="alcohol"] .pixel-scene__sleep-symbols { display: none; }
+.pixel-scene[data-substance="alcohol"] .pixel-scene__person { transform-origin: 406px 277px; animation: pixel-balance var(--scene-duration) steps(2, end) infinite; }
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__risk-highlight,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__risk-label,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__arrival,
+.pixel-scene:not([data-stage="loop"]) .pixel-scene__dissociation,
+.pixel-scene:not([data-stage="loop"])[data-action="takes"] .pixel-scene__hand,
+.pixel-scene:not([data-stage="loop"])[data-substance="alcohol"] .pixel-scene__person { animation: none; }
+.pixel-scene[data-stage="0"][data-action="takes"] .pixel-scene__hand { transform: translate(-2px, -3px); }
+.pixel-scene[data-stage="0"] .pixel-scene__arrival,
+.pixel-scene[data-stage="1"] .pixel-scene__dissociation,
+.pixel-scene[data-stage="2"] .pixel-scene__risk-highlight,
+.pixel-scene[data-stage="2"] .pixel-scene__risk-label { opacity: 1; }
+.pixel-scene[data-stage="2"][data-substance="alcohol"] .pixel-scene__person { transform: rotate(2deg); }
+@keyframes pixel-hand-neutral { 0%, 31%, 100% { transform: translate(0, 0); } 13%, 23% { transform: translate(-2px, -3px); } }
+@keyframes pixel-arrival { 0%, 30%, 100% { opacity: 0; transform: translate(4px, 0); } 8%, 23% { opacity: 1; transform: translate(-3px, 0); } }
+@keyframes pixel-balance { 0%, 70%, 96%, 100% { transform: rotate(0); } 76%, 86% { transform: rotate(2deg); } 81%, 91% { transform: rotate(-2deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-scene * { animation: none !important; }
+  .pixel-scene[data-stage="loop"] .pixel-scene__body-highlight,
+  .pixel-scene[data-stage="loop"] .pixel-scene__good-effects,
+  .pixel-scene[data-stage="loop"] .pixel-scene__thought--good { opacity: 1; }
+}
+
+@media (max-width: 520px) {
+  .pixel-scene__scale-label { display: none; }
+  .pixel-scene__art { width: 126%; max-width: none; margin-left: -13%; }
+  .pixel-scene__room-label { transform: translateX(70px); }
+  .pixel-scene__tiny-note { display: none; }
+}
