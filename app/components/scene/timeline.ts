@@ -37,9 +37,9 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
     t, intake, response, adverse, oralProp: 1 - (contextual?envelope(t,6.1,6.7,23.2,24):envelope(t, 3.3, 3.9, 22.8, 24)), stage: t < (contextual?8.2:5.9) ? 0 : t < (contextual?14:13.4) ? 1 : 2,
     contextTaskAmount:0,contextPropOpacity:0,contextExposureOpacity:1,
     // Reach around the shoulder on an arc; a straight line crosses its joint.
-    hand: [(1 - intake) ** 2 * 465 + 2 * (1 - intake) * intake * 500 + intake ** 2 * 409 + tremor,
-      (1 - intake) ** 2 * 267 + 2 * (1 - intake) * intake * 210 + intake ** 2 * 211] as Point,
-    leftHand: [366 + gut * 32, 279 - gut * 11] as Point,
+    hand: [(1 - intake) ** 2 * 440 + 2 * (1 - intake) * intake * 398 + intake ** 2 * 409 + tremor,
+      (1 - intake) ** 2 * 305 + 2 * (1 - intake) * intake * 281 + intake ** 2 * 211] as Point,
+    leftHand: [360 + gut * 38, 305 - gut * 37] as Point,
     sway, tremor, breath, breathPhase, blink, gut,
     tilt: adverse * (motion === 'sway' ? Math.sin(t * 1.3) * 7 : motion === 'breathing' ? 7 : motion === 'dissociate' ? -4 : motion === 'gut' ? 5 : 0),
     eyelid: adverse * (motion === 'breathing' ? .55 : motion === 'sway' ? .3 : 0),
@@ -54,7 +54,7 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
   if(context)return {...base,...sampleContextPose(base,context)};
   const r = response, a = adverse;
   const oscillate = (speed: number, phase = 0) => Math.sin(t * speed + phase);
-  let lr: Point = [366,279], la: Point = [366,279], rr: Point = [465,267], ra: Point = [465,267];
+  let lr: Point = [360,305], la: Point = [360,305], rr: Point = [440,305], ra: Point = [440,305];
   let bodyLean = 0, bodyDrop = 0, lookX = 0, lookY = 0, smile = 0, mouthOpen = 0, pupil = 1, browLift = 0, footTap = 0;
   // Each named sequence combines reusable joints with a different gesture and reaction.
   // Nutritional/endocrine response beats point to diagrams, without an instant benefit pose.
@@ -63,37 +63,37 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
       lr=[360,269+oscillate(3)*4];la=[366,277+oscillate(11)*3];ra=[465+oscillate(16)*2.4,267+oscillate(13)*1.7];
       browLift=r*2;lookX=r*1.6+a*oscillate(3)*1.3;footTap=(r*.8+a*2)*Math.max(0,oscillate(7));smile=r*1.3-a*2;break;
     case 'nicotine':
-      lr=[356,256];la=[350+oscillate(2)*4,242+oscillate(3)*5];rr=[454,259];ra=[464+oscillate(4)*4,252+oscillate(5)*5];
+      lr=[356,256];la=[346+oscillate(2)*4,264+oscillate(3)*5];rr=[454,259];ra=[464+oscillate(4)*4,252+oscillate(5)*5];
       lookX=r*2+a*oscillate(2)*2.5;bodyLean=a*2;smile=r*.7-a*2;footTap=a*(1+oscillate(6));break;
     case 'cocaine':
       lr=[350,253+oscillate(4)*9];rr=[469,244-oscillate(4)*7];la=[401,239];ra=[473,263+oscillate(8)*4];
       bodyLean=r*-2+a*5;lookX=r*oscillate(4)*2.5;lookY=a*1.8;smile=r*1.5-a*3;mouthOpen=a*.3;break;
     case 'mdma':
-      lr=[345,243];rr=[471,246];la=[355,278];ra=[447+oscillate(2)*3,181];
+      lr=[345,243];rr=[471,246];la=[360,305];ra=[455+oscillate(2)*3,287];
       base.sway=r*oscillate(2)*3;bodyLean=r*oscillate(2)*3+a*4;smile=r*5-a*1.5;base.tilt=r*oscillate(2)*4+a*5;browLift=r;break;
     case 'synthetic-cathinones':
-      lr=[348,248+oscillate(5)*8];rr=[474,250-oscillate(5)*8];la=[330+oscillate(3)*3,222+oscillate(5)*4];ra=[449+oscillate(3)*4,207-oscillate(5)*4];
+      lr=[348,248+oscillate(5)*8];rr=[474,250-oscillate(5)*8];la=[328+oscillate(3)*3,250+oscillate(5)*4];ra=[476+oscillate(3)*4,247-oscillate(5)*4];
       base.sway=(r*2+a*3)*oscillate(3);lookX=(r+a)*oscillate(4)*2.3;bodyLean=a*oscillate(3)*4;smile=-a*3;pupil=1+(r+a)*.18;break;
     case 'psilocybin':
       lr=[345,233];rr=[457,253];la=[385,250];ra=[452,235];
       base.tilt=r*10+a*-8;lookX=r*-2+a*2;lookY=r*-1.4;bodyLean=r*-2+a*-6;smile=r*2-a*3;pupil=1+r*.25+a*.2;break;
     case 'lsd':
-      lr=[330,226+oscillate(1)*4];rr=[463,244];la=[330,218];ra=[446,198];
+      lr=[330,226+oscillate(1)*4];rr=[463,244];la=[322,249];ra=[475,248];
       base.tilt=r*oscillate(.8)*9+a*oscillate(1.2)*6;lookX=(r+a)*oscillate(.9)*3;lookY=(r+a)*oscillate(1.1)*2;bodyLean=a*-3;smile=r*.6-a*3;pupil=1+(r+a)*.25;break;
     case '2c-b':
       lr=[346,246+oscillate(2)*5];rr=[468,237+oscillate(2)*4];la=[399,238];ra=[467,255+oscillate(7)*3];
       browLift=r*2;lookX=r*oscillate(1.4)*2;bodyLean=r*-1.5+a*3;base.tilt=r*-5+a*4;smile=r*1.3-a*3;pupil=1+(r+a)*.2;break;
     case 'alcohol':
-      lr=[350,257];la=[341+oscillate(1.3)*6,234-oscillate(1.3)*8];
+      lr=[350,257];la=[337+oscillate(1.3)*6,290-oscillate(1.3)*8];
       base.sway=a*oscillate(1.3)*7;bodyLean=r*oscillate(.8)*2+a*oscillate(1.3)*9;base.tilt=r*6-a*oscillate(1.3)*5;
       base.eyelid=r*.25+a*.35;lookX=-a*oscillate(1.3)*2;smile=r*3-a*2;break;
     case 'fentanyl':
-      lr=[369,281];rr=[453,280];la=[373,285];ra=[445,290];
+      lr=[360,305];rr=[440,305];la=[360,305];ra=[440,305];
       bodyLean=r*4+a*11;bodyDrop=r*1+a*3;base.tilt=r*7+a*17;base.eyelid=r*.38+a*.82;
       lookY=(r+a)*1.8;smile=-a*1.5;mouthOpen=a*.45;break;
     case 'cannabis': {
       const recall = (1+oscillate(1.1))/2;
-      lr=[354,267];rr=[456,277];la=[338+recall*14,223+recall*24];ra=[456,274];
+      lr=[354,267];rr=[456,277];la=[370+recall*15,280+recall*10];ra=[440,305];
       bodyLean=r*-3+a*2;base.tilt=r*-9+a*(5+oscillate(1.1)*5);base.eyelid=r*.3+a*.15;
       lookX=r*-1+a*oscillate(1.1)*2.6;smile=r*3-a*1.8;browLift=a*1.5;break;
     }
@@ -105,7 +105,7 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
       lr=[354,251];rr=[455,265];la=[355,243];ra=[451,268];
       lookX=r*-1.4+a*1.5;base.tilt=r*-3+a*3;break;
     case 'anabolic-steroids':
-      lr=[348,253];rr=[473,253];la=[363,243];ra=[465,263];
+      lr=[348,253];rr=[473,253];la=[352,258];ra=[465,263];
       lookX=r*oscillate(.7)*1.4+a*oscillate(1)*1.8;base.tilt=r*2+a*-4;break;
     case 'ostarine':
       lr=[355,247];rr=[454,263];la=[351,254];ra=[461,246];
@@ -129,12 +129,10 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
     rest[0] + r*(responseHand[0]-rest[0]) + a*(adverseHand[0]-rest[0]),
     rest[1] + r*(responseHand[1]-rest[1]) + a*(adverseHand[1]-rest[1]),
   ];
-  const right = blend([465,267],rr,ra);
-  // Route the forehead wipe around the shoulder instead of through its joint.
-  if (substanceKey === 'mdma') right[0] += 56*a*(1-a);
+  const right = blend([440,305],rr,ra);
   if(substanceKey) {
-    base.leftHand=blend([366,279],lr,la);
-    base.hand=[base.hand[0]+right[0]-465,base.hand[1]+right[1]-267];
+    base.leftHand=blend([360,305],lr,la);
+    base.hand=[base.hand[0]+right[0]-440,base.hand[1]+right[1]-305];
     base.heat=['mdma','synthetic-cathinones'].includes(substanceKey)?a:0;
     base.worry=['testosterone','anabolic-steroids','ostarine','vitamin-d','st-johns-wort'].includes(substanceKey)?0:a;
   }

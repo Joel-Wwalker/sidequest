@@ -66,7 +66,7 @@ test('a beverage uses the sipping hand throughout the activity with continuous j
       const solved=solveCharacterArm('right',p.hand);
       assert.ok(Math.hypot(solved.hand[0]-p.hand[0],solved.hand[1]-p.hand[1])<.01,`${adverse}: unreachable cup`);
       if(previous)assert.ok(Math.hypot(p.hand[0]-previous[0],p.hand[1]-previous[1])<4,`${adverse}: jumping cup`);
-      if(t<3.3)assert.deepEqual(p.leftHand,[366,279],'opening should not hold a second cup');
+      if(t<3.3)assert.deepEqual(p.leftHand,[360,305],'opening should not hold a second cup');
       previous=p.hand;
     }
   }

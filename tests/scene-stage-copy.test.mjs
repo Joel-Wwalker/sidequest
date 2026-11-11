@@ -92,11 +92,24 @@ test('reviewed downside props and local cues render the selected event',()=>{
   };
   for(const id of ['finasteride','dutasteride','cimetidine','spironolactone','esomeprazole']){
     const html=render(id);
-    assert.ok(html.includes('data-card-content="symptom-notes"'),id);
+    assert.ok(!html.includes('data-card-content='),`${id}: synthetic card returned`);
+    assert.ok(html.includes('data-character-cue="symptom-review"'),id);
     assert.ok(!html.includes('data-stage-object="urgent-review"')&&!html.includes('data-stage-object="review-labs"'),id);
   }
   assert.ok(render('ipratropium').includes('data-local-cue="nasal-dryness"'));
   assert.ok(render('peppermint-oil').includes('data-local-cue="reflux"'));
   assert.ok(render('isoniazid').includes('Nerves in the limbs'));
   assert.ok(render('methoxphenidine-mxp').includes('data-stage-object="urgent-review"'));
+});
+
+
+test('silent risks stay on the selected body region without chart props',()=>{
+  for(const [id,process] of [['fluconazole','liver'],['clozapine','white-cell-risk'],['insulin-lispro','blood-glucose']]){
+    const entry=substances.find(entry=>entry.id===id);
+    const html=renderToStaticMarkup(createElement(SceneFrame,{type:entry.sceneType,action:entry.action,name:entry.name,substanceId:id,time:18.1,labels:entry.sceneLabels}));
+    assert.ok(html.includes(`data-body-process="${process}"`),id);
+    assert.ok(!html.includes('data-card-content='),`${id}: card substituted for a body process`);
+  }
+  const story=getContextStageCopies(getCatalogSeed('hydroxychloroquine'))[2];
+  assert.ok(story.cue.includes('Retinal'), 'eye-risk explanation must match the selected event');
 });

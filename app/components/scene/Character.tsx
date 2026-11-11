@@ -8,6 +8,20 @@ import { contextPropVisibility } from './prop-visibility';
 import { inhalerGeometry, inhalerBootPath } from './prop-geometry';
 
 type Pose = ReturnType<typeof sampleScene>;
+function Arm({arm,accent,dark,light}:{arm:ReturnType<typeof solveCharacterArm>;accent:string;dark:string;light:string}){
+  const {shoulder:s,elbow:e,hand:h}=arm;
+  const distance=Math.hypot(h[0]-e[0],h[1]-e[1]);
+  const u=[(h[0]-e[0])/distance,(h[1]-e[1])/distance];
+  const cuff=[e[0]+u[0]*5,e[1]+u[1]*5];
+  const normal=[-u[1],u[0]];
+  return <g data-character-arm="articulated">
+    <path d={`M${e.join(' ')}L${h.join(' ')}`} fill="none" stroke="#cf9f7d" strokeWidth="14" strokeLinecap="round"/>
+    <path d={`M${e.join(' ')}L${h.join(' ')}`} fill="none" stroke="#e9bb96" strokeWidth="11" strokeLinecap="round"/>
+    <path d={`M${s.join(' ')}L${e.join(' ')}L${cuff.join(' ')}`} fill="none" stroke={dark} strokeWidth="21" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d={`M${s.join(' ')}L${e.join(' ')}L${cuff.join(' ')}`} fill="none" stroke={accent} strokeWidth="16" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d={`M${cuff[0]+normal[0]*7} ${cuff[1]+normal[1]*7}L${cuff[0]-normal[0]*7} ${cuff[1]-normal[1]*7}`} stroke={light} strokeWidth="3" strokeLinecap="round"/>
+  </g>;
+}
 export default function Character({ pose, motion, intake, mushroom = false, accent = '#91a78b', substanceKey = '' }: { pose: Pose; motion: string; intake: 'drink' | 'oral' | 'symbolic' | 'inhaler' | 'topical'; mushroom?: boolean; accent?: string; substanceKey?: string }) {
   const eyeId = useId().replace(/:/g, '');
   const context = getCatalogSeed(substanceKey);
@@ -31,16 +45,13 @@ export default function Character({ pose, motion, intake, mushroom = false, acce
     {context&&<ContextCharacterEffects seed={context} pose={pose} left={left.hand} right={right.hand} part="feet"/>}
     <g transform={`translate(${pose.sway} ${-pose.breath * .65 + pose.bodyDrop}) rotate(${pose.bodyLean} 401 285)`}>
       {/* The same calculated joints draw the sleeve, forearm, cuff and attached prop. */}
-      <path d={`M${left.shoulder.join(' ')}L${left.elbow.join(' ')}`} fill="none" stroke={dark} strokeWidth="21" strokeLinecap="round"/>
-      <path d="M384 213H414L428 225L425 282L419 291H380L372 282L374 228Z" fill={accent} stroke={dark} strokeWidth="3" strokeLinejoin="round"/>
+      <path d="M384 213H414L435 222Q440 225 438 238L425 282L419 291H380L372 282L362 238Q360 225 367 222Z" fill={accent} stroke={dark} strokeWidth="3" strokeLinejoin="round"/>
       <path d="M382 232V276M381 283H419" stroke={light} strokeWidth="5"/>
       <path d="M387 213V221Q400 228 413 219V212" fill="#d5a780"/>
       <path d="M386 221Q400 231 415 221" stroke={dark} strokeWidth="4" fill="none"/>
-      <path d={`M${right.shoulder.join(' ')}L${right.elbow.join(' ')}`} fill="none" stroke={dark} strokeWidth="22" strokeLinecap="round"/>
-      <path d={`M${right.shoulder.join(' ')}L${right.elbow.join(' ')}`} fill="none" stroke={accent} strokeWidth="16" strokeLinecap="round"/>
-      <path d={`M${right.elbow.join(' ')}L${right.hand.join(' ')}`} fill="none" stroke={dark} strokeWidth="20" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d={`M${right.elbow.join(' ')}L${right.hand.join(' ')}`} fill="none" stroke={accent} strokeWidth="16" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d={`M${right.elbow[0] + 1} ${right.elbow[1] - 3}L${right.hand[0] - 4} ${right.hand[1] - 3}`} fill="none" stroke={light} strokeWidth="3" strokeLinecap="round"/>
+      {context&&<ContextCharacterEffects seed={context} pose={pose} left={left.hand} right={right.hand} part="body"/>}
+      <Arm arm={left} accent={accent} dark={dark} light={light}/>
+      <Arm arm={right} accent={accent} dark={dark} light={light}/>
       <g transform={`rotate(${pose.tilt} 400 214)`}>
         <path d="M377 165V153H386V145H414V151H423V161H429V190H424V204H416V214H386V207H377V195H371V171Z" fill="#665a51"/>
         <path d="M382 168H390V161H411V167H420V192H416V203H409V210H390V204H382V195H377V177H382Z" fill="#eabd96"/>
@@ -61,11 +72,8 @@ export default function Character({ pose, motion, intake, mushroom = false, acce
     {motion === 'craving' && <g opacity={pose.adverse * .65} transform={`translate(468 183) rotate(${pose.orbit} 0 0)`} fill="none" stroke="#b4a1bf" strokeWidth="2"><path d="M-11 0a11 11 0 1 1 11 11M0 11l-4-4m4 4l5-4"/></g>}
         {context&&<ContextCharacterEffects seed={context} pose={pose} left={left.hand} right={right.hand} part="face"/>}
       </g>
-      {context&&<ContextCharacterEffects seed={context} pose={pose} left={left.hand} right={right.hand} part="body"/>}
       {['cocaine','2c-b'].includes(substanceKey) && <g transform={`translate(405 239) scale(${1+pose.adverse*Math.sin(pose.t*9)*.12})`} opacity={pose.adverse*.7}><path d="M0-3C-8-11-15 1 0 11C15 1 8-11 0-3Z" fill="#c88577"/><path d="M-7 2H-3L0-3L3 7L5 2H8" stroke="#fff0d8" strokeWidth="1.5" fill="none"/></g>}
       {!context&&pose.gut > 0 && <g opacity={pose.gut * .7} fill="none" stroke="#d5ac7b" strokeWidth="2"><ellipse cx="400" cy="266" rx={13 + pose.drift} ry="10"/><ellipse cx="400" cy="266" rx={19 + pose.drift} ry="15" opacity=".4"/></g>}
-      <path d={`M${left.elbow.join(' ')}L${left.hand.join(' ')}`} fill="none" stroke={dark} strokeWidth="20" strokeLinecap="round"/>
-      <path d={`M${left.elbow.join(' ')}L${left.hand.join(' ')}`} fill="none" stroke={accent} strokeWidth="16" strokeLinecap="round"/>
       {context && <ContextTaskProps seed={context} pose={pose} left={left.hand} right={right.hand}/>}
       {context&&<ContextCharacterEffects seed={context} pose={pose} left={left.hand} right={right.hand} part="props"/>}
       <circle cx={left.hand[0]} cy={left.hand[1]} r="9" fill="#e9bb96" stroke="#cf9f7d" strokeWidth="1"/>
@@ -76,7 +84,7 @@ export default function Character({ pose, motion, intake, mushroom = false, acce
           ? <g data-scene-prop="alcohol-bottle"><path d="M-10-18H-3V-6Q5-2 5 5V27Q5 30 2 30H-16Q-19 30-19 27V5Q-19-2-10-6Z" fill="#987443" stroke="#725b3d" strokeWidth="2"/><path d="M-14 5V24" stroke="#c5a578" strokeWidth="2" strokeLinecap="round"/><rect x="-18" y="9" width="22" height="12" rx="1" fill="#dfd2ac"/><path d="M-12 15H-2" stroke="#9c8860" strokeWidth="2"/><path d="M-11-18H-2" stroke="#594b36" strokeWidth="3" strokeLinecap="round"/></g>
           : <g data-scene-prop="coffee-mug" transform="translate(-7 -15)"><path d="M0 0H21V20Q19 25 15 25H6Q0 23 0 18Z" fill="#e9d4a8" stroke="#bc9e72" strokeWidth="2"/><path d="M21 5H27V16H21" stroke="#bc9e72" strokeWidth="3" fill="none"/><ellipse cx="10" cy="1" rx="10" ry="2" fill="#86694f"/></g>}</g>}
         <ellipse cx="0" cy="1" rx="8" ry="7" fill="#e8bb93" stroke="#cf9f7d" strokeWidth="1"/>
-        {intake === 'oral' && <g opacity={pose.oralProp*pose.contextExposureOpacity}>{mushroom ? <g transform="translate(-9 -12)"><rect x="2" y="3" width="4" height="7" fill="#efddbb"/><path d="M-1 3Q4-6 10 3Z" fill="#b49587"/></g> : <rect x="-8" y="-12" width="7" height="4" rx="2" fill="#f6efda"/>}</g>}
+        {intake === 'oral' && <g opacity={pose.oralProp*pose.contextExposureOpacity}>{mushroom ? <g transform="translate(-9 -12)"><rect x="2" y="3" width="4" height="7" fill="#efddbb"/><path d="M-1 3Q4-6 10 3Z" fill="#b49587"/></g> : <><path d="M-2-3L-4-9" stroke="#e8bb93" strokeWidth="4" strokeLinecap="round"/><rect x="-8" y="-12" width="7" height="4" rx="2" fill="#f6efda"/></>}</g>}
       </g>
       {context&&<ContextCharacterEffects seed={context} pose={pose} left={left.hand} right={right.hand} part="hands"/>}
     </g>

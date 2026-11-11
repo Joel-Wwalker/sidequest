@@ -23,7 +23,7 @@ test('the rendered intake wrist remains connected throughout the approach and re
     const pose = sampleScene(time, 'jitter');
     const rendered=solveCharacterArm('right',pose.hand);
     assert.deepEqual(rendered.hand,pose.hand,'rendered wrist stays attached to the prop');
-    assert.ok(Math.hypot(rendered.elbow[0]-rendered.shoulder[0],rendered.elbow[1]-rendered.shoulder[1])<=33);
+    assert.ok(Math.abs(Math.hypot(rendered.elbow[0]-rendered.shoulder[0],rendered.elbow[1]-rendered.shoulder[1])-38)<.0001);
   }
 });
 
@@ -59,7 +59,7 @@ test('side-effect poses differ and stay within the protected character area', ()
     for (let t = 0; t < LOOP_SECONDS; t += .05) {
       const pose = sampleScene(t, motion);
       assert.ok(pose.hand[0] > 385 && pose.hand[0] < 490);
-      assert.ok(pose.hand[1] > 175 && pose.hand[1] < 300);
+      assert.ok(pose.hand[1] > 175 && pose.hand[1] < 310);
       assert.ok(Math.abs(pose.sway) < 6);
       assert.ok(Object.values(pose).flat().filter(v => typeof v === 'number').every(Number.isFinite));
     }

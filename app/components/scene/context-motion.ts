@@ -1,11 +1,11 @@
 import type { CatalogSeed, Reaction, Activity, ContextTask } from '../../data/catalog/types';
 import { getSceneStory } from '../../data/catalog/scene-stories.ts';
-import { storyGesture, actionUsesContext, contextHandoff, handoffObjectOpacity } from './story-motion.ts';
+import { storyGesture, actionUsesContext, restingGesture, type StoryGesture } from './story-motion.ts';
 
 type Point = [number,number];
-type Base = { t:number;intake:number;response:number;adverse:number;hand:Point };
-type Gesture = {left:Point;right:Point;lean:number;tilt:number;eyes:number;smile:number;lookX:number;lookY:number;brow:number;mouth:number;gut:number;heat:number};
-const rest = ():Gesture=>({left:[366,279],right:[465,267],lean:0,tilt:0,eyes:0,smile:0,lookX:0,lookY:0,brow:0,mouth:0,gut:0,heat:0});
+type Base = { t:number;intake:number;response:number;adverse:number;hand:Point;breath:number };
+type Gesture = StoryGesture;
+const rest=restingGesture;
 
 export function sceneIdentity(id:string) {
   let hash=2166136261;
@@ -38,7 +38,7 @@ function reactionGesture(reaction:Reaction,t:number):Gesture {
     case'tense':g.left=[340+s(t*2)*2,238];g.right=[469,242];g.brow=-.5;g.smile=-2;g.lookX=s(t*2)*1.7;break;
     case'nausea':g.left=[398,268];g.right=[449,280];g.gut=.5;g.lean=5;g.tilt=5;g.smile=-2;g.lookY=1;break;
     case'itch':g.left=[393,252+s(t*2.4)*2];g.right=[453,264];g.tilt=3;g.smile=-1;break;
-    case'dry-mouth':g.left=[359,263];g.right=[445,239];g.mouth=.25;g.smile=-1;g.tilt=2;break;
+    case'dry-mouth':g.left=[359,263];g.right=[458,260];g.mouth=.25;g.smile=-1;g.tilt=2;break;
     case'flush':g.left=[347,255];g.right=[464,261];g.heat=.6;g.smile=-1;g.brow=.5;break;
     case'cramp':g.left=[399,272];g.right=[447,281];g.gut=1;g.lean=6;g.tilt=6;g.smile=-2;break;
     case'dizzy':g.left=[330,225];g.right=[466,245];g.lean=s(t)*3;g.tilt=s(t)*4;g.lookX=-s(t)*2;g.smile=-1.5;break;
@@ -54,25 +54,25 @@ export function contextTask(seed:Pick<CatalogSeed,'scene'>):ContextTask {
 }
 function taskGesture(task:ContextTask,t:number):Gesture {
   const g=rest(),s=Math.sin;
-  g.left=[359,258];g.right=[457,268];g.lookX=-1.5;g.lookY=1;
+  g.left=[385,270];g.right=[405,265];g.lookX=-1.5;g.lookY=1;
   switch(task){
-    case'writing':case'meal-log':case'sleep-log':case'research-notes':g.left=[359,257];g.right=[374+s(t*3)*3,254+s(t*2)*2];g.tilt=-3;break;
-    case'checklist':case'care-card':g.left=[355,253];g.right=[374,253+s(t*2)*4];g.lookY=1.5;break;
-    case'typing':g.left=[359,255];g.right=[373+s(t*4)*2,254];g.lookY=2;break;
-    case'reading':g.left=[365,256];g.right=[401,256];g.lookY=2;g.tilt=-2;break;
-    case'planning':case'organizer':g.left=[351,264];g.right=[375+s(t)*4,261];g.lookY=2;break;
-    case'mirror':g.left=[337,231];g.right=[443,219+ s(t)*1.5];g.lookX=-2.4;g.tilt=-3;break;
-    case'hair-photo':g.left=[340,231];g.right=[448,190];g.lookX=-2;g.tilt=-2;break;
-    case'skin-check':g.left=[347,253];g.right=[363,256];g.lookX=-2;g.lookY=2;break;
-    case'meal':g.left=[357,267];g.right=[386,257+s(t*1.8)*3];g.lookY=2;break;
-    case'glucose-log':g.left=[351,254];g.right=[372,254];g.lookY=1.5;break;
+    case'writing':case'meal-log':case'sleep-log':case'research-notes':g.left=[385,270];g.right=[405+s(t*3)*3,265+s(t*2)*2];g.tilt=-3;break;
+    case'checklist':case'care-card':g.left=[385,270];g.right=[405,264+s(t*2)*2];g.lookY=1.5;break;
+    case'typing':g.left=[385,270];g.right=[405+s(t*4)*2,265];g.lookY=2;break;
+    case'reading':g.left=[389,266];g.right=[413,266];g.lookY=2;g.tilt=-2;break;
+    case'planning':case'organizer':g.left=[385,275];g.right=[405+s(t)*3,271];g.lookY=2;break;
+    case'mirror':g.left=[337,251];g.right=[440,305];g.lookX=-2.4;g.tilt=-3+s(t*.8)*2;break;
+    case'hair-photo':g.left=[340,251];g.right=[440,305];g.lookX=-2;g.tilt=-4+s(t*.7)*3;break;
+    case'skin-check':g.left=[386,258];g.right=[403,264];g.lookX=-.6;g.lookY=2;break;
+    case'meal':g.left=[383,284];g.right=[411,271+s(t*1.8)*3];g.lookY=2;break;
+    case'glucose-log':g.left=[383,270];g.right=[404,267];g.lookY=1.5;break;
     case'hydration':g.left=[351,266];g.right=[459,253];g.lookX=-1.8;break;
     case'resting':g.left=[357,276];g.right=[452,279];g.tilt=-3;g.lookY=1;break;
     case'stretching':g.left=[341-s(t)*3,253];g.right=[475+s(t)*3,254];g.lookX=-1;break;
     case'breathing':g.left=[357,268];g.right=[453,270];g.lookX=0;g.lookY=0;break;
     case'packing':g.left=[350,284];g.right=[457,264];g.lookX=-2;g.lookY=1;break;
     case'music':g.left=[351,254];g.right=[458,251];g.tilt=s(t)*3;g.lookX=-1;break;
-    case'gardening':g.left=[348,267];g.right=[372,263];g.lookX=-2;g.lookY=1.5;break;
+    case'gardening':g.left=[383,282];g.right=[407,274];g.lookX=-2;g.lookY=1.5;break;
   }
   return g;
 }
@@ -85,7 +85,7 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
   const task=taskGesture(contextTask(seed),t);
   // A beverage stays in the right hand from the opening through the sip.
   if(seed.scene.exposure==='drink'&&seed.scene.prop==='cup'){
-    task.left=[366,279];task.right=[459,253];task.lookX=2;task.lookY=1;
+    task.left=[360,305];task.right=[459,253];task.lookX=2;task.lookY=1;
   }
   const activity=activityGesture(seed.scene.activity);
   const story=getSceneStory(seed as CatalogSeed);
@@ -104,63 +104,67 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
   const resumesTask=!story&&(['neutral','focus','relax','relief'].includes(seed.scene.response)||seed.status==='experimental');
   if(resumesTask){response.left=task.left;response.right=task.right;response.lookX=task.lookX;response.lookY=task.lookY;}
   const adverse=story?storyGesture(story.downsideAction,t,story.downsideTarget):reactionGesture(seed.scene.adverse,t);
-  if(story){adverse.smile=Math.min(adverse.smile,-1.6);adverse.brow=Math.max(adverse.brow,1.7);adverse.lookY+=.5;}
-  // Keep the person's actual book, meal, photo or research object in follow-up
-  // actions instead of replacing every activity with the same clipboard.
-  if(story)for(const [gesture,action,isRisk] of [[response,story.responseAction,false],[adverse,story.downsideAction,true]] as const){
-    if(actionUsesContext(action)){
-      gesture.left=task.left;
-      if(action==='review-uncertainty'||action==='withdrawal-watch'){
-        gesture.right=isRisk?[471,243]:[463,259];
-        gesture.lookX=task.lookX;gesture.lookY=task.lookY;
-        gesture.tilt=isRisk?5:-4;gesture.brow=isRisk?2.5:1.5;
-      }else{
-        gesture.right=task.right;gesture.lookX=task.lookX;gesture.lookY=task.lookY;
-        gesture.tilt=task.tilt;gesture.brow=action==='focus'?2:1;
-      }
-    }
+  if(story&&['felt','visible-local'].includes(story.downsideMode)){
+    adverse.smile=Math.min(adverse.smile,-1.6);adverse.brow=Math.max(adverse.brow,1.7);adverse.lookY+=.5;
   }
-  const handoff=story?contextHandoff(t):0;
-  if(story)for(const [gesture,action] of [[response,story.responseAction],[adverse,story.downsideAction]] as const){
-    if(!actionUsesContext(action)){
-      const viaRest=(from:Point,to:Point,rest:Point):Point=>{
-        const progress=1-handoff,first=progress<.5,start=first?from:rest,end=first?rest:to;
-        const amount=ease(first?progress*2:(progress-.5)*2);
-        return [start[0]+(end[0]-start[0])*amount,start[1]+(end[1]-start[1])*amount];
-      };
-      gesture.left=viaRest(task.left,gesture.left,[366,279]);
-      gesture.right=viaRest(task.right,gesture.right,[465,267]);
-      gesture.lookX+=(task.lookX-gesture.lookX)*handoff;
-      gesture.lookY+=(task.lookY-gesture.lookY)*handoff;
+  // Paper is useful in the opening context. The selected event then lives in
+  // the body, except activities whose physical object is part of the action.
+  const physicalTask=['stretching','resting','breathing','music','gardening','packing'].includes(contextTask(seed));
+  const keepResponseTask=!!story&&(actionUsesContext(story.responseAction)||(story.responseMode==='uncertain'&&physicalTask)||seed.id==='nystatin');
+  const keepAdverseTask=!!story&&actionUsesContext(story.downsideAction);
+  if(keepResponseTask){response.left=task.left;response.right=task.right;response.lookX=task.lookX;response.lookY=task.lookY;}
+  if(keepAdverseTask){adverse.left=task.left;adverse.right=task.right;}
+  // These variations use the existing selected event and real activity.
+  // They do not attribute extra symptoms to silent or uncertain processes.
+  const beat=(start:number,hold:number,end:number)=>ease((t-start)/.6)*(1-ease((t-hold)/(end-hold)));
+  switch(seed.id){
+    case'fluconazole':{
+      const swallow=beat(10.1,10.8,11.5);response.mouth=.08+.42*swallow;response.tilt=-2+3*swallow;response.smile=2.4;response.breathing=.2;break;
     }
+    case'nystatin':response.left=[337,251];response.right=[440,305];response.lookX=-2.5;response.tilt=-4+3*Math.sin(t*.8);response.mouth=.4;break;
+    case'voriconazole':adverse.eyes=.12+.55*beat(17,17.6,18.3);adverse.lookX=3*Math.sin((t-15)*.8);adverse.tilt=2*Math.sin((t-15)*.45);break;
+    case'temazepam':response.tilt=10;response.lean=5;response.drop=3;adverse.tilt=3+9*beat(17.3,18.2,18.8);adverse.lean=2+5*beat(17.3,18.2,18.8);break;
+    case'zolpidem':response.tilt=-8;response.lean=-3;response.drop=2;adverse.eyes=.3+.5*beat(16,16.8,17.2);adverse.lookX=-2+3*beat(17.2,18,19);adverse.tilt=3+8*beat(18.3,19,19.6);break;
+    case'ramelteon':response.tilt=5;response.lean=2;response.eyes=.45+.45*ease((t-9)/3);adverse.mouth=.1+.6*beat(17,17.6,18.4);adverse.tilt=-3-5*beat(17,17.6,18.4);adverse.lean=2;break;
+    case'eszopiclone':response.tilt=-10;response.eyes=.9;adverse.lookY=1.5;adverse.tilt=2+10*beat(19,19.8,20.3);adverse.eyes=.3+.5*beat(19,19.8,20.3);break;
+    case'amoxicillin':adverse.left=[389,285];adverse.right=[440,305];adverse.lean=4+4*beat(16.6,17.5,18.6);adverse.tilt=5;break;
+    case'ampicillin':adverse.right=[412,286];adverse.left=[360,305];adverse.lean=3+5*beat(18,19.1,20.2);adverse.lookX=1;adverse.tilt=7;break;
+    case'cephalexin':adverse.left=[389,285];adverse.right=[422,292];adverse.lean=7;adverse.drop=1.5;adverse.tilt=8;break;
+    case'atorvastatin':adverse.left=[399,247];adverse.right=[440,305];adverse.lean=3;adverse.lookX=-2;break;
+    case'rosuvastatin':adverse.left=[364,300];adverse.right=[440,305];adverse.lean=5;adverse.tilt=9;adverse.lookY=3;adverse.drop=1.2;break;
+    case'insulin-glargine':response.lookX=.4;response.tilt=0;adverse.lookX=.4;adverse.tilt=0;break;
+    case'insulin-lispro':response.left=[381,284];response.lookX=-1.6;response.lookY=1.3;response.tilt=-2;adverse.lookX=-1.6;adverse.lookY=1.3;break;
+    case'insulin-aspart':response.right=[415,282];response.lookX=1.1;response.tilt=2;adverse.lookX=1.1;adverse.tilt=2;break;
+    case'albuterol':response.left=[351,284];response.right=[449,284];response.lean=-3;response.breathing=1;adverse.left=[398,245];adverse.right=[440,305];adverse.tilt=3;break;
+    case'levalbuterol':response.left=[360,305];response.right=[440,305];response.lean=-1;response.breathing=.8;adverse.left=[344+Math.sin(t*10)*2,268];adverse.right=[456+Math.sin(t*9)*2,270];break;
+    case'semaglutide':response.left=[381,284];response.right=[440,305];response.lean=-3;adverse.left=[389,277];adverse.lean=4+4*beat(16.4,17.5,18.4);adverse.tilt=5;break;
+    case'tirzepatide':response.left=[381,284];response.right=[420,280];response.tilt=4;response.lean=-1;adverse.left=[360,305];adverse.right=[415,277];adverse.lean=2+6*beat(18.2,19.4,20.2);adverse.tilt=3+5*beat(18.2,19.4,20.2);break;
+    case'phenibut':response.eyes=.45;response.tilt=5;response.lean=3;response.smile=.3;response.breathing=-.4;break;
+    case'beta-alanine':adverse.left=[342+Math.sin(t*6)*beat(17,18,19)*4,259];adverse.right=[440,305];adverse.lookX=-3;adverse.tilt=-4;break;
+    case'finasteride':adverse.lookX=-1.8;adverse.tilt=-4;adverse.brow=1.4;adverse.left=[354,294];break;
+    case'dutasteride':adverse.lookX=1.8;adverse.tilt=3;adverse.brow=1;adverse.right=[446,294];break;
   }
   const mix=(left:Point,right:Point,origin:Point):Point=>[
     origin[0]+r*(left[0]-origin[0])+a*(right[0]-origin[0]),
     origin[1]+r*(left[1]-origin[1])+a*(right[1]-origin[1]),
   ];
-  const right=mix(response.right,adverse.right,[465,267]);
-  right[0]+=opening*(task.right[0]-465);right[1]+=opening*(task.right[1]-267);
-  if(contextTask(seed)==='hair-photo'){
-    // Lift outside the face before moving across the hairline; reverse the same path.
-    const amount=opening+(resumesTask?r:0);
-    right[0]=465+(task.right[0]-465)*amount+a*(adverse.right[0]-465)+(resumesTask?0:r*(response.right[0]-465));
-    right[1]=267+(task.right[1]-267)*amount+a*(adverse.right[1]-267)+(resumesTask?0:r*(response.right[1]-267));
-  }
+  const right=mix(response.right,adverse.right,[440,305]);
+  right[0]+=opening*(task.right[0]-440);right[1]+=opening*(task.right[1]-305);
   const exposureHand:Point=seed.scene.exposure==='topical'
-    ? [465+(361-465)*base.intake,267+(260-267)*base.intake]
+    ? [440+(361-440)*base.intake,305+(260-305)*base.intake]
     : seed.scene.exposure==='inhaler'
-    ? [465-28*base.intake+48*base.intake*(1-base.intake),267-60*base.intake]
+    ? [(1-base.intake)**2*440+2*(1-base.intake)*base.intake*398+base.intake**2*414,(1-base.intake)**2*305+2*(1-base.intake)*base.intake*281+base.intake**2*213]
     : base.hand;
   const value=(key:Exclude<keyof Gesture,'left'|'right'>)=>opening*task[key]+r*response[key]+a*adverse[key];
-  const left=mix(response.left,adverse.left,[366,279]);left[0]+=opening*(task.left[0]-366);left[1]+=opening*(task.left[1]-279);
+  const left=mix(response.left,adverse.left,[360,305]);left[0]+=opening*(task.left[0]-360);left[1]+=opening*(task.left[1]-305);
   return {
-    hand:[exposureHand[0]+right[0]-465,exposureHand[1]+right[1]-267] as Point,
+    hand:[exposureHand[0]+right[0]-440,exposureHand[1]+right[1]-305] as Point,
     symbolicHand:right,leftHand:left,
-    bodyLean:value('lean'),bodyDrop:a*(seed.scene.adverse==='sleepy'?1:0),tilt:value('tilt'),eyelid:value('eyes'),
+    bodyLean:value('lean'),bodyDrop:value('drop'),tilt:value('tilt'),eyelid:value('eyes'),
     smile:value('smile'),lookX:value('lookX'),lookY:value('lookY'),browLift:value('brow'),mouthOpen:value('mouth'),
-    gut:value('gut'),heat:value('heat'),worry:a*(seed.scene.adverse==='neutral'?0:.6),pupil:1,footTap:0,ghost:0,sway:0,
-    contextTaskAmount:opening+(resumesTask||story&&actionUsesContext(story.responseAction)?r:r*handoff)+(story&&actionUsesContext(story.downsideAction)?a:a*handoff),
-    contextPropOpacity:Math.max(1-ease((t-3.3)/.7)+ease((t-23.2)/.8),resumesTask||story&&actionUsesContext(story.responseAction)?r:r*(story?handoffObjectOpacity(t,'task'):0),story&&actionUsesContext(story.downsideAction)?a:a*(story?handoffObjectOpacity(t,'task'):0)),
+    gut:value('gut'),heat:value('heat'),worry:a*(story&&['felt','visible-local'].includes(story.downsideMode)?.6:0),pupil:1,footTap:value('tap'),ghost:0,sway:value('sway'),breath:base.breath*(1+value('breathing')),
+    contextTaskAmount:opening+(resumesTask||keepResponseTask?r:0)+(keepAdverseTask?a:0),
+    contextPropOpacity:Math.max(1-ease((t-3.3)/.7)+ease((t-23.2)/.8),resumesTask||keepResponseTask?r:0,keepAdverseTask?a:0),
     contextExposureOpacity:ease((t-3.7)/.4)*(1-ease((t-7.7)/.5)),
   };
 }

@@ -9,10 +9,11 @@ import { contextPropVisibility } from '../app/components/scene/prop-visibility.t
 test('fluconazole changes its body action between treatment and safety review',()=>{
   const response=sampleScene(11,'context','fluconazole');
   const downside=sampleScene(18,'context','fluconazole');
-  assert.ok(Math.hypot(response.hand[0]-downside.hand[0],response.hand[1]-downside.hand[1])>12);
-  assert.ok(Math.abs(response.lookX-downside.lookX)>.5);
+  assert.ok(response.smile>downside.smile+1.5, 'mouth relief should read in the face');
+  assert.ok(response.hand[1]>290&&downside.hand[1]>290,'arms relax instead of presenting cards');
+  assert.equal(downside.gut,0,'a silent liver risk must not invent pain');
   assert.ok(response.mouthOpen>.1,'oral-yeast scene needs a visible mouth-directed response');
-  assert.ok(downside.lookX<-.5,'safety review should track the card');
+  assert.equal(downside.worry,0,'silent risk is a cutaway, not an immediate symptom');
 });
 
 test('activity props leave the wrist before a different stage object appears',()=>{
@@ -20,22 +21,20 @@ test('activity props leave the wrist before a different stage object appears',()
     const story=getSceneStory(seed);
     for(let t=8.2;t<23;t+=1/30){
       const p=sampleScene(t,'context',seed.id),action=p.stage===2?story.downsideAction:story.responseAction;
-      if(actionUsesContext(action))continue;
+      if(!['training-effort','hair-check','meal-pause','dry-mouth'].includes(action))continue;
       const amount=(p.stage===2?p.adverse:p.response)*handoffObjectOpacity(t,'action');
       assert.ok(p.contextPropOpacity*amount<.00001,`${seed.id}: two objects on a wrist at ${t}`);
     }
   }
 });
 
-test('all three context beverages release the mug before a review card uses that hand',()=>{
+test('context beverages remain held through the sip and leave before the later body event',()=>{
   const entries=catalogSeeds.filter(seed=>seed.scene.exposure==='drink'&&seed.scene.prop==='cup');
   assert.equal(entries.length,3);
   for(const seed of entries)for(let t=0;t<24;t+=1/60){
-    const p=sampleScene(t,'context',seed.id),v=contextPropVisibility(seed,p),story=getSceneStory(seed);
-    const action=p.stage===2?story.downsideAction:story.responseAction;
-    const card=['review-uncertainty','withdrawal-watch'].includes(action)?v.reviewCardGate*(p.stage===2?p.adverse:p.response):0;
-    assert.ok(v.beverage*card<.00001,`${seed.id}: mug and card overlap at ${t}`);
+    const p=sampleScene(t,'context',seed.id),v=contextPropVisibility(seed,p);
     if(t<7.7)assert.equal(v.beverage,1,'the mug remains held through the sip');
+    if(t>14&&t<22)assert.equal(v.beverage,0,'the mug has left before the downside');
   }
 });
 
@@ -55,8 +54,8 @@ test('follow-up concerns interrupt the task with a neutral symptom review',()=>{
     assert.equal(actionUsesContext(story.downsideAction),false,id);
     const pose=sampleScene(18,'context',id);
     assert.equal(pose.contextPropOpacity,0,`${id}: opening task should have stopped`);
-    assert.ok(pose.hand[1]>245&&pose.hand[0]<400,`${id}: hand should point to the notes`);
-    assert.ok(pose.lookX<0&&pose.lookY>1,`${id}: attention should follow the notes`);
+    assert.ok(pose.hand[1]>290,`${id}: neutral follow-up should have relaxed arms`);
+    assert.ok(Math.abs(pose.bodyLean)<1,`${id}: follow-up must not look like collapse`);
     assert.equal(pose.gut,0,`${id}: review must not invent abdominal pain`);
   }
   assert.equal(getSceneStory(catalogSeeds.find(seed=>seed.id==='esomeprazole')).downsideMode,'silent-risk');

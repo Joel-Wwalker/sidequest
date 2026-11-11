@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { solveCharacterArm } from '../app/components/scene/arm-geometry.ts';
+import { solveCharacterArm, UPPER_ARM, FOREARM } from '../app/components/scene/arm-geometry.ts';
 import { sampleScene, solveArm } from '../app/components/scene/timeline.ts';
 import { getSceneProfile } from '../app/components/scene/profiles.ts';
 import { getCatalogSeed } from '../app/data/catalog/index.ts';
@@ -59,20 +59,25 @@ test('every rendered arm clears the moving head through each full loop',()=>{
         const target=side==='left'?pose.leftHand:intake==='symbolic'?pose.symbolicHand:pose.hand;
         const arm=solveCharacterArm(side,target),label=`${entry.id} ${side} at ${t.toFixed(3)}s`;
         assert.deepEqual(arm.hand,target,`${label}: detached wrist`);
-        assert.ok(Math.hypot(arm.elbow[0]-arm.shoulder[0],arm.elbow[1]-arm.shoulder[1])<=33,`${label}: upper arm overstretches`);
+        assert.ok(Math.abs(Math.hypot(arm.elbow[0]-arm.shoulder[0],arm.elbow[1]-arm.shoulder[1])-UPPER_ARM)<1e-8,`${label}: upper arm overstretches`);
         const length=Math.hypot(arm.elbow[0]-target[0],arm.elbow[1]-target[1]);
-        assert.ok(length>=18&&length<=60,`${label}: forearm length ${length}`);
+        assert.ok(Math.abs(length-FOREARM)<1e-8,`${label}: forearm length ${length}`);
+        const distance=Math.hypot(target[0]-arm.shoulder[0],target[1]-arm.shoulder[1]);
+        const jointAngle=Math.acos((UPPER_ARM**2+FOREARM**2-distance**2)/(2*UPPER_ARM*FOREARM))*180/Math.PI;
+        assert.ok(jointAngle>25&&jointAngle<175,`${label}: elbow overfolds or locks (${jointAngle})`);
         if(prior[side])assert.ok(Math.hypot(arm.elbow[0]-prior[side][0],arm.elbow[1]-prior[side][1])<4,`${label}: elbow jumps`);
         prior[side]=arm.elbow;
         const shoulder=unrotate(arm.shoulder,pose.tilt),elbow=unrotate(arm.elbow,pose.tilt),hand=unrotate(arm.hand,pose.tilt);
-        assert.ok(clearance(shoulder,elbow,head,side==='right'?11:10.5)>=-.05,`${label}: upper sleeve in head`);
-        assert.ok(clearance(elbow,hand,face,10)>=-.05,`${label}: forearm in face`);
+        const cuff=unrotate([arm.elbow[0]+(target[0]-arm.elbow[0])*5/length,arm.elbow[1]+(target[1]-arm.elbow[1])*5/length],pose.tilt);
+        assert.ok(clearance(elbow,cuff,head,10.5)>=-.05,`${label}: rolled cuff in head`);
+        assert.ok(clearance(shoulder,elbow,head,10.5)>=-.05,`${label}: upper sleeve in head`);
+        assert.ok(clearance(elbow,hand,face,7)>=-.05,`${label}: forearm in face`);
         // The oral/drink wrist touches the lower jaw as the prop meets the
         // mouth. Only that terminal 20px may touch; the rest of the arm must
         // remain clear, including during the approach and return.
-        const mouthContact=side==='right'&&['oral','drink'].includes(intake)&&pose.intake>.7&&target[0]>=400&&target[0]<=437&&target[1]>=207&&target[1]<=222;
+        const mouthContact=side==='right'&&['oral','drink','inhaler'].includes(intake)&&pose.intake>.7&&target[0]>=400&&target[0]<=437&&target[1]>=207&&target[1]<=222;
         const checkedHand=mouthContact?[elbow[0]+(hand[0]-elbow[0])*Math.max(0,1-20/length),elbow[1]+(hand[1]-elbow[1])*Math.max(0,1-20/length)]:hand;
-        assert.ok(clearance(elbow,checkedHand,head,10)>=-.05,`${label}: forearm in hair/ear/jaw`);
+        assert.ok(clearance(elbow,checkedHand,head,7)>=-.05,`${label}: forearm in hair/ear/jaw`);
       }
     }
   }
