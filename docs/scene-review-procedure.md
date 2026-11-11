@@ -18,7 +18,7 @@ For each affected scene, record a complete loop at desktop width. At 390 CSS pix
 
 The current loop is 24 seconds. Start before the first action and continue past the reset into the next cycle; approximately 26 seconds covers that boundary. Check the displayed scene time as well as elapsed recording time. If `LOOP_SECONDS` changes, capture the new complete duration and its reset.
 
-Save opening, exposure, response and downside stills, plus frames immediately before and after the loop boundary. Add frames at maximum reach, mouth contact, strongest body lean and any attachment or occlusion that needs closer inspection. Legacy stage times are 3.7, 9 and 18.1 seconds. Context scenes use 2, 10 and 18.1 seconds, with exposure contact near 6 seconds. Use the current source values if these change.
+Save opening, exposure, response and downside stills, plus frames immediately before and after the loop boundary. Add frames at maximum reach, mouth contact, strongest body lean and any attachment or occlusion that needs closer inspection. Legacy stage times are 3.7, 9 and 18.1 seconds. Context scenes use 2, 11.5 and 18.1 seconds, with exposure contact near 6 seconds and handoffs near 9.7 and 15.5 seconds. Use the current source values if these change.
 
 Check capture validity before reviewing it. A cropped SVG, hidden feet, covered character, devtools overlay or missing loop boundary makes that capture insufficient for approval. Magnified crops help diagnose a defect, but require a complete-scene capture alongside them. Recapture invalid evidence. Record the actual sampling rate and any dropped frames; a sparse recording does not establish a higher rendering frame rate.
 
@@ -40,6 +40,10 @@ Review every affected scene against these checks. Use the complete desktop recor
 The current 720 by 430 scene reserves character space at x310 to x525, y110 to y370, and caption space at x294 to x466, y24 to y95. Side props occupy x16 to x278 or x548 to x704. The room floor begins at y309; the character's feet meet the foreground at about y365. If a layout changes these bounds, document the replacement bounds and inspect the complete motion envelope again.
 
 Maintain an intentional-overlap allowlist for each reviewed scene. Name the two objects, the intended depth or contact, the relevant stage, and the evidence showing it works. Examples include a hand wrapping a bottle or a desk monitor occluding the window behind it. An unlisted collision remains a finding until inspected. A general statement that overlaps are artistic does not resolve a specific collision.
+
+For shared character work, sample both complete upper arms and forearms, including the visible stroke widths, against the rotated head, hair, ears and jaw. A center-face or left-arm-only check misses elbow collisions. A narrow mouth-contact allowance may cover the terminal hand segment; it must not exempt an entire arm. Verify the actual renderer's rig, not an unused geometry helper. Inspect at native scene size as well as in the catalog grid.
+
+Check prop handoffs through their full visibility envelopes. Two objects assigned to one wrist must not appear together accidentally. Check the selected target and direction of each effect: skin sensitivity is not eye sensitivity, swelling relief must reduce swelling, and a silent laboratory risk must not invent a felt symptom. Stage buttons, strip headings, SVG descriptions and adjacent explanation must agree with the chosen story. Keep other important risks clearly secondary.
 
 ## 4. Check controls, source and tests
 
@@ -67,3 +71,5 @@ The motion reviewer must inspect full-loop playback, attachment continuity, stag
 Keep each review pending until its required evidence is valid and its concrete findings have been resolved and rechecked. Record each reviewer's disposition, reviewed revision, covered scenes and limitations. Report unresolved or untested areas explicitly. Approval means that no blocking defect remains in the reviewed scope; it is not a guarantee against every possible defect.
 
 Use Sol for both independent review roles. Source research may use a lower-cost model. A development review grid can establish broad coverage, but it does not replace full-size contact checks or the real guide's captions, controls and mobile layout. Record the IDs actually present in each grid, capture timestamps, sample rate and gaps. Never treat a sparse capture as proof of smooth rendering.
+
+Use independent Astra assessments for shared anatomy and explanatory meaning. Keep authoring separate from approval. When a later edit affects only a documented subset, carry earlier evidence forward only after comparing the exact source delta and recording why the unaffected evidence still applies. Re-render and recheck the affected subset.

@@ -8,6 +8,8 @@ Use clean, readable typography. The user rejected pixel lettering; retro styling
 
 Use Sol for independent reviews. Use a lower-cost model for source research; this cost preference does not lower the implementation or review bar. Keep reviewers independent from authors.
 
+Use independent Astra reviewers for shared anatomy and explanatory-meaning assessments, alongside the Sol motion and composition reviews. Inspect the full-size character, not only small catalog tiles. Include both complete sleeves against the entire tilted head, and verify that every stage heading, description and body effect names the same selected event.
+
 For every UI or animation revision, obtain independent UI reviews before delivery. Reviewers must not author the change they review. Use at least one motion reviewer and one composition/accessibility reviewer. Have them inspect rendered output as well as source. Address concrete findings and have the revised output checked again. Do not claim a revision is reviewed from compilation or source inspection alone.
 
 Animations need smooth, connected movement; distinct, evidence-backed side effects; stable object placement; readable annotations; and working pause, replay, selected stages and reduced-motion behavior. Check a full loop and narrow layouts, not only one still.

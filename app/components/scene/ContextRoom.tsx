@@ -38,9 +38,6 @@ export default function ContextRoom({id,seed}:{id:string;seed:CatalogSeed}){
     <rect width="720" height="430" fill={style.wall}/><rect y="309" width="720" height="121" fill={style.floor}/>
     <path d="M0 306H720M0 355H720M0 402H720M92 309L55 430M269 309L250 430M550 309L570 430M662 309L699 430" stroke={style.trim} strokeWidth="2" opacity=".45"/>
     <path d="M0 0H720V8H0M0 0H8V309H0M712 0H720V309H712" fill={style.trim} opacity=".18"/>
-    <g clipPath={`url(#${id}-context-furniture)`}><Furnishings seed={seed}/>
-      <rect x="553" y="35" width="146" height="192" rx={seed.scene.setting==='bathroom'?12:5} fill="#f2eee1" stroke={style.trim} strokeWidth="4"/>
-      <path d="M562 58H690" stroke={style.trim} opacity=".45"/>
-    </g>
+    <g clipPath={`url(#${id}-context-furniture)`}><Furnishings seed={seed}/></g>
   </g>;
 }

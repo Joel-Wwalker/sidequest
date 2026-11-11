@@ -1335,8 +1335,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "gym",
       "activity": "research",
-      "task": "writing",
-      "prop": "notebook",
+      "task": "meal-log",
+      "prop": "clipboard",
       "motif": "uncertainty",
       "mechanismStyle": "uncertain",
       "response": "neutral",
@@ -1347,7 +1347,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "cautions": [
         "liver"
       ],
-      "intent": "Writing questions about a weight-loss supplement before a workout.",
+      "intent": "Comparing a meal record with uncertain weight-management claims.",
       "responseNotes": [
         "Weight studies show small or inconsistent effects.",
         "A reliable weight-loss benefit is not established."
@@ -1985,7 +1985,7 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "bedroom",
       "activity": "care",
-      "task": "reading",
+      "task": "resting",
       "prop": "book",
       "motif": "uncertainty",
       "mechanismStyle": "modulate",
@@ -1997,7 +1997,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "cautions": [
         "gut"
       ],
-      "intent": "Reading about a specific oral lavender preparation for anxiety symptoms.",
+      "intent": "Setting a book aside while reviewing an oral lavender-oil claim.",
       "responseNotes": [
         "A specific oral oil preparation may reduce anxiety symptoms.",
         "The result does not apply to every lavender product."
@@ -4182,8 +4182,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "kitchen",
       "activity": "care",
-      "task": "reading",
-      "prop": "care-card",
+      "task": "organizer",
+      "prop": "clipboard",
       "motif": "hormone",
       "mechanismStyle": "replace",
       "response": "neutral",
@@ -4196,7 +4196,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "cautions": [
         "hormones"
       ],
-      "intent": "Reading an iodine-product label during a thyroid-nutrition discussion.",
+      "intent": "Organizing thyroid-health questions alongside a nutrition label.",
       "responseNotes": [
         "Adequate iodine supports thyroid-hormone synthesis.",
         "It supports normal growth and brain development."
@@ -5010,8 +5010,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "bedroom",
       "activity": "research",
-      "task": "sleep-log",
-      "prop": "notebook",
+      "task": "resting",
+      "prop": "phone",
       "motif": "uncertainty",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -5020,7 +5020,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Comparing a sleep record with experimental sleep-peptide claims.",
+      "intent": "Checking a digital sleep record while reviewing experimental peptide claims.",
       "responseNotes": [
         "This sleep-related peptide has been studied experimentally.",
         "A clinical sleep benefit has not been established."
@@ -5300,8 +5300,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "gym",
       "activity": "research",
-      "task": "reading",
-      "prop": "research-folder",
+      "task": "organizer",
+      "prop": "care-card",
       "motif": "uncertainty",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -5310,7 +5310,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Reading muscle-biology claims before considering a research peptide.",
+      "intent": "Organizing muscle-biology questions about a research peptide.",
       "responseNotes": [
         "Researchers have studied its role in muscle biology.",
         "A human clinical benefit has not been established."
@@ -5558,7 +5558,7 @@ export const specialtySeeds: CatalogSeed[] = [
         "Safety data for proposed routes are absent or limited."
       ],
       "asides": [
-        "The neurologic diagram represents a research topic.",
+        "The research card still has unanswered questions.",
         "FDA notes immune reactions and peptide-impurity concerns."
       ],
       "exposure": "symbolic"
@@ -5652,8 +5652,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "recovery",
       "activity": "research",
-      "task": "planning",
-      "prop": "calendar",
+      "task": "stretching",
+      "prop": "stretch-band",
       "motif": "uncertainty",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -5662,7 +5662,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Planning a research discussion about tissue-repair marketing claims.",
+      "intent": "Pausing a recovery exercise to review unproven tissue-repair claims.",
       "responseNotes": [
         "This fragment is marketed for tissue-repair claims.",
         "A human tissue-repair benefit has not been established."
@@ -5902,8 +5902,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "laboratory",
       "activity": "research",
-      "task": "research-notes",
-      "prop": "notebook",
+      "task": "checklist",
+      "prop": "research-folder",
       "motif": "receptor",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -5912,7 +5912,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "liver",
       "organs": [],
       "cautions": [],
-      "intent": "Recording preclinical tissue-selective androgen findings.",
+      "intent": "Checking preclinical findings against unapproved-product claims.",
       "responseNotes": [
         "Animal studies found tissue-selective androgenic activity.",
         "A human clinical benefit has not been established."
@@ -5964,8 +5964,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "clinic",
       "activity": "research",
-      "task": "planning",
-      "prop": "calendar",
+      "task": "organizer",
+      "prop": "research-folder",
       "motif": "hormone",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -5974,7 +5974,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Planning a literature review of experimental androgen-based contraception.",
+      "intent": "Organizing preclinical androgen and contraception study records.",
       "responseNotes": [
         "Animal models examined androgen and contraceptive effects.",
         "A human clinical benefit has not been established."
@@ -6275,7 +6275,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "setting": "study",
       "activity": "research",
       "task": "research-notes",
-      "prop": "clipboard",
+      "prop": "book",
       "motif": "uncertainty",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -6284,7 +6284,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Taking notes on an in-vitro SARM metabolism study.",
+      "intent": "Annotating an in-vitro SARM metabolism study without human outcomes.",
       "responseNotes": [
         "The cited work characterized in-vitro metabolic pathways.",
         "It did not evaluate clinical effectiveness."
@@ -6337,7 +6337,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "setting": "recovery",
       "activity": "research",
       "task": "reading",
-      "prop": "book",
+      "prop": "phone",
       "motif": "receptor",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -6346,7 +6346,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Reading trials that examined muscle function and body composition.",
+      "intent": "Reading a digital trial summary about muscle function and body composition.",
       "responseNotes": [
         "Trials have examined body composition and physical function.",
         "A general clinical benefit has not been established."
@@ -8052,8 +8052,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "conservatory",
       "activity": "reading",
-      "task": "reading",
-      "prop": "notebook",
+      "task": "gardening",
+      "prop": "plant",
       "motif": "serotonin",
       "mechanismStyle": "modulate",
       "response": "uncertain",
@@ -8062,7 +8062,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "serotonin",
       "organs": [],
       "cautions": [],
-      "intent": "Setting aside plant notes before nonmedical psychedelic exposure.",
+      "intent": "Setting down a houseplant before nonmedical psychedelic exposure.",
       "responseNotes": [
         "It can cause hallucinations and altered perception.",
         "Agitation or confusion can occur."
@@ -9116,8 +9116,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "study",
       "activity": "research",
-      "task": "reading",
-      "prop": "research-folder",
+      "task": "typing",
+      "prop": "phone",
       "motif": "hormone",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -9126,7 +9126,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "liver",
       "organs": [],
       "cautions": [],
-      "intent": "Reviewing historical androgen labeling for selected anemia.",
+      "intent": "Saving notes on historical anemia labels and their liver warnings.",
       "responseNotes": [
         "Historical labels described treatment for selected anemia.",
         "That does not establish safe nonmedical enhancement."
@@ -9240,7 +9240,7 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "gym",
       "activity": "research",
-      "task": "reading",
+      "task": "organizer",
       "prop": "clipboard",
       "motif": "hormone",
       "mechanismStyle": "modulate",
@@ -9250,7 +9250,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "hormones",
       "organs": [],
       "cautions": [],
-      "intent": "Reading a nonmedical performance claim and its fertility concerns.",
+      "intent": "Organizing nonmedical performance claims and fertility concerns.",
       "responseNotes": [
         "It is encountered in nonmedical enhancement settings.",
         "Human effectiveness and safety are not established."
@@ -9302,8 +9302,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "gym",
       "activity": "research",
-      "task": "writing",
-      "prop": "clipboard",
+      "task": "stretching",
+      "prop": "stretch-band",
       "motif": "hormone",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -9312,7 +9312,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "liver",
       "organs": [],
       "cautions": [],
-      "intent": "Writing questions about a nonmedical physique-enhancement claim.",
+      "intent": "Pausing a gym exercise to review a nonmedical physique claim.",
       "responseNotes": [
         "Nonmedical users seek muscle and physique effects.",
         "A human medical benefit has not been established."
@@ -9554,8 +9554,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "clinic",
       "activity": "research",
-      "task": "writing",
-      "prop": "notebook",
+      "task": "planning",
+      "prop": "clipboard",
       "motif": "hormone",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -9564,7 +9564,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "hormones",
       "organs": [],
       "cautions": [],
-      "intent": "Noting country-specific medical uses and separate enhancement claims.",
+      "intent": "Planning questions about country-specific uses and enhancement claims.",
       "responseNotes": [
         "Medical uses depend on the country and indication.",
         "They do not establish a nonmedical enhancement benefit."
@@ -9616,8 +9616,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "study",
       "activity": "research",
-      "task": "checklist",
-      "prop": "care-card",
+      "task": "planning",
+      "prop": "notebook",
       "motif": "hormone",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -9626,7 +9626,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "liver",
       "organs": [],
       "cautions": [],
-      "intent": "Checking safety information for an androgen without an approved human role.",
+      "intent": "Planning safety questions about an androgen without a human indication.",
       "responseNotes": [
         "A human therapeutic benefit has not been established.",
         "Human safety and efficacy evidence are very limited."
@@ -9678,8 +9678,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "gym",
       "activity": "research",
-      "task": "organizer",
-      "prop": "notebook",
+      "task": "planning",
+      "prop": "research-folder",
       "motif": "hormone",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -9688,7 +9688,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "hormones",
       "organs": [],
       "cautions": [],
-      "intent": "Organizing notes about a controlled anabolic agent's physique claims.",
+      "intent": "Planning a safety discussion about a controlled anabolic agent.",
       "responseNotes": [
         "Nonmedical users seek physique and performance effects.",
         "Controlled evidence has not established human benefit."
@@ -9740,8 +9740,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "study",
       "activity": "research",
-      "task": "writing",
-      "prop": "clipboard",
+      "task": "hydration",
+      "prop": "water-bottle",
       "motif": "hormone",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -9750,7 +9750,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "liver",
       "organs": [],
       "cautions": [],
-      "intent": "Writing an evidence summary about an illicit performance-enhancement agent.",
+      "intent": "Taking a water break while reviewing illicit performance claims.",
       "responseNotes": [
         "Nonmedical enhancement has no established therapeutic benefit.",
         "Human evidence is limited; anti-doping records document use."
@@ -10668,8 +10668,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "study",
       "activity": "research",
-      "task": "research-notes",
-      "prop": "notebook",
+      "task": "organizer",
+      "prop": "research-folder",
       "motif": "uncertainty",
       "mechanismStyle": "uncertain",
       "response": "neutral",
@@ -10678,7 +10678,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Taking notes on NAD-related biomarkers and aging-supplement claims.",
+      "intent": "Sorting human-trial findings from broad aging-supplement claims.",
       "responseNotes": [
         "Short trials show changes in NAD-related biomarkers.",
         "Clinical disease-prevention benefits remain unproven."
@@ -10726,8 +10726,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "laboratory",
       "activity": "research",
-      "task": "reading",
-      "prop": "care-card",
+      "task": "checklist",
+      "prop": "research-folder",
       "motif": "nutrition",
       "mechanismStyle": "uncertain",
       "response": "neutral",
@@ -10736,7 +10736,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Reading a human-trial summary about an NAD precursor.",
+      "intent": "Checking NAD biomarkers against a human-trial summary.",
       "responseNotes": [
         "Trials show increases in blood NAD-related metabolites.",
         "Metabolic and clinical benefits remain uncertain."
@@ -10784,8 +10784,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "living-room",
       "activity": "research",
-      "task": "writing",
-      "prop": "clipboard",
+      "task": "planning",
+      "prop": "care-card",
       "motif": "uncertainty",
       "mechanismStyle": "uncertain",
       "response": "neutral",
@@ -10794,7 +10794,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Writing questions about a supplement promoted for mood and joint health.",
+      "intent": "Planning questions about uncertain mood and joint-health claims.",
       "responseNotes": [
         "A pilot depression trial missed its primary outcome.",
         "Clinical benefit remains uncertain."
@@ -10848,8 +10848,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "recovery",
       "activity": "rest",
-      "task": "reading",
-      "prop": "book",
+      "task": "resting",
+      "prop": "water-bottle",
       "motif": "receptor",
       "mechanismStyle": "modulate",
       "response": "sleepy",
@@ -10858,7 +10858,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "breathing",
       "organs": [],
       "cautions": [],
-      "intent": "Taking a quiet break before a nonmedical opioid exposure.",
+      "intent": "Pausing with water before a nonmedical opioid exposure.",
       "responseNotes": [
         "It can cause euphoria followed by drowsiness.",
         "Heart and breathing rates can slow."
@@ -11039,8 +11039,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "listening-room",
       "activity": "rest",
-      "task": "reading",
-      "prop": "notebook",
+      "task": "typing",
+      "prop": "phone",
       "motif": "receptor",
       "mechanismStyle": "modulate",
       "response": "sleepy",
@@ -11049,7 +11049,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "breathing",
       "organs": [],
       "cautions": [],
-      "intent": "Setting aside notes before nonmedical exposure to a GHB-related solvent.",
+      "intent": "Putting down a phone before nonmedical GHB-analogue exposure.",
       "responseNotes": [
         "It can cause GHB-like sedation and reduced consciousness.",
         "A U.S. medical use has not been established."
@@ -11105,8 +11105,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "gym",
       "activity": "research",
-      "task": "care-card",
-      "prop": "clipboard",
+      "task": "meal",
+      "prop": "plate",
       "motif": "hormone",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -11115,7 +11115,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "metabolic",
       "organs": [],
       "cautions": [],
-      "intent": "Reviewing nonmedical anabolic claims alongside a historical anemia-treatment label.",
+      "intent": "Pausing a meal to compare nonmedical anabolic claims with historical labeling.",
       "responseNotes": [
         "Historical anemia labels described increased red-cell mass.",
         "That does not establish safe performance enhancement."

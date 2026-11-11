@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { sampleScene, solveArm, LOOP_SECONDS, STAGE_TIMES } from '../app/components/scene/timeline.ts';
+import { solveCharacterArm } from '../app/components/scene/arm-geometry.ts';
 
 test('the loop closes with the same pose and no visible effect layers', () => {
   const start = sampleScene(0, 'jitter');
@@ -10,13 +11,19 @@ test('the loop closes with the same pose and no visible effect layers', () => {
   assert.equal(start.adverse, 0);
 });
 
-test('a moving hand remains joined to both fixed-length arm segments', () => {
+test('the legacy IK helper preserves its fixed-length contract', () => {
+  const arm = solveArm([422, 225], [465,267]);
+  assert.ok(Math.abs(Math.hypot(arm.elbow[0] - 422, arm.elbow[1] - 225) - 32) < .0001);
+  assert.ok(Math.abs(Math.hypot(arm.hand[0] - arm.elbow[0], arm.hand[1] - arm.elbow[1]) - 50) < .0001);
+  assert.ok(Math.hypot(arm.hand[0] - 465, arm.hand[1] - 267) < .001);
+});
+
+test('the rendered intake wrist remains connected throughout the approach and return', () => {
   for (let time = 0; time <= LOOP_SECONDS; time += 1 / 120) {
     const pose = sampleScene(time, 'jitter');
-    const arm = solveArm([422, 225], pose.hand);
-    assert.ok(Math.abs(Math.hypot(arm.elbow[0] - 422, arm.elbow[1] - 225) - 32) < .0001);
-    assert.ok(Math.abs(Math.hypot(arm.hand[0] - arm.elbow[0], arm.hand[1] - arm.elbow[1]) - 50) < .0001);
-    assert.ok(Math.hypot(arm.hand[0] - pose.hand[0], arm.hand[1] - pose.hand[1]) < .001);
+    const rendered=solveCharacterArm('right',pose.hand);
+    assert.deepEqual(rendered.hand,pose.hand,'rendered wrist stays attached to the prop');
+    assert.ok(Math.hypot(rendered.elbow[0]-rendered.shoulder[0],rendered.elbow[1]-rendered.shoulder[1])<=33);
   }
 });
 

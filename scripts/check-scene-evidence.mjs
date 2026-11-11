@@ -5,22 +5,38 @@ const directory=path.resolve(process.argv[2]??'');
 const revision=JSON.parse(await readFile(path.join(directory,'revision.json'),'utf8'));
 const ids=revision.entries.map(entry=>entry.id),loops=new Set(),mobile=new Map(),invalid=[];
 const recordings=[];
-for(const entry of await readdir(directory,{withFileTypes:true})){
+// Explicit independent carry-forward reviews can preserve unaffected captures.
+// This records reviewed scope; it does not itself prove visual equivalence.
+const captureSources=[{directory,allowedIds:ids}];
+let carried=[];
+try{carried=JSON.parse(await readFile(path.join(directory,'carry-forward.json'),'utf8'));}catch{}
+for(const review of carried){
+  const previousDirectory=path.resolve(directory,review.directory??'');
+  const previous=JSON.parse(await readFile(path.join(previousDirectory,'revision.json'),'utf8'));
+  if(review.toFingerprint!==revision.fingerprint||review.fromFingerprint!==previous.fingerprint||!review.reviewedBy||!review.reason||!Array.isArray(review.ids)||review.ids.some(id=>!ids.includes(id))){invalid.push('Invalid carry-forward review');continue;}
+  try{await readFile(path.resolve(directory,review.report),'utf8');}catch{invalid.push('Missing independent carry-forward report');continue;}
+  captureSources.push({directory:previousDirectory,allowedIds:review.ids});
+}
+for(const source of captureSources){
+for(const entry of await readdir(source.directory,{withFileTypes:true})){
   if(!entry.isDirectory()||!/^(desktop|detail)-/.test(entry.name))continue;
   let record;
-  try{record=JSON.parse(await readFile(path.join(directory,entry.name,'manifest.json'),'utf8'));}catch{continue;}
-  if(record.fingerprint!==revision.fingerprint){
+  try{record=JSON.parse(await readFile(path.join(source.directory,entry.name,'manifest.json'),'utf8'));}catch{continue;}
+  const sourceRevision=JSON.parse(await readFile(path.join(source.directory,'revision.json'),'utf8'));
+  if(record.fingerprint!==sourceRevision.fingerprint){
     let previous;
     try{previous=JSON.parse(await readFile(path.join(directory,'..',`scene-review-${record.fingerprint.slice(0,12)}`,'revision.json'),'utf8'));}catch{}
-    const matches=previous?.rendererFingerprint===revision.rendererFingerprint&&record.ids.every(id=>previous.entries.find(e=>e.id===id)?.fingerprint===revision.entries.find(e=>e.id===id)?.fingerprint);
+    const matches=previous?.rendererFingerprint===sourceRevision.rendererFingerprint&&record.ids.every(id=>previous.entries.find(e=>e.id===id)?.fingerprint===sourceRevision.entries.find(e=>e.id===id)?.fingerprint);
     if(!matches){invalid.push(`${entry.name}: stale source`);continue;}
   }
   if(record.duration<24||record.frameCount<24){invalid.push(`${entry.name}: incomplete recording`);continue;}
   const endTime=Number.parseFloat(record.finalTime);
   if(!record.wrapped||!Number.isFinite(endTime)||endTime<.1||endTime>5){invalid.push(`${entry.name}: loop reset not established`);continue;}
   if(record.layout.tiles.some(tile=>tile.svg.top<0||tile.svg.left<0||tile.svg.bottom>record.layout.viewport[1]||tile.svg.right>record.layout.viewport[0])){invalid.push(`${entry.name}: cropped scene`);continue;}
-  for(const id of record.ids)loops.add(id);
-  recordings.push({name:entry.name,ids:record.ids,frameCount:record.frameCount,sampledFps:record.sampledFps,maxGap:record.maxGap,finalTime:record.finalTime});
+  const coveredIds=record.ids.filter(id=>source.allowedIds.includes(id));
+  for(const id of coveredIds)loops.add(id);
+  recordings.push({name:entry.name,directory:source.directory,ids:coveredIds,frameCount:record.frameCount,sampledFps:record.sampledFps,maxGap:record.maxGap,finalTime:record.finalTime});
+}
 }
 let mobileRecords=[];
 try{mobileRecords=JSON.parse(await readFile(path.join(directory,'mobile-manifest.json'),'utf8'));}catch{}

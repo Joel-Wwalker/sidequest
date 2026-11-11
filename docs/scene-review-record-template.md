@@ -40,7 +40,7 @@ Add a row for every affected scene at each viewport size. Link the complete desk
 | Check | Command or evidence | Observed result |
 | --- | --- | --- |
 | TypeScript | `npx tsc --noEmit` | Pending |
-| Full test suite; current baseline 13 tests | `node --test tests/*.test.mjs` | Pending |
+| Full test suite; record the actual current count | `node --test tests/*.test.mjs` | Pending |
 | Production build | Record actual command | Pending |
 | Whitespace | `git diff --check` | Pending |
 | Pause, resume, replay and stage selection | Pending | Pending |

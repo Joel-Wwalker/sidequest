@@ -1,4 +1,6 @@
 import type { CatalogSeed, Reaction, Activity, ContextTask } from '../../data/catalog/types';
+import { getSceneStory } from '../../data/catalog/scene-stories.ts';
+import { storyGesture, actionUsesContext, contextHandoff, handoffObjectOpacity } from './story-motion.ts';
 
 type Point = [number,number];
 type Base = { t:number;intake:number;response:number;adverse:number;hand:Point };
@@ -60,7 +62,7 @@ function taskGesture(task:ContextTask,t:number):Gesture {
     case'reading':g.left=[365,256];g.right=[401,256];g.lookY=2;g.tilt=-2;break;
     case'planning':case'organizer':g.left=[351,264];g.right=[375+s(t)*4,261];g.lookY=2;break;
     case'mirror':g.left=[337,231];g.right=[443,219+ s(t)*1.5];g.lookX=-2.4;g.tilt=-3;break;
-    case'hair-photo':g.left=[340,231];g.right=[400,165];g.lookX=-2;g.tilt=-2;break;
+    case'hair-photo':g.left=[340,231];g.right=[448,190];g.lookX=-2;g.tilt=-2;break;
     case'skin-check':g.left=[347,253];g.right=[363,256];g.lookX=-2;g.lookY=2;break;
     case'meal':g.left=[357,267];g.right=[386,257+s(t*1.8)*3];g.lookY=2;break;
     case'glucose-log':g.left=[351,254];g.right=[372,254];g.lookY=1.5;break;
@@ -86,11 +88,52 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
     task.left=[366,279];task.right=[459,253];task.lookX=2;task.lookY=1;
   }
   const activity=activityGesture(seed.scene.activity);
-  const response=seed.status==='experimental'?activity:reactionGesture(seed.scene.response,t);
-  if(seed.scene.response==='neutral'||seed.status==='experimental')Object.assign(response,activity);
-  const resumesTask=['neutral','focus','relax','relief'].includes(seed.scene.response)||seed.status==='experimental';
+  const story=getSceneStory(seed as CatalogSeed);
+  // Show the selected condition before treatment without inventing a visible
+  // symptom for silent processes. The original held task object stays attached.
+  if(story?.responseMode==='felt'||story?.responseMode==='visible-local'){
+    if(story.responseAction==='mouth-ease'){task.mouth=.32;task.smile=-2;task.brow=-.5;task.tilt=3;}
+    if(['breathe-easier','cough-ease'].includes(story.responseAction)){task.lean=4;task.mouth=.35;task.brow=-1;task.eyes=.15;}
+    if(['stomach-relief','urinary-ease','pelvic-relief'].includes(story.responseAction)){task.lean=4;task.tilt=3;task.smile=-1.5;}
+    if(story.responseAction==='headache-ease'){task.eyes=.45;task.tilt=5;task.smile=-1.5;}
+  }
+  const response=story?storyGesture(story.responseAction,t,story.responseTarget):seed.status==='experimental'?activity:reactionGesture(seed.scene.response,t);
+  if(story?.responseAction==='ankle-check'){response.smile=.6;response.brow=.6;response.lean=2;response.tilt=4;}
+  if(story?.responseAction==='steadier-hands'){task.left=[task.left[0]+Math.sin(t*9)*1.3,task.left[1]];task.right=[task.right[0]+Math.sin(t*8)*1.3,task.right[1]];}
+  if(!story&&(seed.scene.response==='neutral'||seed.status==='experimental'))Object.assign(response,activity);
+  const resumesTask=!story&&(['neutral','focus','relax','relief'].includes(seed.scene.response)||seed.status==='experimental');
   if(resumesTask){response.left=task.left;response.right=task.right;response.lookX=task.lookX;response.lookY=task.lookY;}
-  const adverse=reactionGesture(seed.scene.adverse,t);
+  const adverse=story?storyGesture(story.downsideAction,t,story.downsideTarget):reactionGesture(seed.scene.adverse,t);
+  if(story){adverse.smile=Math.min(adverse.smile,-1.6);adverse.brow=Math.max(adverse.brow,1.7);adverse.lookY+=.5;}
+  // Keep the person's actual book, meal, photo or research object in follow-up
+  // actions instead of replacing every activity with the same clipboard.
+  if(story)for(const [gesture,action,isRisk] of [[response,story.responseAction,false],[adverse,story.downsideAction,true]] as const){
+    if(actionUsesContext(action)){
+      gesture.left=task.left;
+      if(action==='review-uncertainty'||action==='withdrawal-watch'){
+        gesture.right=isRisk?[471,243]:[463,259];
+        gesture.lookX=task.lookX;gesture.lookY=task.lookY;
+        gesture.tilt=isRisk?5:-4;gesture.brow=isRisk?2.5:1.5;
+      }else{
+        gesture.right=task.right;gesture.lookX=task.lookX;gesture.lookY=task.lookY;
+        gesture.tilt=task.tilt;gesture.brow=action==='focus'?2:1;
+      }
+    }
+  }
+  const handoff=story?contextHandoff(t):0;
+  if(story)for(const [gesture,action] of [[response,story.responseAction],[adverse,story.downsideAction]] as const){
+    if(!actionUsesContext(action)){
+      const viaRest=(from:Point,to:Point,rest:Point):Point=>{
+        const progress=1-handoff,first=progress<.5,start=first?from:rest,end=first?rest:to;
+        const amount=ease(first?progress*2:(progress-.5)*2);
+        return [start[0]+(end[0]-start[0])*amount,start[1]+(end[1]-start[1])*amount];
+      };
+      gesture.left=viaRest(task.left,gesture.left,[366,279]);
+      gesture.right=viaRest(task.right,gesture.right,[465,267]);
+      gesture.lookX+=(task.lookX-gesture.lookX)*handoff;
+      gesture.lookY+=(task.lookY-gesture.lookY)*handoff;
+    }
+  }
   const mix=(left:Point,right:Point,origin:Point):Point=>[
     origin[0]+r*(left[0]-origin[0])+a*(right[0]-origin[0]),
     origin[1]+r*(left[1]-origin[1])+a*(right[1]-origin[1]),
@@ -99,9 +142,9 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
   right[0]+=opening*(task.right[0]-465);right[1]+=opening*(task.right[1]-267);
   if(contextTask(seed)==='hair-photo'){
     // Lift outside the face before moving across the hairline; reverse the same path.
-    const amount=opening+(resumesTask?r:0),lift=ease(amount/.7),across=ease((amount-.7)/.3);
-    right[0]=465+(440-465)*lift+(task.right[0]-440)*across+a*(adverse.right[0]-465)+(resumesTask?0:r*(response.right[0]-465));
-    right[1]=267+(150-267)*lift+(task.right[1]-150)*across+a*(adverse.right[1]-267)+(resumesTask?0:r*(response.right[1]-267));
+    const amount=opening+(resumesTask?r:0);
+    right[0]=465+(task.right[0]-465)*amount+a*(adverse.right[0]-465)+(resumesTask?0:r*(response.right[0]-465));
+    right[1]=267+(task.right[1]-267)*amount+a*(adverse.right[1]-267)+(resumesTask?0:r*(response.right[1]-267));
   }
   const exposureHand:Point=seed.scene.exposure==='topical'
     ? [465+(361-465)*base.intake,267+(260-267)*base.intake]
@@ -116,6 +159,8 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
     bodyLean:value('lean'),bodyDrop:a*(seed.scene.adverse==='sleepy'?1:0),tilt:value('tilt'),eyelid:value('eyes'),
     smile:value('smile'),lookX:value('lookX'),lookY:value('lookY'),browLift:value('brow'),mouthOpen:value('mouth'),
     gut:value('gut'),heat:value('heat'),worry:a*(seed.scene.adverse==='neutral'?0:.6),pupil:1,footTap:0,ghost:0,sway:0,
-    contextTaskAmount:opening+(resumesTask?r:0),contextPropOpacity:Math.max(1-ease((t-3.3)/.7)+ease((t-23.2)/.8),resumesTask?r:0),contextExposureOpacity:ease((t-3.7)/.4)*(1-ease((t-7.7)/.5)),
+    contextTaskAmount:opening+(resumesTask||story&&actionUsesContext(story.responseAction)?r:r*handoff)+(story&&actionUsesContext(story.downsideAction)?a:a*handoff),
+    contextPropOpacity:Math.max(1-ease((t-3.3)/.7)+ease((t-23.2)/.8),resumesTask||story&&actionUsesContext(story.responseAction)?r:r*(story?handoffObjectOpacity(t,'task'):0),story&&actionUsesContext(story.downsideAction)?a:a*(story?handoffObjectOpacity(t,'task'):0)),
+    contextExposureOpacity:ease((t-3.7)/.4)*(1-ease((t-7.7)/.5)),
   };
 }

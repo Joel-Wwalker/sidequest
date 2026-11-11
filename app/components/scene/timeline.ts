@@ -38,7 +38,7 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
     contextTaskAmount:0,contextPropOpacity:0,contextExposureOpacity:1,
     // Reach around the shoulder on an arc; a straight line crosses its joint.
     hand: [(1 - intake) ** 2 * 465 + 2 * (1 - intake) * intake * 500 + intake ** 2 * 409 + tremor,
-      (1 - intake) ** 2 * 267 + 2 * (1 - intake) * intake * 170 + intake ** 2 * 211] as Point,
+      (1 - intake) ** 2 * 267 + 2 * (1 - intake) * intake * 210 + intake ** 2 * 211] as Point,
     leftHand: [366 + gut * 32, 279 - gut * 11] as Point,
     sway, tremor, breath, breathPhase, blink, gut,
     tilt: adverse * (motion === 'sway' ? Math.sin(t * 1.3) * 7 : motion === 'breathing' ? 7 : motion === 'dissociate' ? -4 : motion === 'gut' ? 5 : 0),
@@ -63,13 +63,13 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
       lr=[360,269+oscillate(3)*4];la=[366,277+oscillate(11)*3];ra=[465+oscillate(16)*2.4,267+oscillate(13)*1.7];
       browLift=r*2;lookX=r*1.6+a*oscillate(3)*1.3;footTap=(r*.8+a*2)*Math.max(0,oscillate(7));smile=r*1.3-a*2;break;
     case 'nicotine':
-      lr=[356,256];la=[377+oscillate(2)*4,242+oscillate(3)*5];rr=[454,259];ra=[464+oscillate(4)*4,252+oscillate(5)*5];
+      lr=[356,256];la=[350+oscillate(2)*4,242+oscillate(3)*5];rr=[454,259];ra=[464+oscillate(4)*4,252+oscillate(5)*5];
       lookX=r*2+a*oscillate(2)*2.5;bodyLean=a*2;smile=r*.7-a*2;footTap=a*(1+oscillate(6));break;
     case 'cocaine':
       lr=[350,253+oscillate(4)*9];rr=[469,244-oscillate(4)*7];la=[401,239];ra=[473,263+oscillate(8)*4];
       bodyLean=r*-2+a*5;lookX=r*oscillate(4)*2.5;lookY=a*1.8;smile=r*1.5-a*3;mouthOpen=a*.3;break;
     case 'mdma':
-      lr=[345,243];rr=[471,246];la=[355,278];ra=[400+oscillate(2)*3,170];
+      lr=[345,243];rr=[471,246];la=[355,278];ra=[447+oscillate(2)*3,181];
       base.sway=r*oscillate(2)*3;bodyLean=r*oscillate(2)*3+a*4;smile=r*5-a*1.5;base.tilt=r*oscillate(2)*4+a*5;browLift=r;break;
     case 'synthetic-cathinones':
       lr=[348,248+oscillate(5)*8];rr=[474,250-oscillate(5)*8];la=[330+oscillate(3)*3,222+oscillate(5)*4];ra=[449+oscillate(3)*4,207-oscillate(5)*4];
@@ -93,7 +93,7 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
       lookY=(r+a)*1.8;smile=-a*1.5;mouthOpen=a*.45;break;
     case 'cannabis': {
       const recall = (1+oscillate(1.1))/2;
-      lr=[354,267];rr=[456,277];la=[349+recall*22,220+recall*26];ra=[456,274];
+      lr=[354,267];rr=[456,277];la=[338+recall*14,223+recall*24];ra=[456,274];
       bodyLean=r*-3+a*2;base.tilt=r*-9+a*(5+oscillate(1.1)*5);base.eyelid=r*.3+a*.15;
       lookX=r*-1+a*oscillate(1.1)*2.6;smile=r*3-a*1.8;browLift=a*1.5;break;
     }

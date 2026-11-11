@@ -3067,9 +3067,9 @@ export const medicationSeeds: CatalogSeed[] = [
     ],
     "scene": {
       "setting": "bedroom",
-      "activity": "sleep",
-      "task": "sleep-log",
-      "prop": "notebook",
+      "activity": "reading",
+      "task": "music",
+      "prop": "headphones",
       "motif": "receptor",
       "mechanismStyle": "block",
       "response": "sleepy",
@@ -3081,7 +3081,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "cautions": [
         "brain"
       ],
-      "intent": "Writing a sleep diary during prescribed insomnia treatment.",
+      "intent": "Setting headphones aside during a prescribed insomnia-care routine.",
       "responseNotes": [
         "Orexin wake-promoting signaling is reduced",
         "Falling or staying asleep can become easier"
@@ -3331,7 +3331,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "motif": "neural",
       "mechanismStyle": "modulate",
       "response": "neutral",
-      "adverse": "dizzy",
+      "adverse": "itch",
       "timeCourse": "over-time",
       "organs": [
         "brain"
@@ -3346,16 +3346,16 @@ export const medicationSeeds: CatalogSeed[] = [
         "Abnormal brain activity is reduced"
       ],
       "riskNotes": [
-        "Dizziness or poor coordination can occur",
-        "A serious skin rash can require hospital care"
+        "A serious skin rash can require hospital care",
+        "Dizziness or poor coordination can also occur"
       ],
       "beats": [
         "Bipolar mood episodes may be delayed",
-        "Dizziness or poor coordination can occur"
+        "A serious skin rash can require hospital care"
       ],
       "asides": [
         "The notes follow the longer treatment course.",
-        "A serious skin rash can require hospital care"
+        "A new rash needs prompt medical assessment."
       ],
       "riskVisual": "skin",
       "exposure": "oral"
@@ -5827,7 +5827,7 @@ export const medicationSeeds: CatalogSeed[] = [
     "scene": {
       "setting": "living-room",
       "activity": "care",
-      "task": "reading",
+      "task": "resting",
       "prop": "care-card",
       "motif": "pain",
       "mechanismStyle": "modulate",
@@ -5841,7 +5841,7 @@ export const medicationSeeds: CatalogSeed[] = [
         "brain",
         "lungs"
       ],
-      "intent": "Reading a care card during prescribed pain treatment.",
+      "intent": "Taking a quiet rest during prescribed pain treatment.",
       "responseNotes": [
         "Pain can ease",
         "Opioid and monoamine signaling are affected"
@@ -6180,8 +6180,8 @@ export const medicationSeeds: CatalogSeed[] = [
     ],
     "scene": {
       "setting": "clinic",
-      "activity": "consultation",
-      "task": "reading",
+      "activity": "breathing",
+      "task": "breathing",
       "prop": "care-card",
       "motif": "receptor",
       "mechanismStyle": "block",
@@ -6195,7 +6195,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "cautions": [
         "lungs"
       ],
-      "intent": "Reviewing an emergency card about reversing opioid overdose and recurrent breathing suppression.",
+      "intent": "An emergency reversal of opioid-related breathing suppression.",
       "responseNotes": [
         "Opioid effects can be rapidly reversed",
         "Breathing can return during opioid overdose"
@@ -6210,7 +6210,7 @@ export const medicationSeeds: CatalogSeed[] = [
       ],
       "asides": [
         "Emergency reversal can wear off before the opioid does.",
-        "Severe withdrawal can follow reversal."
+        "Recurrent breathing suppression is still an emergency."
       ],
       "riskVisual": "breathing",
       "exposure": "symbolic"
@@ -10979,7 +10979,7 @@ export const medicationSeeds: CatalogSeed[] = [
         "Gas, diarrhea, and abdominal pain are common"
       ],
       "asides": [
-        "The plate is ordinary; the digestion diagram is schematic.",
+        "The plate has not read the pharmacology notes.",
         "Liver injury is a rare concern"
       ],
       "exposure": "oral"
@@ -11795,7 +11795,7 @@ export const medicationSeeds: CatalogSeed[] = [
         "Severe skin reactions can occur"
       ],
       "asides": [
-        "The urate diagram represents prevention over time.",
+        "The follow-up notes take the long view.",
         "Liver or blood-cell problems can occur"
       ],
       "exposure": "oral"
@@ -12384,8 +12384,8 @@ export const medicationSeeds: CatalogSeed[] = [
     "scene": {
       "setting": "living-room",
       "activity": "care",
-      "task": "planning",
-      "prop": "calendar",
+      "task": "organizer",
+      "prop": "clipboard",
       "motif": "immune",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -12396,7 +12396,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "cautions": [
         "eyes"
       ],
-      "intent": "Planning follow-up during lupus treatment.",
+      "intent": "Organizing lupus and eye-safety follow-up records.",
       "responseNotes": [
         "Autoimmune symptoms can decrease",
         "Immune activity is modulated"
@@ -14650,8 +14650,8 @@ export const medicationSeeds: CatalogSeed[] = [
     "scene": {
       "setting": "travel",
       "activity": "care",
-      "task": "care-card",
-      "prop": "care-card",
+      "task": "packing",
+      "prop": "suitcase",
       "motif": "gut",
       "mechanismStyle": "modulate",
       "response": "relief",
@@ -14664,7 +14664,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "cautions": [
         "heart"
       ],
-      "intent": "Reviewing a diarrhea-care card while away from home.",
+      "intent": "Packing an overnight bag during diarrhea care away from home.",
       "responseNotes": [
         "Can reduce diarrhea",
         "Can reduce stool frequency"
@@ -15779,8 +15779,8 @@ export const medicationSeeds: CatalogSeed[] = [
     "scene": {
       "setting": "recovery",
       "activity": "reading",
-      "task": "reading",
-      "prop": "book",
+      "task": "hydration",
+      "prop": "water-bottle",
       "motif": "bacteria",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -15791,7 +15791,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "cautions": [
         "heart"
       ],
-      "intent": "Reading during a rest break in bacterial-infection treatment.",
+      "intent": "Pausing with water during a prescribed bacterial-infection course.",
       "responseNotes": [
         "Can treat susceptible bacterial infections",
         "Can clear bacterial illness"
@@ -16589,8 +16589,8 @@ export const medicationSeeds: CatalogSeed[] = [
     "scene": {
       "setting": "recovery",
       "activity": "care",
-      "task": "care-card",
-      "prop": "care-card",
+      "task": "reading",
+      "prop": "book",
       "motif": "bacteria",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -16603,7 +16603,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "cautions": [
         "kidneys"
       ],
-      "intent": "Reviewing a care card for oral treatment of an intestinal infection.",
+      "intent": "Reading care information for oral treatment of an intestinal infection.",
       "responseNotes": [
         "Selected intestinal infection can be treated",
         "Bacterial cell-wall synthesis is inhibited"
@@ -17097,28 +17097,28 @@ export const medicationSeeds: CatalogSeed[] = [
       "mechanismStyle": "modulate",
       "response": "neutral",
       "adverse": "neutral",
-      "timeCourse": "variable",
+      "timeCourse": "over-time",
       "riskVisual": "liver",
       "organs": [],
       "cautions": [
         "liver"
       ],
-      "intent": "Reading a care card during treatment for a susceptible yeast infection.",
+      "intent": "Following oral yeast treatment and checking mouth discomfort.",
       "responseNotes": [
-        "Can treat susceptible fungal infections",
-        "Can clear yeast infection"
+        "Yeast growth can slow during an oral-thrush treatment course",
+        "This scene follows one selected mouth-infection use"
       ],
       "riskNotes": [
         "Liver injury and QT prolongation can occur",
         "Rash or severe skin reaction can occur"
       ],
       "beats": [
-        "Can treat susceptible fungal infections",
+        "Oral yeast symptoms may ease during treatment",
         "Liver injury and QT prolongation can occur"
       ],
       "asides": [
-        "The care card keeps the treatment and follow-up together.",
-        "Rash or severe skin reaction can occur"
+        "The mouth has a long list of things to get back to.",
+        "Liver safety and interacting medicines need attention."
       ],
       "exposure": "oral"
     }
@@ -17715,8 +17715,8 @@ export const medicationSeeds: CatalogSeed[] = [
     "scene": {
       "setting": "recovery",
       "activity": "care",
-      "task": "planning",
-      "prop": "calendar",
+      "task": "organizer",
+      "prop": "research-folder",
       "motif": "parasite",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -17725,7 +17725,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "riskVisual": "dizziness",
       "organs": [],
       "cautions": [],
-      "intent": "Planning follow-up for a diagnosed susceptible fluke infection.",
+      "intent": "Organizing follow-up papers for a diagnosed susceptible fluke infection.",
       "responseNotes": [
         "Can treat selected worm infections",
         "Can clear parasitic infection"
@@ -18683,11 +18683,9 @@ export const medicationSeeds: CatalogSeed[] = [
       "response": "neutral",
       "adverse": "neutral",
       "timeCourse": "over-time",
-      "riskVisual": "liver",
+      "riskVisual": "testing",
       "organs": [],
-      "cautions": [
-        "liver"
-      ],
+      "cautions": [],
       "intent": "Organizing oncology-care papers during oral APL treatment.",
       "responseNotes": [
         "Can induce remission in APL",
@@ -18703,7 +18701,7 @@ export const medicationSeeds: CatalogSeed[] = [
       ],
       "asides": [
         "This scene follows the oral leukemia-treatment indication.",
-        "Fetal harm and liver effects are concerns"
+        "Differentiation syndrome needs urgent clinical assessment."
       ],
       "exposure": "oral"
     }

@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import { substances } from '../app/data/substances.ts';
 import { catalogSeeds } from '../app/data/catalog/index.ts';
 import { settings, activities, reactions, motifs, contextTasks, contextProps, riskVisuals } from '../app/data/catalog/types.ts';
-import { sampleScene, solveArm } from '../app/components/scene/timeline.ts';
+import { sampleScene } from '../app/components/scene/timeline.ts';
+import { solveCharacterArm } from '../app/components/scene/arm-geometry.ts';
 import { getSceneProfile } from '../app/components/scene/profiles.ts';
+import { getSceneStory } from '../app/data/catalog/scene-stories.ts';
 
 test('the catalog reaches 500 distinct sourced entries and covers the requested priorities',()=>{
   assert.ok(substances.length>=500,`${substances.length} of the 500-entry target`);
@@ -50,14 +52,18 @@ test('expanded entries have distinct authored scenes and reachable joints throug
     const setting=shared(s.setting,[['garden','conservatory']]);
     const task=shared(s.task,[['writing','meal-log','sleep-log','research-notes'],['checklist','care-card']]);
     const prop=shared(s.prop,[['notebook','care-card']]);
-    const motif=seed.status==='experimental'?'uncertainty':s.motif==='receptor'?(seed.id==='tirzepatide'?'dual-receptor':s.mechanismStyle==='block'?'receptor-block':'receptor-signal'):shared(s.motif,[['neural','serotonin'],['immune','inflammation'],['fluid','flow']]);
-    const signature=JSON.stringify([setting,task,prop,s.exposure,motif,seed.status==='experimental'?'neutral':s.response,s.adverse,s.riskVisual]);
+    const story=getSceneStory(seed);
+    // The deleted wall motifs and old neutral reactions are not rendered differences.
+    // Mode, label, target name and palette alone cannot establish choreography uniqueness.
+    const signature=JSON.stringify([setting,task,prop,s.exposure,story.responseAction,story.downsideAction]);
     assert.ok(!blueprints.has(signature),`${seed.id} repeats ${blueprints.get(signature)}; palette and labels cannot establish a unique scene`);
     blueprints.set(signature,seed.id);
     for(let t=0;t<24;t+=1/60){
       const p=sampleScene(t,'context',seed.id);
-      for(const [shoulder,hand,upper,lower] of [[[422,225],p.hand,32,50],[[422,225],p.symbolicHand,32,50],[[378,225],p.leftHand,36,36]]){
-        const solved=solveArm(shoulder,hand,upper,lower);
+      for(const [side,hand] of [['right',s.exposure==='symbolic'?p.symbolicHand:p.hand],['left',p.leftHand]]){
+        const solved=solveCharacterArm(side,hand);
+        const reach=Math.hypot(hand[0]-solved.shoulder[0],hand[1]-solved.shoulder[1]);
+        assert.ok(reach>=16&&reach<=80,`${seed.id} exceeds arm reach at${t}`);
         assert.ok(Math.hypot(solved.hand[0]-hand[0],solved.hand[1]-hand[1])<.01,`${seed.id} unreachable at${t}`);
       }
     }

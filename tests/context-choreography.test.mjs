@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { sampleContextPose } from '../app/components/scene/context-motion.ts';
-import { sampleScene, solveArm } from '../app/components/scene/timeline.ts';
+import { sampleScene } from '../app/components/scene/timeline.ts';
+import { solveCharacterArm } from '../app/components/scene/arm-geometry.ts';
 import { reactions, contextTasks } from '../app/data/catalog/types.ts';
 import { inhalerGeometry } from '../app/components/scene/prop-geometry.ts';
 
@@ -13,12 +14,14 @@ test('context gestures preserve joint reach and facial clearance across every re
     for(let t=0;t<24;t+=1/60){
       const base=sampleScene(t,'context');
       const p=sampleContextPose(base,seed);
-      for(const [shoulder,target,upper,lower] of [[[422,225],p.hand,32,50],[[378,225],p.leftHand,36,36]]){
-        const solved=solveArm(shoulder,target,upper,lower);
+      for(const [side,target] of [['right',p.hand],['left',p.leftHand]]){
+        const solved=solveCharacterArm(side,target);
+        const reach=Math.hypot(target[0]-solved.shoulder[0],target[1]-solved.shoulder[1]);
+        assert.ok(reach>=16&&reach<=80,`${reaction}/${activity}: arm exceeds reach at${t}`);
         assert.ok(Math.hypot(solved.hand[0]-target[0],solved.hand[1]-target[1])<.01,`${reaction}/${activity}: unreachable at${t}`);
       }
       if(previous)for(const field of ['hand','leftHand'])assert.ok(Math.hypot(p[field][0]-previous[field][0],p[field][1]-previous[field][1])<4,`${reaction}/${task}: discontinuity at${t}`);
-      const arm=solveArm([378,225],p.leftHand,36,36,1),angle=-p.tilt*Math.PI/180;
+      const arm=solveCharacterArm('left',p.leftHand),angle=-p.tilt*Math.PI/180;
       if(t<4||(t>=8.2&&t<14)){
         const x=p.hand[0]-400,y=p.hand[1]-214;
         const hx=400+x*Math.cos(angle)-y*Math.sin(angle),hy=214+x*Math.sin(angle)+y*Math.cos(angle);
@@ -27,7 +30,7 @@ test('context gestures preserve joint reach and facial clearance across every re
       for(let k=0;k<=18;k++){
         const x=arm.elbow[0]+k/18*(arm.hand[0]-arm.elbow[0])-400,y=arm.elbow[1]+k/18*(arm.hand[1]-arm.elbow[1])-214;
         const hx=400+x*Math.cos(angle)-y*Math.sin(angle),hy=214+x*Math.sin(angle)+y*Math.cos(angle);
-        assert.ok(Math.hypot(Math.max(386-hx,0,hx-415),Math.max(174-hy,0,hy-201))>=9,`${reaction}/${activity}: sleeve in face at${t}`);
+        assert.ok(Math.hypot(Math.max(386-hx,0,hx-415),Math.max(174-hy,0,hy-201))>=10,`${reaction}/${activity}: sleeve in face at${t}`);
       }
       previous=p;
     }
@@ -46,7 +49,7 @@ test('experimental entries do not animate a therapeutic response as established'
 test('the inhaler nozzle meets the lips while its canister clears the eyes',()=>{
   const seed={id:'inhaler-contact',status:'prescription',scene:{activity:'care',task:'care-card',response:'neutral',adverse:'neutral',exposure:'inhaler'}};
   for(let t=4.1;t<8.2;t+=1/60){
-    const base=sampleScene(t,'context'),p=sampleContextPose(base,seed),hand=solveArm([422,225],p.hand).hand;
+    const base=sampleScene(t,'context'),p=sampleContextPose(base,seed),hand=solveCharacterArm('right',p.hand).hand;
     assert.ok(Math.hypot(hand[0]-p.hand[0],hand[1]-p.hand[1])<.01,'unreachable inhaler grip');
     const box={left:hand[0]+inhalerGeometry.canister.x,right:hand[0]+inhalerGeometry.canister.x+inhalerGeometry.canister.width,top:hand[1]+inhalerGeometry.canister.y,bottom:hand[1]+inhalerGeometry.canister.y+inhalerGeometry.canister.height};
     assert.ok(box.left>419||box.top>192||box.right<379||box.bottom<173,'canister crosses the eye region');
@@ -60,7 +63,7 @@ test('a beverage uses the sipping hand throughout the activity with continuous j
     let previous;
     for(let t=0;t<24;t+=1/60){
       const p=sampleContextPose(sampleScene(t,'context'),seed);
-      const solved=solveArm([422,225],p.hand);
+      const solved=solveCharacterArm('right',p.hand);
       assert.ok(Math.hypot(solved.hand[0]-p.hand[0],solved.hand[1]-p.hand[1])<.01,`${adverse}: unreachable cup`);
       if(previous)assert.ok(Math.hypot(p.hand[0]-previous[0],p.hand[1]-previous[1])<4,`${adverse}: jumping cup`);
       if(t<3.3)assert.deepEqual(p.leftHand,[366,279],'opening should not hold a second cup');

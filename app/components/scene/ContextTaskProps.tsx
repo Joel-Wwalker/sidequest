@@ -1,6 +1,7 @@
 import type { CatalogSeed, ContextProp } from '../../data/catalog/types';
 import type { sampleScene } from './timeline';
 import { contextTask } from './context-motion';
+import { getSceneStory } from '../../data/catalog/scene-stories';
 
 type Pose=ReturnType<typeof sampleScene>;
 function HeldObject({kind}:{kind:ContextProp}){
@@ -15,7 +16,7 @@ function HeldObject({kind}:{kind:ContextProp}){
     case'water-bottle':return <g stroke="#88a7a2" strokeWidth="2"><path d="M-5-35H5V-26L12-20V7H-12V-20L-5-26Z" fill="#c5dcce"/><path d="M-7-36H7M-8-10H8M-8-3H8"/><path d="M-8-18V-3" stroke="#e9f0df"/></g>;
     case'towel':return <g><path d="M-24-29H22V10L10 5L0 10L-11 5L-24 10Z" fill="#c1c7a3" stroke="#a4b08f" strokeWidth="2"/><path d="M-18-23H16M-18-18H16" stroke="#dbe0bf" strokeWidth="3"/></g>;
     case'plant':return <g><path d="M0-11V-38M0-22Q-21-43-22-25Q-18-13 0-17M0-30Q19-48 20-31Q16-20 0-24" fill="#99b28c" stroke="#799671" strokeWidth="2"/><path d="M-15-10H15L11 9H-11Z" fill="#c3a187" stroke="#9f8b72" strokeWidth="2"/></g>;
-    case'headphones':return <g fill="none" stroke="#8f8ca2" strokeWidth="5"><path d="M-17 0V-16Q-17-40 1-40Q19-40 19-16V0"/><path d="M-17-14V1M19-14V1" strokeWidth="10"/></g>;
+    case'headphones':return <g transform="translate(-19 0)" fill="none" stroke="#8f8ca2" strokeWidth="5"><path d="M-17 0V-16Q-17-40 1-40Q19-40 19-16V0"/><path d="M-17-14V1M19-14V1" strokeWidth="10"/></g>;
     case'suitcase':return <g stroke="#8d9c95" strokeWidth="2"><rect x="-24" width="48" height="35" rx="5" fill="#b3c1b1"/><path d="M-8 0V-9H8V0M-13 4V31M13 4V31" fill="none"/><circle cx="-13" cy="38" r="3" fill="#8d9c95"/><circle cx="13" cy="38" r="3" fill="#8d9c95"/></g>;
     case'pencil':return <path d="M-4 5L8-30" stroke="#b5a16b" strokeWidth="5" strokeLinecap="round"/>;
     case'stretch-band':return null;
@@ -27,9 +28,11 @@ function HeldObject({kind}:{kind:ContextProp}){
 export default function ContextTaskProps({seed,pose,left,right}:{seed:CatalogSeed;pose:Pose;left:[number,number];right:[number,number]}){
   const task=contextTask(seed),kind=seed.scene.prop??(task==='mirror'?'mirror':task==='meal'?'plate':task==='reading'?'book':'notebook');
   const writing=['writing','meal-log','sleep-log','research-notes','checklist','care-card','planning'].includes(task);
+  const story=getSceneStory(seed),action=pose.stage===2?story?.downsideAction:story?.responseAction;
+  const occupied=pose.stage>0&&(action==='review-uncertainty'||action==='withdrawal-watch');
   return <g opacity={pose.contextPropOpacity} data-context-task={task} aria-hidden="true">
-    {kind==='stretch-band'?<path d={`M${left[0]} ${left[1]}Q400 ${280-pose.contextTaskAmount*13} ${right[0]} ${right[1]}`} fill="none" stroke="#a993b5" strokeWidth="5"/>:!(seed.scene.exposure==='drink'&&kind==='cup')&&<g transform={`translate(${left.join(' ')})`}><HeldObject kind={kind}/></g>}
-    {writing&&<path d={`M${right[0]+2} ${right[1]-5}L${right[0]-16} ${right[1]+1}`} stroke="#b6a16c" strokeWidth="4" strokeLinecap="round"/>}
-    {task==='meal'&&<path d={`M${right[0]+1} ${right[1]-3}L${right[0]-17} ${right[1]+5}`} stroke="#a9ae9a" strokeWidth="3"/>}
+    {kind==='stretch-band'?<path d={occupied?`M${left[0]} ${left[1]}q-10 41 21 43q22-3 10-30`:`M${left[0]} ${left[1]}Q400 ${280-pose.contextTaskAmount*13} ${right[0]} ${right[1]}`} fill="none" stroke="#a993b5" strokeWidth="5"/>:!(seed.scene.exposure==='drink'&&kind==='cup')&&<g transform={`translate(${left.join(' ')})`}><HeldObject kind={kind}/></g>}
+    {writing&&!occupied&&<path d={`M${right[0]+2} ${right[1]-5}L${right[0]-16} ${right[1]+1}`} stroke="#b6a16c" strokeWidth="4" strokeLinecap="round"/>}
+    {task==='meal'&&!occupied&&<path d={`M${right[0]+1} ${right[1]-3}L${right[0]-17} ${right[1]+5}`} stroke="#a9ae9a" strokeWidth="3"/>}
   </g>;
 }

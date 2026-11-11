@@ -42,8 +42,8 @@ function Furniture({ substanceKey, id }: { substanceKey: string; id: string }) {
     </>;
     case 'synthetic-cathinones': return <>
       <path d="M16 36H269L231 203H16Z" fill="#ccc3d1"/><path d="M16 36L155 203H16ZM269 36L155 203H231Z" fill="#ada5b9"/><path d="M64 36L202 203M112 36L247 187" stroke="#e3d6dc" strokeWidth="8"/>
-      <path d="M24 255L246 220L277 244L51 281Z" fill="#9793a3"/><path d="M51 281V352M246 254V345" stroke="#777384" strokeWidth="8"/><path d="M84 240L177 224L202 240L107 256Z" fill="#d7d4da"/>
-      <rect x="558" y="65" width="141" height="125" fill="#e9dfe6" stroke="#9590a5" strokeWidth="5"/><path d="M555 251L679 220L702 262L571 289Z" fill="#79788a"/><path d="M573 250L667 231M580 265L678 245" stroke="#c1b1bf" strokeWidth="5"/><path d="M575 288V348M688 271V348" stroke="#7e7b8b" strokeWidth="7"/>
+      <path d="M24 255L246 220L277 244L51 281Z" fill="#9793a3"/><path d="M51 281V352M246 249V345" stroke="#777384" strokeWidth="8"/><path d="M84 240L177 224L202 240L107 256Z" fill="#d7d4da"/>
+      <rect x="558" y="65" width="141" height="125" fill="#e9dfe6" stroke="#9590a5" strokeWidth="5"/><path d="M555 251L679 220L702 262L571 289Z" fill="#79788a"/><path d="M573 250L667 231M580 265L678 245" stroke="#c1b1bf" strokeWidth="5"/><path d="M575 288V348M688 265V348" stroke="#7e7b8b" strokeWidth="7"/>
     </>;
     case 'alcohol': return <>
       <rect x="16" y="166" width="263" height="137" fill="#c9a78b"/>{[37,76,115,154,193,232,270].map(x => <path key={x} d={`M${x} 171V302`} stroke="#b18e74" strokeWidth="3"/>)}<path d="M16 165H278V176H16" fill="#ac876a"/>
@@ -102,7 +102,7 @@ function Furniture({ substanceKey, id }: { substanceKey: string; id: string }) {
     </>;
     case 'magnesium': return <>
       <rect x="23" y="38" width="248" height="292" rx="3" fill="#b2b6a1" stroke="#959e87" strokeWidth="5"/><rect x="35" y="52" width="224" height="107" fill="#d7d7bf"/><path d="M35 106H259" stroke="#98a18b" strokeWidth="5"/>
-      {[57,102,147,192,235].map((x,i) => <g key={x}><rect x={x-12} y={i%2?120:67} width="25" height="31" rx="4" fill={i%2?'#c5b996':'#a9beb0'} stroke="#91a28c" strokeWidth="2"/><rect x={x-13} y={i%2?116:63} width="27" height="6" rx="1" fill="#9c9f87"/></g>)}<rect x="36" y="174" width="222" height="142" fill="#e1e2cc" stroke="#a8af96" strokeWidth="3"/>
+      {[57,102,147,192,235].map((x,i) => <g key={x} transform={`translate(0 ${i%2?7:4.5})`}><rect x={x-12} y={i%2?120:67} width="25" height="31" rx="4" fill={i%2?'#c5b996':'#a9beb0'} stroke="#91a28c" strokeWidth="2"/><rect x={x-13} y={i%2?116:63} width="27" height="6" rx="1" fill="#9c9f87"/></g>)}<rect x="36" y="174" width="222" height="142" fill="#e1e2cc" stroke="#a8af96" strokeWidth="3"/>
       <path d="M560 261Q560 239 582 239H667Q687 239 687 261V318H560Z" fill="#a7b5aa"/><path d="M552 287H576V313H678V287H700V337H552Z" fill="#8eaa9e"/><path d="M596 273Q615 265 630 275Q646 263 666 270V294Q646 287 630 299Q612 288 596 296Z" fill="#eee7cc" stroke="#bdba9e" strokeWidth="2"/>
       <rect x="562" y="58" width="47" height="73" rx="3" fill="#d8ddc8" stroke="#a7b49d" strokeWidth="3"/><circle cx="585" cy="78" r="6" fill="#9aab98"/><path d="M585 87V110M574 97H596M585 108L576 122M585 108L594 122" stroke="#9aab98" strokeWidth="4"/>
     </>;
@@ -118,8 +118,8 @@ function Furniture({ substanceKey, id }: { substanceKey: string; id: string }) {
     </>;
     default: return <>
       <rect x="17" y="75" width="258" height="170" fill={`url(#${id}-tiles)`}/><rect x="19" y="255" width="256" height="83" fill="#c7ad89"/><path d="M19 251H275V263H19" fill="#a88d6d"/><path d="M107 266V332M193 266V332M29 300H264" stroke="#aa906f" strokeWidth="3"/><path d="M54 281H77M134 281H159M216 281H241" stroke="#94795c" strokeWidth="4"/>
-      <rect x="44" y="173" width="103" height="72" fill="#afa995" stroke="#8d927e" strokeWidth="3"/><rect x="53" y="182" width="85" height="20" rx="3" fill="#d5d4bd"/><path d="M59 211H133V238H59Z" fill="#6f7e70"/><rect x="84" y="222" width="22" height="16" rx="3" fill="#f2e3bf"/><path d="M106 225h7v9h-7" fill="none" stroke="#f2e3bf" strokeWidth="3"/>
-      <path d="M188 195H236V245H188Z" fill="#d5bc89"/><path d="M194 204H231M194 214H231M194 224H231" stroke="#bc9e6e" strokeWidth="3"/>
+      <g transform="translate(0 4.5)"><rect x="44" y="173" width="103" height="72" fill="#afa995" stroke="#8d927e" strokeWidth="3"/><rect x="53" y="182" width="85" height="20" rx="3" fill="#d5d4bd"/><path d="M59 211H133V238H59Z" fill="#6f7e70"/><rect x="84" y="222" width="22" height="16" rx="3" fill="#f2e3bf"/><path d="M106 225h7v9h-7" fill="none" stroke="#f2e3bf" strokeWidth="3"/></g>
+      <g transform="translate(0 6)"><path d="M188 195H236V245H188Z" fill="#d5bc89"/><path d="M194 204H231M194 214H231M194 224H231" stroke="#bc9e6e" strokeWidth="3"/></g>
       <path d="M34 50H263" stroke="#b3a080" strokeWidth="7"/>{[61,108,156,204,249].map((x,i) => <g key={x}><path d={`M${x} 51V65`} stroke="#9e9276" strokeWidth="3"/><path d={`M${x-13} 67h26v24q-12 10-26 0Z`} fill={['#c0c4a5','#cfa991','#b0bba6'][i%3]}/></g>)}
       <rect x="571" y="185" width="119" height="160" rx="8" fill="#b8c3ac" stroke="#97a38d" strokeWidth="4"/><path d="M574 237H687M585 205V226M585 254V283" stroke="#87977e" strokeWidth="4"/><g transform="rotate(-8 630 117)"><path d="M602 88L593 78M658 88L667 78" stroke="#a7906b" strokeWidth="7"/><circle cx="630" cy="118" r="36" fill="#e9d5ad" stroke="#b49a73" strokeWidth="7"/><path d="M630 93V119L647 126" fill="none" stroke="#8b8268" strokeWidth="4" strokeLinecap="round"/></g>
     </>;

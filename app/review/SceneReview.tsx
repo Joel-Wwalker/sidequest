@@ -14,11 +14,13 @@ export default function SceneReview(){
   const queries=query.toLowerCase().split(',').map(value=>value.trim()).filter(Boolean);
   const entries=substances.filter(s=>(scope==='all'||(scope==='expanded'?!!s.context:!s.context))&&(!queries.length||queries.some(q=>[s.id,s.name,...s.aliases].some(v=>v.toLowerCase().includes(q)))));
   const count=Math.max(1,Math.ceil(entries.length/size)),batch=entries.slice(page*size,(page+1)*size);
-  const stageTimes=batch.some(entry=>entry.context)?[2,10,18.1]:STAGE_TIMES;
+  const stageTimes=batch.some(entry=>entry.context)?[2,11.5,18.1]:STAGE_TIMES;
   useEffect(()=>{
     if(paused)return;
     let frame:number,previous=performance.now();
-    const tick=(now:number)=>{const delta=Math.min((now-previous)/1000,.1);previous=now;if(!document.hidden)setTime(value=>(value+delta)%LOOP_SECONDS);frame=requestAnimationFrame(tick);};
+    // A large review grid can paint slowly; keep its clock close to real time.
+    // The single-scene production player retains its own smaller frame cap.
+    const tick=(now:number)=>{const delta=Math.min((now-previous)/1000,.5);previous=now;if(!document.hidden)setTime(value=>(value+delta)%LOOP_SECONDS);frame=requestAnimationFrame(tick);};
     frame=requestAnimationFrame(tick);return()=>cancelAnimationFrame(frame);
   },[paused]);
   const change=(next:number)=>{setPage(Math.max(0,Math.min(count-1,next)));setTime(0);setPaused(true);};
