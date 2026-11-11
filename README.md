@@ -30,6 +30,7 @@ Local browsing needs no environment file or cloud account.
 - Browse by category or search names and aliases. The address hash links to the selected entry.
 - Read the overview, body response, risks and interactions, and linked sources for each substance.
 - Pause or replay a scene, or select one of its three story stages. Reduced-motion settings keep the illustration still.
+- Each entry has its own setting and reaction sequence. Enable the optional sound button for quiet scene cues; sound starts off and pauses with playback.
 - Save entries to your collection and write a field note for each one.
 
 Browser storage belongs to the current browser and site address. Notes and bookmarks do not sync between devices, and clearing site data removes them.

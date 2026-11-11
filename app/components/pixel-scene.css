@@ -20,3 +20,12 @@
 @container(max-width:650px){.scene-thought{display:none}}
 @container(max-width:520px){.scene-monitor{min-height:275px}.monitor-copy{min-height:200px}.monitor-legend{font-size:10px}.monitor-signal>span{font-size:9px}}
 .scene-thought{top:8%;padding:7px 9px;min-height:0}
+.scene-tools{display:flex;align-items:center;gap:14px;min-width:0}.scene-tools>span{font-size:9px;letter-spacing:.7px;color:#656f59}.scene-sound{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:7px 10px;border:1px solid #d4d6c6;border-radius:7px;background:#faf8ef;color:#5b654f;cursor:pointer;font:500 11px/1.2 var(--body);letter-spacing:0;white-space:nowrap}.scene-sound:hover{background:#e9eddf}.scene-sound[aria-pressed=true]{background:#e5eadb;border-color:#a8b599}.scene-sound:disabled{opacity:.6;cursor:default}.scene-masthead{padding-top:7px;padding-bottom:7px}.monitor-copy h3{min-height:36px}.scene-story{min-height:91px}
+@container(max-width:650px){.scene-tools>span{display:none}.scene-masthead{gap:8px}.scene-masthead>span:first-child{font-size:9px;line-height:1.5;letter-spacing:.6px}.scene-sound{font-size:10px}.scene-story{min-height:105px}.monitor-copy h3{min-height:40px}}
+/* Reserve room for the longest drug-specific explanation across all three stages. */
+.monitor-copy h3{min-height:54px}.monitor-copy ul{min-height:82px}.monitor-copy{min-height:232px}
+@container(max-width:810px){.scene-monitor{min-height:300px}.monitor-copy{min-height:232px}}
+@container(max-width:520px){.scene-monitor{min-height:310px}.monitor-copy{min-height:245px}.monitor-copy ul{min-height:93px}}
+.scene-room{align-self:stretch;display:flex;align-items:center;background:var(--scene-wall,#eee8df)}.monitor-copy h3{display:flex;align-items:flex-end}
+.scene-room-art{position:relative;width:100%;aspect-ratio:720/430}.monitor-legend{min-height:32px;display:block}.monitor-key{margin-right:5px;vertical-align:middle}
+.scene-masthead,.monitor-heading{color:#59674c}

@@ -19,6 +19,7 @@ type BodyMapProps = {
   risks: Organ[];
   pose: ReturnType<typeof sampleScene>;
   motion: string;
+  substanceKey?: string;
 };
 
 function MedicineInteraction({ pose }: Pick<BodyMapProps, 'pose'>) {
@@ -55,7 +56,7 @@ function MedicineInteraction({ pose }: Pick<BodyMapProps, 'pose'>) {
   </svg>;
 }
 
-export default function BodyMap({ organs, risks, pose, motion }: BodyMapProps) {
+export default function BodyMap({ organs, risks, pose, motion, substanceKey = '' }: BodyMapProps) {
   if (motion === 'interaction') return <MedicineInteraction pose={pose}/>;
   const hormoneSignal = 1 - pose.adverse * .82;
   const injuryOrgans = motion === 'hormone' ? risks.filter(organ => organ !== 'hormones') : risks;
@@ -64,8 +65,8 @@ export default function BodyMap({ organs, risks, pose, motion }: BodyMapProps) {
     <path d="M70 57V142M52 152H90" stroke="#cdd2c3" strokeDasharray="3 5"/>
     <g opacity=".18">{[...new Set([...organs, ...risks])].map(organ => <path key={organ} d={shapes[organ]} fill="#8d9e80"/>)}</g>
     <g opacity={pose.response}>{organs.map(organ => <path key={organ} d={shapes[organ]} fill={organ === 'brain' || organ === 'hormones' ? '#b29bc3' : '#95aa84'} stroke="#728c68" strokeWidth="1" style={{ transformOrigin: '70px 80px', transform: organ === 'lungs' ? `scale(${1 + pose.breath * .035})` : organ === 'heart' ? `scale(${pose.heart})` : undefined }}/>)}</g>
-    <g opacity={pose.adverse}>{injuryOrgans.map(organ => <path key={organ} d={shapes[organ]} fill="#d99986" stroke="#ae6d59" strokeWidth="1.3" style={{ transformOrigin: '70px 80px', transform: organ === 'lungs' ? `scale(${1 + pose.breath * .035})` : organ === 'heart' ? `scale(${pose.heart})` : undefined }}/>)}</g>
-    {motion === 'hormone' && <g opacity={Math.min(1, .3 + pose.response + pose.adverse)}>
+    <g opacity={pose.adverse}>{injuryOrgans.map((organ,index) => <path key={organ} d={shapes[organ]} fill="#d99986" stroke="#ae6d59" strokeWidth="1.3" opacity={substanceKey==='anabolic-steroids' ? .6 + Math.sin(pose.t*2-index*1.8)*.35 : 1} style={{ transformOrigin: '70px 80px', transform: organ === 'lungs' ? `scale(${1 + pose.breath * .035})` : organ === 'heart' ? `scale(${pose.heart})` : undefined }}/>)}</g>
+    {motion === 'hormone' && substanceKey!=='ostarine' && <g opacity={Math.min(1, .3 + pose.response + pose.adverse)}>
       <path d="M71 31V46M71 56V97M71 107V146" fill="none" stroke="#9b83ac" strokeWidth="2.5" strokeDasharray="3 4" opacity={hormoneSignal}/>
       {[26, 51, 102, 151].map((y, index) => {
         const pulse = .7 + Math.sin(pose.t * Math.PI / 2 - index * .7) * .3;
@@ -76,6 +77,8 @@ export default function BodyMap({ organs, risks, pose, motion }: BodyMapProps) {
         </g>;
       })}
     </g>}
+    {substanceKey==='ostarine' && <g opacity={pose.response+pose.adverse} fill="none" stroke="#a18bae" strokeWidth="2"><path d="M70 44V57M70 57L42 77M70 57L100 77" strokeDasharray="3 5" strokeDashoffset={-pose.t*3}/><circle cx="70" cy="44" r="5"/><path d="M65 42h10M70 39v10"/><path d="M62 104h16" stroke="#b27760" strokeWidth={1+pose.adverse*2}/></g>}
+    {substanceKey==='vitamin-d' && <g fill="#d7b467" opacity={pose.response}>{[0,1,2].map(i=><circle key={i} cx={63+Math.sin(pose.t*1.5-i)*6} cy={82+i*20} r={2.5+Math.sin(pose.t*1.5-i)*.7}/>)}</g>}
     <circle cx="126" cy="12" r="3" fill="#8c9f79" opacity={.8 * (1 - pose.adverse)}/>
     <circle cx="126" cy="12" r="3" fill={motion === 'hormone' ? '#9b83ac' : '#bd7d66'} opacity={.8 * pose.adverse}/>
   </svg>;
