@@ -1,10 +1,11 @@
+import { catalogSubstances } from './catalog/adapter.ts';
 export type Category =
   | 'Everyday'
   | 'Psychoactives'
   | 'Steroids'
   | 'SARMs'
   | 'Research chemicals'
-  | 'Vitamins & herbs';
+  | 'Vitamins & herbs' | 'Medications' | 'Peptides';
 
 export type Substance = {
   id: string;
@@ -18,8 +19,9 @@ export type Substance = {
   effects: string[];
   risks: string[];
   interactions: string;
-  riskLevel: 'Lower' | 'Moderate' | 'High' | 'Very high' | 'Uncertain';
-  dependence: 'Low' | 'Moderate' | 'High' | 'Very high' | 'Uncertain' | 'Not typical';
+  context?: {purpose:string;setting:string;activity:string;status:string};
+  riskLevel: 'Context dependent' | 'Lower' | 'Moderate' | 'High' | 'Very high' | 'Uncertain';
+  dependence: 'See risks' | 'Low' | 'Moderate' | 'High' | 'Very high' | 'Uncertain' | 'Not typical';
   evidence: 'Strong' | 'Moderate' | 'Limited';
   duration: string;
   sceneType: 'caffeine' | 'psychedelic' | 'sedative' | 'stimulant' | 'cannabis' | 'muscle' | 'supplement';
@@ -28,16 +30,16 @@ export type Substance = {
   sources: { label: string; url: string }[];
 };
 
-export const categories: Category[] = ['Everyday', 'Psychoactives', 'Steroids', 'SARMs', 'Research chemicals', 'Vitamins & herbs'];
+export const categories: Category[] = ['Everyday', 'Psychoactives', 'Steroids', 'SARMs', 'Research chemicals', 'Vitamins & herbs', 'Medications', 'Peptides'];
 
 // These qualitative summaries are editorial navigation aids, not validated clinical
 // scores. Risk varies with health, age, exposure, product contents and combinations.
 // Evidence describes confidence in the overview, not proof of therapeutic benefit.
-export const riskContext = 'Risk labels are broad editorial summaries, not personal safety predictions. For prescription medicines, labels focus on nonmedical use. Amount, frequency, health, product contents and combinations can change risk substantially. “Lower” never means risk-free.';
+export const riskContext = 'Risk labels are broad editorial summaries, not personal safety predictions. For medicines, benefit and risk depend on the indication, formulation and clinical supervision. Amount, frequency, health, product contents and combinations can change risk substantially. “Lower” never means risk-free.';
 export const evidenceContext = 'Evidence describes how well the overview is supported. It does not mean a substance is effective as a treatment. Research on controlled medical use does not establish the safety of unsupervised use.';
 export const reviewedOn = '2026-11-11';
 
-export const substances: Substance[] = [
+export const originalSubstances: Substance[] = [
   {
     id: 'caffeine',
     name: 'Caffeine',
@@ -236,7 +238,7 @@ export const substances: Substance[] = [
     ],
   },
   {
-    id: 'anabolic-steroids', name: 'Anabolic steroids', aliases: ['AAS', 'Nandrolone', 'Stanozolol', 'Anabolic-androgenic steroids'], category: 'Steroids',
+    id: 'anabolic-steroids', name: 'Anabolic steroids', aliases: ['AAS', 'Anabolic-androgenic steroids'], category: 'Steroids',
     className: 'Androgens · performance-enhancing drugs', tagline: 'Muscles are only part of the story.',
     description: 'Anabolic-androgenic steroids are a family of drugs related to testosterone; examples include nandrolone and stanozolol. Some have medical uses, while nonmedical use aims to increase muscle or performance. Risks extend to the heart, liver, reproductive system and mental health. Individual compounds differ, so this is a class overview. Dependence can develop, and stopping after sustained misuse can bring fatigue, low mood and other withdrawal symptoms.',
     mechanism: 'These drugs activate androgen receptors, influencing protein production and tissue growth. They also disrupt the hormonal feedback systems that regulate reproductive function. Effects reach far beyond skeletal muscle, including changes in blood pressure, cholesterol and the body’s own hormone production.',
@@ -286,7 +288,7 @@ export const substances: Substance[] = [
     ],
   },
   {
-    id: 'synthetic-cathinones', name: 'Synthetic cathinones', aliases: ['Mephedrone', '4-MMC', '3-MMC', 'Bath salts'], category: 'Research chemicals',
+    id: 'synthetic-cathinones', name: 'Synthetic cathinones', aliases: ['Bath salts'], category: 'Research chemicals',
     className: 'Stimulants · cathinone derivatives', tagline: 'One category. Many unknowns.',
     description: 'Synthetic cathinones are a varied family of stimulants, including mephedrone and newer compounds. Their effects and potency can differ substantially, so a category name is a poor guide to a particular product. Some produce energy or sociability, alongside risks of agitation, overheating and cardiovascular injury. Repeated use can become compulsive. Rapidly changing products and sparse human research make long-term effects and interactions especially difficult to assess.',
     mechanism: 'Different cathinones alter dopamine, norepinephrine and serotonin transport in different proportions. Some promote release; others mainly prevent reuptake. These changes can increase reward and arousal while pushing temperature regulation and the cardiovascular system into dangerous territory during toxicity.',
@@ -368,3 +370,5 @@ export const substances: Substance[] = [
     ],
   },
 ];
+
+export const substances: Substance[] = [...originalSubstances,...catalogSubstances];
