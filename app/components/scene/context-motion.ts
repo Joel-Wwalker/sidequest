@@ -85,7 +85,7 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
   const task=taskGesture(contextTask(seed),t);
   // A beverage stays in the right hand from the opening through the sip.
   if(seed.scene.exposure==='drink'&&seed.scene.prop==='cup'){
-    task.left=[360,305];task.right=[459,253];task.lookX=2;task.lookY=1;
+    task.left=[360,305];task.right=[412,273];task.lookX=.5;task.lookY=1.5;
   }
   const activity=activityGesture(seed.scene.activity);
   const story=getSceneStory(seed as CatalogSeed);
@@ -118,6 +118,11 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
   // They do not attribute extra symptoms to silent or uncertain processes.
   const beat=(start:number,hold:number,end:number)=>ease((t-start)/.6)*(1-ease((t-hold)/(end-hold)));
   switch(seed.id){
+    case'adapalene':case'azelaic-acid':{
+      // Facial skin is inspected in a mirror; an arm-check would point at the wrong treatment site.
+      response.left=[337,251];response.right=[440,305];response.lookX=-2.6;response.lookY=0;response.tilt=-3+Math.sin(t*.8)*2;response.smile=1;
+      adverse.left=[337,251];adverse.right=[440,305];adverse.lookX=-2.6;adverse.lookY=0;adverse.tilt=-4+Math.sin(t*.7)*2;adverse.smile=-2;break;
+    }
     case'fluconazole':{
       const swallow=beat(10.1,10.8,11.5);response.mouth=.08+.42*swallow;response.tilt=-2+3*swallow;response.smile=2.4;response.breathing=.2;break;
     }
@@ -150,11 +155,7 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
   ];
   const right=mix(response.right,adverse.right,[440,305]);
   right[0]+=opening*(task.right[0]-440);right[1]+=opening*(task.right[1]-305);
-  const exposureHand:Point=seed.scene.exposure==='topical'
-    ? [440+(361-440)*base.intake,305+(260-305)*base.intake]
-    : seed.scene.exposure==='inhaler'
-    ? [(1-base.intake)**2*440+2*(1-base.intake)*base.intake*398+base.intake**2*414,(1-base.intake)**2*305+2*(1-base.intake)*base.intake*281+base.intake**2*213]
-    : base.hand;
+  const exposureHand:Point=base.hand;
   const value=(key:Exclude<keyof Gesture,'left'|'right'>)=>opening*task[key]+r*response[key]+a*adverse[key];
   const left=mix(response.left,adverse.left,[360,305]);left[0]+=opening*(task.left[0]-360);left[1]+=opening*(task.left[1]-305);
   return {
@@ -165,6 +166,6 @@ export function sampleContextPose(base:Base,seed:Pick<CatalogSeed,'id'|'status'|
     gut:value('gut'),heat:value('heat'),worry:a*(story&&['felt','visible-local'].includes(story.downsideMode)?.6:0),pupil:1,footTap:value('tap'),ghost:0,sway:value('sway'),breath:base.breath*(1+value('breathing')),
     contextTaskAmount:opening+(resumesTask||keepResponseTask?r:0)+(keepAdverseTask?a:0),
     contextPropOpacity:Math.max(1-ease((t-3.3)/.7)+ease((t-23.2)/.8),resumesTask||keepResponseTask?r:0,keepAdverseTask?a:0),
-    contextExposureOpacity:ease((t-3.7)/.4)*(1-ease((t-7.7)/.5)),
+    contextExposureOpacity:ease((t-4)/.1)*(1-ease((t-7.7)/.5)),
   };
 }

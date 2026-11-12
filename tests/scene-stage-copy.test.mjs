@@ -10,6 +10,7 @@ import { catalogSeeds, getCatalogSeed } from '../app/data/catalog/index.ts';
 import { substances, originalSubstances } from '../app/data/substances.ts';
 import { getSceneStory } from '../app/data/catalog/scene-stories.ts';
 import { getContextStageCopies } from '../app/components/scene/scene-stage-copy.ts';
+import {getExposure} from '../app/components/scene/exposure.ts';
 
 // Render the production component using the project's TypeScript compiler.
 // Node ignores only stylesheet imports; no product markup is mocked.
@@ -41,8 +42,8 @@ test('all expanded stage labels and cues follow the selected animated story',()=
   assert.equal(catalogSeeds.length,487);
   for(const seed of catalogSeeds){
     const story=getSceneStory(seed),copies=getContextStageCopies(seed);
-    assert.deepEqual(copies.map(copy=>copy.label),['The situation',story.responseLabel,story.downsideLabel],seed.id);
-    assert.deepEqual(copies.map(copy=>copy.cue),[seed.scene.intent,story.responseCue,story.downsideCue],seed.id);
+    assert.deepEqual(copies.map(copy=>copy.label),[getExposure(seed.id).label,story.responseLabel,story.downsideLabel],seed.id);
+    assert.deepEqual(copies.map(copy=>copy.cue),[getExposure(seed.id).description,story.responseCue,story.downsideCue],seed.id);
     assert.equal(copies[1].target,story.responseTarget,seed.id);
     assert.equal(copies[2].target,story.downsideTarget,seed.id);
   }

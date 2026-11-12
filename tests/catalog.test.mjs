@@ -1,3 +1,4 @@
+import {getExposure} from '../app/components/scene/exposure.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { substances } from '../app/data/substances.ts';
@@ -55,12 +56,12 @@ test('expanded entries have distinct authored scenes and reachable joints throug
     const story=getSceneStory(seed);
     // The deleted wall motifs and old neutral reactions are not rendered differences.
     // Mode, label, target name and palette alone cannot establish choreography uniqueness.
-    const signature=JSON.stringify([setting,task,prop,s.exposure,story.responseAction,story.downsideAction]);
+    const signature=JSON.stringify([setting,task,prop,getExposure(seed.id).kind,story.responseAction,story.downsideAction]);
     assert.ok(!blueprints.has(signature),`${seed.id} repeats ${blueprints.get(signature)}; palette and labels cannot establish a unique scene`);
     blueprints.set(signature,seed.id);
     for(let t=0;t<24;t+=1/60){
       const p=sampleScene(t,'context',seed.id);
-      for(const [side,hand] of [['right',s.exposure==='symbolic'?p.symbolicHand:p.hand],['left',p.leftHand]]){
+      for(const [side,hand] of [['right',p.hand],['left',p.leftHand]]){
         const solved=solveCharacterArm(side,hand);
         const reach=Math.hypot(hand[0]-solved.shoulder[0],hand[1]-solved.shoulder[1]);
         assert.ok(reach>=16&&reach<=80,`${seed.id} exceeds arm reach at${t}`);

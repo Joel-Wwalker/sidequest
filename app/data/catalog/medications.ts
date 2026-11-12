@@ -3987,8 +3987,8 @@ export const medicationSeeds: CatalogSeed[] = [
     "scene": {
       "setting": "recovery",
       "activity": "training",
-      "task": "stretching",
-      "prop": "stretch-band",
+      "task": "care-card",
+      "prop": "care-card",
       "motif": "receptor",
       "mechanismStyle": "activate",
       "response": "relief",
@@ -4000,7 +4000,7 @@ export const medicationSeeds: CatalogSeed[] = [
       "cautions": [
         "brain"
       ],
-      "intent": "Preparing a comfortable movement during Parkinson care.",
+      "intent": "Reviewing a movement-care plan for Parkinson symptoms.",
       "responseNotes": [
         "Parkinson movement symptoms can improve",
         "Dopamine receptors are activated"
@@ -18485,8 +18485,8 @@ export const medicationSeeds: CatalogSeed[] = [
     "scene": {
       "setting": "clinic",
       "activity": "consultation",
-      "task": "care-card",
-      "prop": "care-card",
+      "task": "reading",
+      "prop": "book",
       "motif": "flow",
       "mechanismStyle": "modulate",
       "response": "neutral",

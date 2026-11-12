@@ -4,6 +4,9 @@ import type { sampleScene } from './timeline';
 import { smooth } from './timeline';
 import { actionUsesContext, handoffObjectOpacity } from './story-motion';
 import BodyProcesses from './BodyProcesses';
+import {getExposure} from './exposure';
+import {exposureSkinPoint} from './exposure-motion';
+import {solveCharacterArm} from './arm-geometry';
 
 type Point=[number,number];
 type Props={seed:CatalogSeed;pose:ReturnType<typeof sampleScene>;left:Point;right:Point;part:'face'|'body'|'props'|'hands'|'feet'};
@@ -18,11 +21,14 @@ export default function ContextCharacterEffects({seed,pose,left,right,part}:Prop
   const pulse=isRisk?story.downsidePulsePattern:story.responsePulsePattern;
   const heartbeat=pulse==='fast'?Math.sin(t*9):pulse==='slow'?Math.sin(t*2):pulse==='irregular'?(Math.sin(t*5)+Math.sin(t*11)*.35)/1.35:0;
   const local=isRisk?story.downsideMode==='visible-local':story.responseMode==='visible-local';
+  const exposure=getExposure(seed.id),facial=exposure.kind==='face-cream';
+  const skinPoint=exposure.kind==='topical'?exposureSkinPoint(exposure,solveCharacterArm('left',left)):left;
   const baseline=smooth(t/1.6)*(1-smooth((t-8.2)/3));
   let amount=isRisk?pose.adverse:pose.response;
-  if(!isRisk&&((part==='face'&&(action==='mouth-ease'||action==='recovery-check'&&target==='nose'))||(part==='feet'&&action==='ankle-check')||(part==='hands'&&action==='skin-check'&&local)))amount=baseline+(action==='mouth-ease'||target==='nose'?0:pose.response*.15);
+  if(!isRisk&&((part==='face'&&(action==='mouth-ease'||action==='recovery-check'&&target==='nose'||facial&&action==='skin-check'&&local))||(part==='feet'&&action==='ankle-check')||(part==='hands'&&action==='skin-check'&&local)))amount=baseline+(action==='mouth-ease'||target==='nose'?0:pose.response*.15);
   const [lx,ly]=left,[rx,ry]=right;
   if(part==='face')return <g opacity={amount} data-character-cue={action}>
+    {facial&&['skin-check','itch'].includes(action)&&<g data-local-cue="facial-skin" fill={warning} opacity=".65"><circle cx="415" cy="192" r="1.5"/><circle cx="418" cy="196" r="1.5"/><circle cx="413" cy="198" r="1.3"/></g>}
     {isRisk&&seed.id==='risedronate'&&<g data-body-process="jaw-bone" fill="none" stroke={warning} strokeWidth="1.8" opacity=".75"><path d="M385 198V203Q401 216 416 203V198"/><path d="M387 203L391 207M411 207L415 203" stroke="#efd9bc" strokeWidth="2.2"/></g>}
     {action==='flush'&&<><ellipse cx="386" cy="194" rx="8" ry="4" fill="#c67b6a" opacity=".55"/><ellipse cx="414" cy="194" rx="8" ry="4" fill="#c67b6a" opacity=".55"/></>}
     {action==='dry-mouth'&&<path d="M392 202L395 204M409 202L412 204" stroke={warning} strokeWidth="2"/>}
@@ -64,7 +70,7 @@ export default function ContextCharacterEffects({seed,pose,left,right,part}:Prop
     {action==='muscle-guard'&&target==='joint'&&<circle cx={lx} cy={ly} r="11" fill="none" stroke={warning} strokeWidth="2"/>}
     {action==='light-sensitive'&&target==='skin'&&<g transform={`translate(${lx} ${ly})`}><ellipse cx="4" cy="5" rx="7" ry="4" fill="#c88370" opacity=".5"/><path d="M-26-14L-17-8M-29-3H-18M-25 8L-16 5" stroke="#bea06f" strokeWidth="2"/></g>}
     {action==='skin-fragility-check'&&<g transform={`translate(${lx} ${ly})`} fill="none" stroke="#c8948b" strokeWidth="1"><path d="M-4 3Q0 0 6 4M-3 6Q2 3 7 7M-1 9Q3 6 6 9"/></g>}
-    {(action==='skin-check'||action==='itch'||action==='bruise-check'||action==='tingle')&&<g transform={`translate(${lx} ${ly})`}>
+    {!facial&&(action==='skin-check'||action==='itch'||action==='bruise-check'||action==='tingle')&&<g transform={`translate(${skinPoint.join(' ')})`}>
       {action==='bruise-check'?<ellipse cx="3" cy="3" rx="5" ry="3.5" fill="#9b879e" opacity=".7"/>:action==='tingle'||action==='skin-check'&&!local&&!isRisk?<g stroke="#b99b69" strokeWidth="1.8" fill="none">{[-1,0,1].map((n,i)=><path key={i} d={`M${n*5} -6l${n*3} -5M${n*5} 5l${n*3} 5`} opacity={.25+Math.max(0,Math.sin(t*4-i*1.2))*.75}/>)}</g>:<g fill="#c17c6a" opacity={local?.65:.45}>{[[-3,4],[3,6],[5,1]].map(([x,y],i)=><circle key={i} cx={x} cy={y} r="2"/>)}</g>}
     </g>}
     {action==='nail-check'&&<g data-local-cue="nail-base-growth" transform={`translate(${lx} ${ly})`} stroke="#c99e7c" strokeWidth="1"><path d="M-6 0V-12Q-3-16-1-11V-2M0-1V-13Q3-17 5-12V0" fill="#eabd96"/><rect x="-5" y="-12" width="4" height="5" rx="1" fill="#d5c18d"/><rect x="1" y="-13" width="4" height="5" rx="1" fill="#d5c18d"/><path d={`M-4 ${-7.5-pose.response*.6}h2M2 ${-8.5-pose.response*.6}h2`} stroke="#f2dfc5" strokeWidth={1+pose.response*.8}/></g>}
@@ -72,7 +78,7 @@ export default function ContextCharacterEffects({seed,pose,left,right,part}:Prop
   </g>;
   return <g opacity={amount*(actionUsesContext(action)?1:handoffObjectOpacity(t,'action'))} data-stage-object={action}>
     {action==='training-effort'&&<path d={`M${lx} ${ly}Q400 ${280-Math.sin(t)*5} ${rx} ${ry}`} fill="none" stroke="#a18baf" strokeWidth="5"/>}
-    {action==='hair-check'&&<g transform={`translate(${lx} ${ly})`} data-scene-prop="hair-mirror"><path d="M0-4V8" stroke="#8b9f8b" strokeWidth="7" strokeLinecap="round"/><ellipse cy="-19" rx="14" ry="18" fill="#d3ddd6" stroke="#8b9f8b" strokeWidth="3"/><path d="M-7-27L5-31M-8-18L8-25" stroke="#ecf1e4" strokeWidth="2"/></g>}
+    {(action==='hair-check'||facial&&['skin-check','itch'].includes(action))&&<g transform={`translate(${lx} ${ly})`} data-scene-prop={facial?'skin-mirror':'hair-mirror'}><path d="M0-4V8" stroke="#8b9f8b" strokeWidth="7" strokeLinecap="round"/><ellipse cy="-19" rx="14" ry="18" fill="#d3ddd6" stroke="#8b9f8b" strokeWidth="3"/><path d="M-7-27L5-31M-8-18L8-25" stroke="#ecf1e4" strokeWidth="2"/></g>}
     {action==='meal-pause'&&<g transform={`translate(${lx} ${ly})`}><ellipse rx="28" ry="9" fill={paper} stroke="#b4ad92" strokeWidth="2"/><path d="M-18-2Q-12-13-4-2M3-3Q12-16 20-3" fill="#aabd93"/><path d="M-5-2H5" stroke="#c6a17d" strokeWidth="5"/></g>}
     {action==='dry-mouth'&&<g transform={`translate(${lx} ${ly})`}><path d="M-5-33H5V-25L11-19V7H-11V-19L-5-25Z" fill="#d1e0d2" stroke="#8ba89e" strokeWidth="2"/><path d="M-7-33H7" stroke={ink} strokeWidth="4"/></g>}
   </g>;

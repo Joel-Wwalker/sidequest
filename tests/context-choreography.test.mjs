@@ -47,9 +47,8 @@ test('experimental entries do not animate a therapeutic response as established'
 });
 
 test('the inhaler nozzle meets the lips while its canister clears the eyes',()=>{
-  const seed={id:'inhaler-contact',status:'prescription',scene:{activity:'care',task:'care-card',response:'neutral',adverse:'neutral',exposure:'inhaler'}};
   for(let t=4.1;t<8.2;t+=1/60){
-    const base=sampleScene(t,'context'),p=sampleContextPose(base,seed),hand=solveCharacterArm('right',p.hand).hand;
+    const p=sampleScene(t,'context','albuterol'),base=p,hand=solveCharacterArm('right',p.hand).hand;
     assert.ok(Math.hypot(hand[0]-p.hand[0],hand[1]-p.hand[1])<.01,'unreachable inhaler grip');
     const box={left:hand[0]+inhalerGeometry.canister.x,right:hand[0]+inhalerGeometry.canister.x+inhalerGeometry.canister.width,top:hand[1]+inhalerGeometry.canister.y,bottom:hand[1]+inhalerGeometry.canister.y+inhalerGeometry.canister.height};
     assert.ok(box.left>419||box.top>192||box.right<379||box.bottom<173,'canister crosses the eye region');

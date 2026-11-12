@@ -5,6 +5,8 @@ import { sampleScene, solveArm } from '../app/components/scene/timeline.ts';
 import { getSceneProfile } from '../app/components/scene/profiles.ts';
 import { getCatalogSeed } from '../app/data/catalog/index.ts';
 import { substances } from '../app/data/substances.ts';
+import {getExposure} from '../app/components/scene/exposure.ts';
+import {mouthKinds} from '../app/components/scene/exposure-motion.ts';
 
 // The actual hair/head silhouette, including ears and jaw, rather than only
 // a small eye rectangle. Coordinates are local to the animated head group.
@@ -51,12 +53,12 @@ test('Fluconazole reading keeps the complete upper sleeve and elbow out of the h
 test('every rendered arm clears the moving head through each full loop',()=>{
   for(const entry of substances){
     const seed=getCatalogSeed(entry.id),profile=getSceneProfile(entry.name,entry.sceneType,entry.id);
-    const intake=seed?.scene.exposure??(entry.action==='sips'?'drink':profile.oral?'oral':'symbolic');
+    const intake=getExposure(entry.id).kind;
     const prior={};
     for(let frame=0;frame<24*60;frame++){
       const t=frame/60,pose=sampleScene(t,profile.motion,entry.id);
       for(const side of ['left','right']){
-        const target=side==='left'?pose.leftHand:intake==='symbolic'?pose.symbolicHand:pose.hand;
+        const target=side==='left'?pose.leftHand:pose.hand;
         const arm=solveCharacterArm(side,target),label=`${entry.id} ${side} at ${t.toFixed(3)}s`;
         assert.deepEqual(arm.hand,target,`${label}: detached wrist`);
         assert.ok(Math.abs(Math.hypot(arm.elbow[0]-arm.shoulder[0],arm.elbow[1]-arm.shoulder[1])-UPPER_ARM)<1e-8,`${label}: upper arm overstretches`);
@@ -75,7 +77,7 @@ test('every rendered arm clears the moving head through each full loop',()=>{
         // The oral/drink wrist touches the lower jaw as the prop meets the
         // mouth. Only that terminal 20px may touch; the rest of the arm must
         // remain clear, including during the approach and return.
-        const mouthContact=side==='right'&&['oral','drink','inhaler'].includes(intake)&&pose.intake>.7&&target[0]>=400&&target[0]<=437&&target[1]>=207&&target[1]<=222;
+        const mouthContact=side==='right'&&[...mouthKinds,'nasal-spray','nasal-powder','gas-balloon','face-cream'].includes(intake)&&pose.intake>.7&&target[0]>=400&&target[0]<=437&&target[1]>=207&&target[1]<=222;
         const checkedHand=mouthContact?[elbow[0]+(hand[0]-elbow[0])*Math.max(0,1-20/length),elbow[1]+(hand[1]-elbow[1])*Math.max(0,1-20/length)]:hand;
         assert.ok(clearance(elbow,checkedHand,head,7)>=-.05,`${label}: forearm in hair/ear/jaw`);
       }

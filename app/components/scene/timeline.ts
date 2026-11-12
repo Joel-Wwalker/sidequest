@@ -1,7 +1,8 @@
 import { getCatalogSeed } from '../../data/catalog/index.ts';
 import { sampleContextPose } from './context-motion.ts';
+import { withExposurePose } from './exposure-motion.ts';
 export const LOOP_SECONDS = 24;
-export const STAGE_TIMES = [3.7, 9, 18.1] as const;
+export const STAGE_TIMES = [3.2, 9, 18.1] as const;
 export type Motion = 'jitter' | 'sway' | 'panic' | 'heat' | 'breathing' | 'gut' | 'craving' | 'hormone' | 'kidney' | 'interaction' | 'dissociate';
 export type Point = [number, number];
 const clamp = (x: number) => Math.max(0, Math.min(1, x));
@@ -51,7 +52,7 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
     ghost: adverse * (motion === 'dissociate' ? .3 : 0),
     worry: adverse * (motion === 'panic' || motion === 'craving' || motion === 'jitter' ? 1 : 0),
   };
-  if(context)return {...base,...sampleContextPose(base,context)};
+  if(context)return withExposurePose({...base,...sampleContextPose(base,context)},substanceKey,true);
   const r = response, a = adverse;
   const oscillate = (speed: number, phase = 0) => Math.sin(t * speed + phase);
   let lr: Point = [360,305], la: Point = [360,305], rr: Point = [440,305], ra: Point = [440,305];
@@ -136,7 +137,7 @@ export function sampleScene(seconds: number, motion: Motion | string, substanceK
     base.heat=['mdma','synthetic-cathinones'].includes(substanceKey)?a:0;
     base.worry=['testosterone','anabolic-steroids','ostarine','vitamin-d','st-johns-wort'].includes(substanceKey)?0:a;
   }
-  return {...base,symbolicHand:right,bodyLean,bodyDrop,lookX,lookY,smile,mouthOpen,pupil,browLift,footTap};
+  return withExposurePose({...base,symbolicHand:right,bodyLean,bodyDrop,lookX,lookY,smile,mouthOpen,pupil,browLift,footTap},substanceKey,false);
 }
 
 /** A two-link arm keeps the wrist, elbow and shoulder connected through the reach. */

@@ -14,6 +14,7 @@ import { LOOP_SECONDS, STAGE_TIMES, sampleScene } from './scene/timeline';
 import { playSceneSound, prepareSceneSound, stopSceneSound } from './scene/sound';
 import { getSceneSet } from './scene/sets';
 import { getContextStageCopies } from './scene/scene-stage-copy';
+import {getExposure} from './scene/exposure';
 import './pixel-scene.css';
 
 const StaticRoom=memo(Room);
@@ -39,21 +40,20 @@ export function SceneFrame({ type, action, labels, name, substanceId, time, risk
   const id = useId().replace(/:/g, '');
   const profile = useMemo(() => getSceneProfile(name, type,substanceId), [name, type,substanceId]);
   const context=getCatalogSeed(profile.key);
+  const exposure=getExposure(profile.key);
   const sceneSet = getSceneSet(profile.key);
   const pose = sampleScene(time, profile.motion, profile.key);
   const stage = pose.stage;
   const stageCopy = context ? getContextStageCopies(context)?.[stage] : undefined;
-  const title = stageCopy?.label ?? ['The first moment', ...profile.beats][stage];
-  const selectedLabel = stageCopy?.label ?? labels?.[stage] ?? title;
-  const thought = stage === 2 ? profile.thoughts[1] : stage === 1 ? profile.thoughts[0] : context?.scene.intent ?? (action === 'sips' ? 'one curious little human.' : profile.oral ? 'a small action, a complex body.' : 'let’s see what changes.');
+  const title = stage===0?exposure.label:stageCopy?.label ?? ['The first moment', ...profile.beats][stage];
+  const selectedLabel = stage===0?exposure.label:stageCopy?.label ?? labels?.[stage] ?? title;
+  const thought = stage === 2 ? profile.thoughts[1] : stage === 1 ? profile.thoughts[0] : exposure.description;
   const activeOrgans = stage === 2 ? profile.risks : profile.organs;
-  const timing = context ? ({'immediate':'Timing varies with the substance and person.','over-time':'Changes develop over repeated use, not in one loop.',variable:'Timing depends on the condition and formulation.',unknown:'Human effects and timing are not well established.'}[context.scene.timeCourse ?? 'unknown']) : profile.longTerm ? 'Changes develop over time.' : 'This is an illustrative sequence.';
+  const timing = profile.key==='fentanyl' ? 'Patch effects develop over hours; this sequence compresses time.' : context ? ({'immediate':'Timing varies with the substance and person.','over-time':'Changes develop over repeated use, not in one loop.',variable:'Timing depends on the condition and formulation.',unknown:'Human effects and timing are not well established.'}[context.scene.timeCourse ?? 'unknown']) : profile.longTerm ? 'Changes develop over time.' : 'This is an illustrative sequence.';
   const details = stage === 2 ? context?.scene.riskNotes ?? risks.slice(0, 2) : stage === 1 ? context?.scene.responseNotes ?? effects.slice(0, 2) : [context?.scene.intent ?? 'Responses vary between people.', timing];
-  const intake = context?.scene.exposure ?? (action === 'sips' ? 'drink' : profile.oral ? 'oral' : 'symbolic');
-  const exposureText={drink:profile.key==='alcohol'?'smoothly raises and lowers an alcohol bottle':'smoothly raises and lowers a mug',oral:'raises their hand to their mouth in an oral example',symbolic:'appears beside a symbolic exposure marker',inhaler:'raises an inhaler in a schematic example',topical:'brings a topical product toward the forearm'}[intake];
   const sceneDescription=context
-    ? `${sceneSet.name}. ${stage===0?(pose.t<4.1?`${context.scene.intent} The activity uses a ${context.scene.prop.replaceAll('-',' ')}.`:`A person ${exposureText}.`):`${title}. ${stageCopy?.cue??thought}. The character illustrates this selected response or safety check.`} ${timing} This is a schematic illustration, not a method of use.`
-    : `${selectedLabel}. ${stage===0?`A person ${exposureText}.`:'Their expression and movement show selected possible effects.'} The separate body view shows ${profile.motion==='interaction'?'medicine interactions':stage===2?profile.riskLabel.toLowerCase():activeOrgans.join(', ')}. This illustration is not a real timeline or a method of use.`;
+    ? `${sceneSet.name}. ${stage===0?`${context.scene.intent} ${exposure.label}. ${exposure.description}`:`${title}. ${stageCopy?.cue??thought}. The character illustrates this selected response or safety check.`} ${timing} This is a schematic illustration, not a method of use.`
+    : `${selectedLabel}. ${stage===0?exposure.description:'Their expression and movement show selected possible effects.'} The separate body view shows ${profile.motion==='interaction'?'medicine interactions':stage===2?profile.riskLabel.toLowerCase():activeOrgans.join(', ')}. This illustration is not a real timeline or a method of use.`;
   const signalFrequency = profile.motion === 'breathing' ? 1 : profile.motion === 'jitter' || profile.motion === 'heat' ? 3 : 1.8;
   const signal = Array.from({ length: 65 }, (_, i) => {
     const envelope = Math.sin(i / 64 * Math.PI);
@@ -62,7 +62,7 @@ export function SceneFrame({ type, action, labels, name, substanceId, time, risk
   }).join(' ');
 
   return <div className="pixel-scene" data-time={pose.t.toFixed(3)} data-stage={stage} data-substance={profile.key} data-family={sceneSet.family} style={{'--scene-wall':sceneSet.wall} as CSSProperties}>
-    <div className="scene-masthead"><span><i style={{background:sceneSet.accent}}/> {sceneSet.name.toUpperCase()}</span><div className="scene-tools"><span>{profile.longTerm ? 'CHANGES OVER TIME' : sceneSet.family.toUpperCase()}</span>{onSoundChange && <button type="button" className="scene-sound" aria-label={soundUnavailable ? 'Scene sound unavailable' : soundOn ? 'Mute scene sounds' : 'Enable scene sounds'} aria-pressed={soundOn} disabled={soundUnavailable} onClick={()=>onSoundChange(!soundOn)}>{soundOn ? <Volume2 size={14}/> : <VolumeX size={14}/>}<span>{soundUnavailable?'Unavailable':soundOn?'Sound on':'Sound off'}</span></button>}</div></div>
+    <div className="scene-masthead"><span><i style={{background:sceneSet.accent}}/> {sceneSet.name.toUpperCase()}</span><div className="scene-tools"><span>{profile.key==='fentanyl' ? 'PATCH EFFECTS OVER HOURS' : profile.longTerm ? 'CHANGES OVER TIME' : sceneSet.family.toUpperCase()}</span>{onSoundChange && <button type="button" className="scene-sound" aria-label={soundUnavailable ? 'Scene sound unavailable' : soundOn ? 'Mute scene sounds' : 'Enable scene sounds'} aria-pressed={soundOn} disabled={soundUnavailable} onClick={()=>onSoundChange(!soundOn)}>{soundOn ? <Volume2 size={14}/> : <VolumeX size={14}/>}<span>{soundUnavailable?'Unavailable':soundOn?'Sound on':'Sound off'}</span></button>}</div></div>
     <div className="scene-layout">
       <div className="scene-room">
         <div className="scene-room-art">
@@ -71,11 +71,10 @@ export function SceneFrame({ type, action, labels, name, substanceId, time, risk
           <desc id={`${id}-description`}>{sceneDescription}</desc>
           {context?<StaticContextRoom id={id} seed={context}/>:<StaticRoom id={id} substanceKey={profile.key}/>}
           {!context&&<Atmosphere id={id} substanceKey={profile.key} pose={pose}/>}
-          <Character pose={pose} motion={profile.motion} intake={intake} mushroom={profile.key === 'psilocybin'} substanceKey={profile.key} accent={sceneSet.accent}/>
+          <Character pose={pose} motion={profile.motion} substanceKey={profile.key} accent={sceneSet.accent}/>
         </svg>
-        {!context&&<div className="scene-thought" key={`${name}-${stage}`}><span>{thought}</span></div>}
-        {context&&stage===1&&context.scene.timeCourse==='over-time'&&<span className="scene-time-note">Treatment over time</span>}
-        <span className="scene-exposure-note">{{drink:'Beverage example',oral:'Oral example',symbolic:'Symbolic exposure',inhaler:'Inhaled example',topical:'Topical example'}[intake]}</span>
+        {!context&&stage>0&&<div className="scene-thought" key={`${name}-${stage}`}><span>{thought}</span></div>}
+        {((context&&stage===1&&context.scene.timeCourse==='over-time')||(profile.key==='fentanyl'&&stage>0))&&<span className="scene-time-note">{profile.key==='fentanyl'?'Patch effects over hours':'Treatment over time'}</span>}
         </div>
       </div>
       {context?<ContextExplainer seed={context} stage={stage} timing={timing}/>:<aside className={`scene-monitor ${stage === 2 ? 'is-adverse' : ''}`} aria-label={`${name} body view`}>
@@ -84,7 +83,7 @@ export function SceneFrame({ type, action, labels, name, substanceId, time, risk
         <div className="monitor-copy"><h3>{title}</h3><ul>{details.map(detail => <li key={detail}>{detail}</li>)}</ul><div className="monitor-signal"><svg viewBox="0 0 160 40" aria-hidden="true"><path d="M0 20H160" stroke="#e0e3d7" strokeDasharray="2 4"/><path d={signal} stroke="currentColor" strokeWidth="1.5" fill="none"/></svg><span>{profile.motion === 'breathing' ? 'Breathing illustration' : profile.motion === 'heat' ? 'Heat / body strain' : profile.longTerm ? 'Changes over time' : 'Body response illustration'}</span></div></div>
       </aside>}
     </div>
-    <div className="scene-story"><span className={`story-number ${stage === 2 ? 'is-adverse' : ''}`}>0{stage + 1}</span><div><strong>{selectedLabel}</strong><p>{thought}</p></div><span className="scene-story-duration" title={timing}>{profile.longTerm ? 'Over repeated use' : context?.scene.timeCourse==='unknown' ? 'Timing uncertain' : 'Every body differs'}</span></div>
+    <div className="scene-story"><span className={`story-number ${stage === 2 ? 'is-adverse' : ''}`}>0{stage + 1}</span><div><strong>{selectedLabel}</strong><p>{thought}</p></div><span className="scene-story-duration" title={timing}>{profile.key==='fentanyl' ? 'Effects over hours' : profile.longTerm ? 'Over repeated use' : context?.scene.timeCourse==='unknown' ? 'Timing uncertain' : 'Every body differs'}</span></div>
     <div className="scene-progress" role="progressbar" aria-label="Illustration playback" aria-valuenow={Math.round(pose.t)} aria-valuemax={LOOP_SECONDS} aria-valuemin={0}><span style={{ transform: `scaleX(${pose.t / LOOP_SECONDS})` }}/></div>
   </div>;
 }
@@ -121,7 +120,7 @@ export default function PixelScene(props: PixelSceneProps) {
   }, []);
   useEffect(() => {
     if (props.phase !== undefined) {
-      const times=getCatalogSeed(profile.key)?[2,11.5,18.1]:STAGE_TIMES;
+      const times=getCatalogSeed(profile.key)?[5.8,11.5,18.1]:STAGE_TIMES;
       elapsed.current = times[Math.max(0, Math.min(2, Math.floor(props.phase)))];
       setTime(elapsed.current); return;
     }

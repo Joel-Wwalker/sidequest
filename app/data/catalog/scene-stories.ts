@@ -503,7 +503,7 @@ const rows:readonly StoryRow[]=[
   ["methamphetamine","focus","felt","brain","Attention and impulse control","pulse-check","felt","heart","Possible heart-rate or rhythm effects","Misuse can cause sudden death or serious cardiac events."],
   ["gamma-hydroxybutyrate-ghb","recovery-check","silent-process","brain","Following narcolepsy treatment","breathing-watch","conditional-event","lungs","Possible dangerous breathing suppression","Breathing suppression can occur even in clinical use."],
   ["gamma-butyrolactone-gbl","drowsy","felt","brain","Sedation and reduced consciousness","breathing-watch","conditional-event","lungs","Possible dangerous breathing suppression","Severe intoxication can cause coma or respiratory depression."],
-  ["nandrolone","review-uncertainty","uncertain","evidence","Enhancement benefit is not established","review-labs","silent-risk","blood","Metabolic safety follow-up","The label reports liver lesions and adverse lipid changes."],
+  ["nandrolone","recovery-check","silent-process","blood","Historical anemia treatment over time","review-labs","silent-risk","blood","Metabolic safety follow-up","The label reports liver lesions and adverse lipid changes."],
   ["stanozolol","review-uncertainty","uncertain","evidence","Enhancement benefit is not established","review-labs","silent-risk","liver","Possible liver injury","Severe liver injury and death have been reported."]
 ];
 const byId=new Map(rows.map(row=>[row[0],row]));

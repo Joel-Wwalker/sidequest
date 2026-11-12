@@ -14,7 +14,7 @@ export default function SceneReview(){
   const queries=query.toLowerCase().split(',').map(value=>value.trim()).filter(Boolean);
   const entries=substances.filter(s=>(scope==='all'||(scope==='expanded'?!!s.context:!s.context))&&(!queries.length||queries.some(q=>[s.id,s.name,...s.aliases].some(v=>v.toLowerCase().includes(q)))));
   const count=Math.max(1,Math.ceil(entries.length/size)),batch=entries.slice(page*size,(page+1)*size);
-  const stageTimes=batch.some(entry=>entry.context)?[2,11.5,18.1]:STAGE_TIMES;
+  const stageTimes=batch.some(entry=>entry.context)?[5.8,11.5,18.1]:STAGE_TIMES;
   useEffect(()=>{
     if(paused)return;
     let frame:number,previous=performance.now();

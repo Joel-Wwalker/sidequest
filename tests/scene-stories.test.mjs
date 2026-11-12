@@ -1,3 +1,4 @@
+import {getExposure} from '../app/components/scene/exposure.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {catalogSeeds} from '../app/data/catalog/index.ts';
@@ -50,7 +51,7 @@ test('character stories differ by actual task, object or action even without roo
     const story=getSceneStory(seed),s=seed.scene;
     const task=normalize(s.task,[['writing','meal-log','sleep-log','research-notes'],['checklist','care-card']]);
     const prop=normalize(s.prop,[['notebook','care-card']]);
-    const key=[task,prop,s.exposure,story.responseAction,story.downsideAction].join('|');
+    const key=[task,prop,getExposure(seed.id).kind,story.responseAction,story.downsideAction].join('|');
     assert.ok(!signatures.has(key),`${seed.id} repeats ${signatures.get(key)} without room/color/labels`);
     signatures.set(key,seed.id);
   }

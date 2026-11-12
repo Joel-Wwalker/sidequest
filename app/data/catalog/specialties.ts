@@ -4716,7 +4716,7 @@ export const specialtySeeds: CatalogSeed[] = [
       }
     ],
     "scene": {
-      "setting": "laboratory",
+      "setting": "clinic",
       "activity": "research",
       "task": "reading",
       "prop": "book",
@@ -4728,7 +4728,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Reading a clinical-research report about a growth-hormone secretagogue.",
+      "intent": "Reviewing investigational IV treatment studied for postoperative bowel recovery.",
       "responseNotes": [
         "Its growth-hormone-secretagogue activity has been studied.",
         "Its therapeutic role remains unsettled."
@@ -4786,7 +4786,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "uncertainty",
       "organs": [],
       "cautions": [],
-      "intent": "Noting the limits of endocrine studies in medically vulnerable participants.",
+      "intent": "Reviewing an investigational nasal formulation and the limits of human endocrine research.",
       "responseNotes": [
         "Researchers have examined its endocrine activity.",
         "A general clinical use has not been established."
@@ -5710,8 +5710,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "clinic",
       "activity": "research",
-      "task": "writing",
-      "prop": "clipboard",
+      "task": "reading",
+      "prop": "book",
       "motif": "hormone",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -5774,8 +5774,8 @@ export const specialtySeeds: CatalogSeed[] = [
     "scene": {
       "setting": "gym",
       "activity": "research",
-      "task": "writing",
-      "prop": "notebook",
+      "task": "reading",
+      "prop": "phone",
       "motif": "hormone",
       "mechanismStyle": "uncertain",
       "response": "uncertain",
@@ -5784,7 +5784,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "hormones",
       "organs": [],
       "cautions": [],
-      "intent": "Writing down a short SARM trial's hormone and lipid findings.",
+      "intent": "Reading a short SARM trial's hormone and lipid findings on a phone.",
       "responseNotes": [
         "A short human trial examined androgen-related effects.",
         "That trial does not establish safe enhancement use."
@@ -11103,10 +11103,10 @@ export const specialtySeeds: CatalogSeed[] = [
       }
     ],
     "scene": {
-      "setting": "gym",
-      "activity": "research",
-      "task": "meal",
-      "prop": "plate",
+      "setting": "clinic",
+      "activity": "care",
+      "task": "care-card",
+      "prop": "care-card",
       "motif": "hormone",
       "mechanismStyle": "modulate",
       "response": "neutral",
@@ -11115,7 +11115,7 @@ export const specialtySeeds: CatalogSeed[] = [
       "riskVisual": "metabolic",
       "organs": [],
       "cautions": [],
-      "intent": "Pausing a meal to compare nonmedical anabolic claims with historical labeling.",
+      "intent": "Reviewing the historical clinical injection formulation and its blood-count effects.",
       "responseNotes": [
         "Historical anemia labels described increased red-cell mass.",
         "That does not establish safe performance enhancement."
